@@ -3,14 +3,14 @@ $color-primary: white;
 
 @font-face {
     font-family: bit;
-    src: url(Masaaki-Regular.otf);
+    src: url('Masaaki-Regular.otf');
 }
 
 body {
-    color: $color-primary;
-    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('unsplash.jpg');
+    color: $color-primary  !important;
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('public/unsplash.jpg');
     background-repeat: no-repeat;
-    background-size: cover;
+    background-size: auto;
     height: 100vh;
 }
 
@@ -25,17 +25,17 @@ body {
 }
 
 .bit {
-    font-family: bit;
+    font-family: bit !important;
 }
 
 .nav-link {
-    font-size: 2rem;
-    padding-bottom:18px;
+    font-size: 2rem !important;
+    padding-bottom: 18px;
 }
 
 .navbar-brand {
-    padding-bottom:25px;
-    font-size: 3rem;
+    padding-bottom: 25px !important;
+    font-size: 3rem !important;
 }
 
 .outline {
