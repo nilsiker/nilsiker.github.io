@@ -1,0 +1,44 @@
+$bg-primary: #16161D;
+$color-primary: white;
+
+@font-face {
+    font-family: bit;
+    src: url(Masaaki-Regular.otf);
+}
+
+body {
+    color: $color-primary;
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('unsplash.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 100vh;
+}
+
+.navbar a>svg {
+    margin-right: 10px;
+}
+
+.v-middle {
+    display: flex;
+    align-items: center;
+
+}
+
+.bit {
+    font-family: bit;
+}
+
+.nav-link {
+    font-size: 2rem;
+    padding-bottom:18px;
+}
+
+.navbar-brand {
+    padding-bottom:25px;
+    font-size: 3rem;
+}
+
+.outline {
+    -webkit-filter: drop-shadow(1px 1px 0 black) drop-shadow(-1px -1px 0 black);
+    filter: drop-shadow(1px 1px 0 black) drop-shadow(-1px -1px 0 black);
+}
