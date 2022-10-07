@@ -1,5 +1,6 @@
 $bg-primary: #16161D;
 $color-primary: white;
+$transition-duration: 1s;
 
 @font-face {
     font-family: bit;
@@ -35,23 +36,18 @@ body {
     height: 0;
     opacity: 0;
     background-color: orange;
-    transition: opacity 0.5s, height 0.5s;
+    transition: opacity $transition-duration, height $transition-duration;
     z-index: 2;
 
     &.show {
         height: 100vh;
         opacity: 1;
-        z-index: -1;
     }
 }
 
-.card {
-    transition: opacity 2s;
-}
-
 .navbar {
-    transition: background-color 0.5s;
-
+    transition: background-color $transition-duration;
+    z-index:3;
     a>svg {
         margin-right: 10px;
     }

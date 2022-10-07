@@ -42,21 +42,22 @@ impl Component for App {
 
         weblog::console_log!(self.secret.to_string());
         let hidden = self.secret;
+        
         html!(
-            <>
-                <BrowserRouter>
-                <Navbar secret={secret}/>
-                <div id="terrain" class={if hidden {"show secret"} else {"secret"}}/>
-                if !hidden {<Container fluid=false>
-                    <div class="row">
-                        <div  class="col mt-2">
-                            <Switch<Route> render={Switch::render(switch)} />
-                        </div>
-                    </div>
-                </Container>}
+                    <>
+                        <BrowserRouter>
+                        <Navbar secret={secret}/>
+                        <div id="terrain" class={if hidden {"show secret"} else {"secret"}}/>
+                        <Container fluid=false>
+                            <div class="row">
+                                <div  class="col mt-2">
+                                    <Switch<Route> render={Switch::render(switch)} />
+                                </div>
+                            </div>
+                        </Container>
 
-                </BrowserRouter>
-            </>
-        )
+                        </BrowserRouter>
+                    </>
+                )
     }
 }
