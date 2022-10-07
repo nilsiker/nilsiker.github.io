@@ -1,11 +1,15 @@
 mod components;
 mod pages;
 
+use components::{app::App, card::Card};
 use pages::about::About;
-use components::{card::Card, navbar::Navbar};
-use yew::prelude::*;
-use yew_router::prelude::*;
-use yewstrap::container::*;
+use yew::{html, Html};
+use yew_router::Routable;
+
+fn main() {
+    yew::start_app::<App>();
+}
+
 
 #[derive(Clone, Routable, PartialEq, Debug)]
 enum Route {
@@ -30,26 +34,4 @@ fn switch(routes: &Route) -> Html {
         Route::Blog => Card::UnderConstruction.into(),
         Route::NotFound => Card::NotFound.into(),
     }
-}
-
-#[function_component(App)]
-fn app() -> Html {
-    html!(
-        <>
-            <BrowserRouter>
-            <Navbar />
-            <Container fluid=false>
-                <div class="row">
-                    <div class="col">
-                        <Switch<Route> render={Switch::render(switch)} />
-                    </div>
-                </div>
-            </Container>
-            </BrowserRouter>
-        </>
-    )
-}
-
-fn main() {
-    yew::start_app::<App>();
 }

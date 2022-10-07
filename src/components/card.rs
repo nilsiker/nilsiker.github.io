@@ -1,5 +1,7 @@
 use yew::{html, Html};
 
+use super::app::SecretPackage;
+
 #[derive(Clone, PartialEq)]
 pub enum Card {
     Custom {
