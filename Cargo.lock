@@ -299,7 +299,6 @@ dependencies = [
  "yew",
  "yew-feather",
  "yew-router",
- "yewstrap",
 ]
 
 [[package]]
@@ -592,11 +591,4 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn",
-]
-
-[[package]]
-name = "yewstrap"
-version = "0.1.0"
-dependencies = [
- "yew",
 ]

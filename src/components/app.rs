@@ -1,10 +1,9 @@
 use yew::prelude::*;
 use yew_router::prelude::*;
 
-use crate::{switch, Route};
+use crate::{switch, Route, components::container::Container};
 
 use super::navbar::*;
-use yewstrap::container::*;
 
 #[derive(PartialEq, Clone)]
 pub struct SecretPackage {
@@ -40,7 +39,6 @@ impl Component for App {
 
         weblog::console_log!(self.secret.to_string());
         let hidden = self.secret;
-
         html!(
             <>
                 <BrowserRouter>
