@@ -2,8 +2,9 @@ use yew::{html, Children, Component, Properties};
 
 #[derive(Properties, PartialEq)]
 pub struct ContainerProps {
-    pub fluid: bool,
     pub children: Children,
+    #[prop_or_default]
+    pub hidden: bool
 }
 
 pub struct Container;
@@ -17,14 +18,8 @@ impl Component for Container {
     }
 
     fn view(&self, ctx: &yew::Context<Self>) -> yew::Html {
-        let class = if ctx.props().fluid {
-            "container-fluid"
-        } else {
-            "container"
-        };
-
         html!(
-            <div class={class}>{ctx.props().children.clone()}</div>
+            <div hidden={ctx.props().hidden} class="container mt-2">{ctx.props().children.clone()}</div>
         )
     }
 }

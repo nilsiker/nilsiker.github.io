@@ -1,7 +1,9 @@
 use yew::Properties;
 
 pub mod about;
-#[derive(Properties, PartialEq)]
+pub mod projects;
+pub mod contributions;
+#[derive(Properties, Eq, PartialEq)]
 pub struct PageProps {
     pub hidden: bool,
 }

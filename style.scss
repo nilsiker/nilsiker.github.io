@@ -22,10 +22,51 @@ body {
 
 body {
     color: $color-primary  !important;
-    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('public/unsplash.jpg');
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('static/unsplash.jpg');
     background-repeat: no-repeat;
     background-size: cover;
-    height: 100vh;
+    background-position: center;
+    min-height: 100vh;
+    height:100%;
+}
+
+.bg-faded {
+    --bs-bg-opacity: 0.5;
+}
+
+.flip {
+    perspective: 1000px;
+    transition: transform 0.5s ease-in;
+    transform-style: preserve-3d;
+
+    .content {
+        background-color: rgba(var(--bs-dark-rgb));
+        position: relative;
+        min-width: 100%;
+        min-height: 100%;
+        transition: transform 0.5s ease-in;
+        transform-style: preserve-3d;
+
+        .front,
+        .back {
+            width:100%;
+            height:100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+        }
+
+        .back {
+            position:absolute;
+        }
+    }
+
+    .back {
+        transform: rotateY(180deg);
+    }
+
+    &:hover {
+        transform: rotateY(180deg);
+    }
 }
 
 .secret {
@@ -47,7 +88,8 @@ body {
 
 .navbar {
     transition: background-color $transition-duration;
-    z-index:3;
+    z-index: 3;
+
     a>svg {
         margin-right: 10px;
     }

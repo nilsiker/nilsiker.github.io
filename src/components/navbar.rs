@@ -23,7 +23,7 @@ impl Component for Navbar {
         let hidden = ctx.props().secret.activated;
         weblog::console_log!(ctx.props().secret.activated.to_string() + " in navbar");
         html!(
-        <nav class={format!("bit navbar navbar-expand-md navbar-dark {}", if hidden {"bg-dark"} else {""})}>
+        <nav class={format!("bit navbar navbar-expand-lg navbar-dark {}", if hidden {"bg-dark"} else {""})}>
             <div class="container">
                 <div class="row">
                     <div class="col">
@@ -37,13 +37,13 @@ impl Component for Navbar {
                 <div class="collapse navbar-collapse" id="navbar">
                     <ul hidden={hidden} class="nav navbar-nav me-0 ms-auto ">
                         <li class="nav-item" data-bs-toggle="collapse" data-bs-target=".navbar-collapse.show">
-                            <Link<Route>  classes="nav-link" to={Route::Home}>{"HOME"}</Link<Route>>
+                            <Link<Route> classes="nav-link" to={Route::Projects}>{"PROJECTS"}</Link<Route>>
+                        </li>
+                        <li class="nav-item" data-bs-toggle="collapse" data-bs-target=".navbar-collapse.show">
+                            <Link<Route> classes="nav-link" to={Route::Contributions}>{"CONTRIBUTIONS"}</Link<Route>>
                         </li>
                         <li class="nav-item" data-bs-toggle="collapse" data-bs-target=".navbar-collapse.show">
                             <Link<Route> classes="nav-link" to={Route::About}>{"ABOUT"}</Link<Route>>
-                        </li>
-                        <li class="nav-item" data-bs-toggle="collapse" data-bs-target=".navbar-collapse.show">
-                            <Link<Route> classes="nav-link" to={Route::Projects}>{"PROJECTS"}</Link<Route>>
                         </li>
                         <li class="nav-item" data-bs-toggle="collapse" data-bs-target=".navbar-collapse.show">
                             <Link<Route> classes="nav-link" to={Route::Blog}>{"BLOG"}</Link<Route>>
