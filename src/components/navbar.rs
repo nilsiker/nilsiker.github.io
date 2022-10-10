@@ -21,7 +21,6 @@ impl Component for Navbar {
 
     fn view(&self, ctx: &yew::Context<Self>) -> yew::Html {
         let hidden = ctx.props().secret.activated;
-        weblog::console_log!(ctx.props().secret.activated.to_string() + " in navbar");
         html!(
         <nav class={format!("bit navbar navbar-expand-lg navbar-dark {}", if hidden {"bg-dark"} else {""})}>
             <div class="container">

@@ -37,17 +37,15 @@ impl Component for App {
             toggler: ctx.link().callback(|_| AppMessage::ToggleSecret),
         };
 
-        weblog::console_log!(self.secret.to_string());
         let hidden = self.secret;
         html!(
             <>
                 <BrowserRouter>
-                <Navbar secret={secret}/>
-                <div id="terrain" class={if hidden {"show secret"} else {"secret"}}/>
-                <Container hidden={hidden}>
-                    <Switch<Route> render={Switch::render(switch)} />
-                </Container>
-
+                    <Navbar secret={secret}/>
+                    <div id="terrain" class={if hidden {"show secret"} else {"secret"}}/>
+                    <Container hidden={hidden}>
+                        <Switch<Route> render={Switch::render(switch)} />
+                    </Container>
                 </BrowserRouter>
             </>
         )
