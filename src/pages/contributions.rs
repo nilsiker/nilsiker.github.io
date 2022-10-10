@@ -10,7 +10,6 @@ pub struct ContributionsPageProps {
 
 #[function_component(Contributions)]
 pub fn projects(props: &ContributionsPageProps) -> Html {
-    
     html!(
     <>
         <div class="mt-4 p-5 bg-dark bg-opacity-75 rounded">
@@ -49,7 +48,7 @@ pub fn load_contributions() -> Vec<Card> {
             <p class="fw-bold">
             <a class="btn btn-light mx-2 text-dark" href="https://github.com/StasTserk/foundry-burningwheel"><Github  /></a>
             </p>
-            
+
             </>
         ),
     }]

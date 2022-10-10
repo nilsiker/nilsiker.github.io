@@ -1,5 +1,5 @@
 use yew::prelude::*;
-use yew_feather::{briefcase::Briefcase, book::Book, user::User};
+use yew_feather::{book::Book, briefcase::Briefcase, user::User};
 
 use crate::components::card::Card;
 
@@ -35,10 +35,8 @@ pub fn about() -> Html {
                     <div>
                         <Briefcase />
                         <h2 class="bit mb-0" style="line-height: 2rem">{"System Developer"}</h2>
-                        <h4 class="bit text-muted mb-1" style="line-height:1rem;">{"2021-ongoing"}</h4>
+                        <h4 class="bit text-muted mb-1" style="line-height:1rem;">{"2022-ongoing"}</h4>
                         <h3 class="bit text-muted" style="line-height: 2rem">{"Skanska IT"}</h3>
-                        
-
                         <hr/>
                         <p>{"I currently work as a full-time system developer at Skanska in Malmö, where I am part of the Digital Collaboration team, focusing on SharePoint and Azure development."}</p>
                         <span class="badge bg-primary rounded-pill me-1">{"Azure"}</span>
@@ -78,7 +76,6 @@ pub fn about() -> Html {
                 </div>
             ),
             }.into();
-
 
     html!(
         <div class="row">

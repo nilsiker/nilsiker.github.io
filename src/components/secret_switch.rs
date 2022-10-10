@@ -6,7 +6,7 @@ pub struct SecretSwitchMessage;
 
 #[derive(Properties, PartialEq)]
 pub struct SecretSwitchProps {
-    pub secret: SecretPackage
+    pub secret: SecretPackage,
 }
 pub struct SecretSwitch;
 
@@ -26,7 +26,7 @@ impl Component for SecretSwitch {
 
     fn view(&self, ctx: &yew::Context<Self>) -> yew::Html {
         let click = ctx.link().callback(|_| SecretSwitchMessage);
-        html!(                
+        html!(
             <div class="form-check form-switch me-5">
                 <input class="form-check-input" type="checkbox" onclick={click} id="toggle_cool " checked={ctx.props().secret.activated}/>
             </div>)

@@ -89,7 +89,7 @@ impl From<Card> for Html {
     }
 }
 
-#[derive(PartialEq, Properties)]
+#[derive(PartialEq, Eq, Properties)]
 pub struct CardImageProps {
     pub src: &'static str,
     pub bg: &'static str,

@@ -4,7 +4,7 @@ use yew::{html, Children, Component, Properties};
 pub struct ContainerProps {
     pub children: Children,
     #[prop_or_default]
-    pub hidden: bool
+    pub hidden: bool,
 }
 
 pub struct Container;

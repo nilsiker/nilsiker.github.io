@@ -6,7 +6,8 @@
         {
             "label": "build-page",
             "type": "shell",
-            "command": "trunk build --release"
+            "command": "trunk build --release",
+            "problemMatcher": []
         },
         {
             "label": "deploy-page",
@@ -15,6 +16,6 @@
             "dependsOn": [
                 "build-page"
             ]
-        },
+        }
     ]
 }

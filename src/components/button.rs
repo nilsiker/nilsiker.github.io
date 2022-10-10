@@ -1,7 +1,7 @@
 use yew::html::onclick::Event;
 use yew::{callback::Callback, html, Children, Component, Properties};
-
-#[derive(PartialEq)]
+#[allow(dead_code)] // TODO remove when start using!
+#[derive(PartialEq,Eq)]
 pub enum Style {
     Primary,
     Secondary,
