@@ -71,7 +71,7 @@ pub fn load_projects() -> Vec<Card> {
             ),
         },
         Card::Flip {
-            header: "Nilsiker Site".into(),
+            header: "nilsiker.github.io".into(),
             image: html!(<CardImage fit=true bg="transparent" src="static/unsplash.jpg" />),
             front: html!(
                 <div class="">
