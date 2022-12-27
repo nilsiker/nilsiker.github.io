@@ -44,12 +44,12 @@ impl Component for Navbar {
                         <li class="nav-item" data-bs-toggle="collapse" data-bs-target=".navbar-collapse.show">
                             <Link<Route> classes="nav-link" to={Route::About}>{"ABOUT"}</Link<Route>>
                         </li>
-                        <li class="nav-item" data-bs-toggle="collapse" data-bs-target=".navbar-collapse.show">
-                            <Link<Route> classes="nav-link" to={Route::Blog}>{"BLOG"}</Link<Route>>
-                       </li>
+                            <li class="nav-item" data-bs-toggle="collapse" data-bs-target=".navbar-collapse.show">
+                        </li>
                         <li class="nav-item v-middle">
-                           <a href="https://github.com/nilsiker"><Github color="white" /></a>
-                           <a href="https://twitter.com/nilsiker"><yew_feather::twitter::Twitter color="white" /></a>
+                            <a class="nav-link" href="https://nilsiker.github.io/blog">{"BLOG"}</a>
+                            <a href="https://github.com/nilsiker"><Github color="white" /></a>
+                            <a href="https://twitter.com/nilsiker"><yew_feather::twitter::Twitter color="white" /></a>
                         </li>
                     </ul>
                 </div>

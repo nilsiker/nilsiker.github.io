@@ -35,24 +35,15 @@ body {
 }
 
 .flip {
-    perspective: 1000px;
     transition: transform 0.5s ease-in;
     transform-style: preserve-3d;
 
     .content {
-        background-color: rgba(var(--bs-dark-rgb));
         position: relative;
         min-width: 100%;
         min-height: 100%;
         transition: transform 0.5s ease-in;
         transform-style: preserve-3d;
-
-        .front,
-        .back {
-            width: 100%;
-            height: 100%;
-            backface-visibility: hidden;
-        }
 
         .front {
             transform: rotateY(0deg);
@@ -61,8 +52,15 @@ body {
         .back {
             position: absolute;
             transform: rotateY(180deg);
+        }
+
+        .front,
+        .back {
+            width: 100%;
+            height: 100%;
             backface-visibility: hidden;
         }
+        
     }
 
     &:hover {

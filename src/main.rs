@@ -8,7 +8,7 @@ use pages::{
     projects::{load_projects, Projects},
 };
 use yew::{html, Html};
-use yew_router::Routable;
+use yew_router::{Routable, prelude::Redirect};
 
 fn main() {
     yew::start_app::<App>();
@@ -24,8 +24,6 @@ enum Route {
     Contributions,
     #[at("/about")]
     About,
-    #[at("/blog")]
-    Blog,
     #[not_found]
     #[at("/404")]
     NotFound,
@@ -36,7 +34,7 @@ fn switch(routes: &Route) -> Html {
         Route::Index | Route::Projects => html!(<Projects projects={load_projects()} />),
         Route::Contributions => html!(<Contributions contributions={load_contributions()} />),
         Route::About => html!(<About />),
-        Route::Blog => Card::UnderConstruction.into(),
         Route::NotFound => Card::NotFound.into(),
+        
     }
 }
