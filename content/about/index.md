@@ -28,17 +28,17 @@ I constantly find ways to talk about the programming language Rust, so there's a
 
 ## System Developer
 ### Skanska IT (2022-ongoing)
+`Azure` `Microsoft 365` `SPFx` `React` `TypeScript`
 
 I currently work as a full-time system developer at Skanska in Malmö, where I am part of the Digital Collaboration team, focusing on SharePoint and Azure development.
 
-> Azure | Microsoft 365 | SPFx | React | TypeScript
 
 ## Developer
 ### Netcompany A/S (2021-2022)
+`Dynamics 365` `Salesforce` `.NET` `JavaScript`
 
 I worked as a full-time software developer at Netcompany in Copenhagen, where I built and maintained solutions for a plethora of customers, both big and small.
 
-> Dynamics 365 | Salesforce | .NET | JavaScript
 
 # 🎓
 

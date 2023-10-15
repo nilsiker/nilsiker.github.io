@@ -3,3 +3,11 @@
 :root {
     --primary-color: #eb7536;
 }
+
+@font-face {
+    src: local('Press Start 2P'),
+        url('font/PressStart2P-Regular.ttf') format("truetype");
+    /* Copyright 2014 - 2023 Adobe (http://www.adobe.com/), with Reserved Font Name ‘Source’.adobe.com/). Licensed under the SIL Open Font License, Version 1.1. More information available at: http://scripts.sil.org/OFL */
+    font-family: 'Press Start';
+    font-display: swap;
+}

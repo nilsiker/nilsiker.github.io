@@ -2,7 +2,7 @@
 title = "Floating Collider for Character Controllers"
 date = 2023-10-13
 description = "Conquering locomotion for a third person character controller in Godot, step by step."
-hidden = true
+draft = true
 
 [taxonomies]
 tags = ["Godot", "recipe", ".NET"]
