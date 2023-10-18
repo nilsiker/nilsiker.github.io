@@ -1,12 +1,12 @@
 +++
 title = "Contour"
-description = "A pixel-art horror game, powered by Rust and Bevy."
+description = "A pixel-art horror microgame, powered by Rust and Bevy."
 weight = 1
 
 [extra]
-local_image = "projects/contour/contour.png"
+local_image = "/img/contour.png"
 canonical_url = "https://osc.garden/ca/projects/chu/"
-social_media_card = "projects/contour/contour.png"
+social_media_card = "/img/contour.png"
 +++
 
 _They came with the dark._

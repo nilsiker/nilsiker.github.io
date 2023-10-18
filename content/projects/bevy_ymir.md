@@ -4,9 +4,9 @@ description = "A plugin for generating and streaming procedural worlds in Bevy."
 weight = 2
 
 [extra]
-local_image = "projects/bevy-ymir/ymir-early-world-cropped.png"
+local_image = "/img/ymir-early-world-cropped.png"
 canonical_url = "https://osc.garden/ca/projects/chu/"
-social_media_card = "projects/bevy-ymir/ymir-early-world-cropped.png"
+social_media_card = "/img/ymir-early-world-cropped.png"
 +++
 
 **!!! 😴 *Project is currently in hibernation* !!!**
