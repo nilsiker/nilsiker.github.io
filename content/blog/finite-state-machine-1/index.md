@@ -2,7 +2,6 @@
 title = "Godot Recipe: Finite State Machine #1"
 date = 2023-10-13
 description = "A walkthrough for implementing a basic FSM module in Godot C#"
-draft = true
 
 [taxonomies]
 tags = ["Godot", "recipe", "C#", ".NET", "FSM", "finite state machine", "character controller"]
@@ -11,6 +10,8 @@ tags = ["Godot", "recipe", "C#", ".NET", "FSM", "finite state machine", "charact
 footnote_backlinks = true
 quick_navigation_buttons = true
 +++
+
+> 🙋🏼 A huge thanks goes out to Robert Nystrom for writing the book [Game Programming Patterns](https://gameprogrammingpatterns.com/) and thus inspiring me to write this post!
 
 > ⚠️ This post assumes you have basic understanding of Nodes and Scenes in Godot and some familiarity with C# syntax.
 
@@ -22,23 +23,23 @@ While not a perfect cure, a **finite state machine (FSM)** can help you untangle
 
 In this recipe series, we'll build an FSM module for Godot using C#.
 
-![Alt text](image-5.png)
+![Alt text](img/example-scene.png)
 
 The long term goal is to provide a module where an arbitrary `State` can control arbitrary `Systems` on our player character.
 
 Along the line we'll make mistakes and questionable design decisions. This is how we learn!
 
-> 🙋🏼 If you simply want a functioning FSM for your Godot project, I suggest heading over to the [Godot Asset Library](https://godotengine.org/asset-library/asset) and searching for available FSM plugins. There is no need to reinvent the wheel, **unless you want to!**
+> 🙋🏼 If you simply want a functioning FSM for your Godot project, I suggest heading over to the [Godot Asset Library](img/https://godotengine.org/asset-library/asset) and searching for available FSM plugins. There is no need to reinvent the wheel, **unless you want to!**
 
 # Scope
 
-At the end of this post, we will end up with a state machine that controls a simple Mover component that pushes a RigidBody3D around.
+At the end of this post, we will end up with a state machine that controls a simple Mover system that pushes a RigidBody3D around.
 
 {% mermaid() %}
-classDiagram
+stateDiagram
     direction LR
-    Player-->StateMachine: has
-    Player-->Mover: has
+    Player-->StateMachine: has a
+    Player-->Mover: has a
     Mover-->Player: moves
     StateMachine-->Mover: controls
 {% end %}
@@ -57,7 +58,7 @@ In future posts, we will iterate on the module, improving the design and archite
 
 Before diving into the code, we head on over to Godot and set up some WASD mappings for movement. We'll call the actions `up`, `down`, `left` and `right`:
 
-![Input of up down left and right mapped to WASD](image-3.png)
+![Input of up down left and right mapped to WASD](img/input.png)
 
 Next, we setup a scene (let's call it `main.tscn`):
 
@@ -69,7 +70,7 @@ In addition to this, set `Linear > Damp` to something like 5. This will prevent 
 
 Finally, add a Camera3D and position it reasonably so it looks slightly down at the world origin. Your scene will look a little like this:
 
-![Scene of a camera, a player with visuals and a collider](image-6.png)
+![Scene of a camera, a player with visuals and a collider](img/scene-setup.png)
 
 Now that we're all set up, let's get codin'!
 
@@ -100,7 +101,7 @@ With this in mind, we sketch up a class that looks like this:
 
 Next we create an abstract State class with this definition in our project. I'll just plop it down right in a scripts folder for now.
 
-![Folder structure, a scripts folder with a State.cs file in it](image.png)
+![Folder structure, a scripts folder with a State.cs file in it](img/folder-structure.png)
 
 We won't be inheriting from Node, but instead make this a pure C# class. We will also have it perform some basic logging in each method. 
 
@@ -276,7 +277,7 @@ public partial class StateMachine : Node
 
 Our FileSystem should look like this, at this point:
 
-![FileSystem containing three scripts](image-1.png)
+![FileSystem containing three scripts](img/filesystem.png)
 
 Next we'll take our State Machine for a logging spin!
 
@@ -284,7 +285,7 @@ Next we'll take our State Machine for a logging spin!
 
 Add the StateMachine node anywhere in your scene. Hitting play should yield some logs:
 
-![Logs from the idlestate](image-2.png)
+![Logs from the idlestate](img/logs.png)
 
 While not particularly exciting, we are successfully idling! If you've come this far, take a short break and grab your drink of choice before continuing. Well done! ☕
 
@@ -376,7 +377,7 @@ public override void Tick(double delta)
 
 At this point we have two states, a state machine and conditions in the states describing when to switch between the states.
 
-## A simple Mover component
+## A simple Mover system
 
 We will showcase our FSM using a really basic Mover:
 
@@ -399,7 +400,7 @@ public partial class Mover : Node
 
 Add the `Mover` node to the `Player` node, and assign the `Player` as the `rigidbody` in the Inspector. If you haven't already, this is also the time to add the `StateMachine` to your `Player`.
 
-![player node with mover and state machine](image-7.png)
+![player node with mover and state machine](img/player-with-fsm.png)
 
 Next, add a public export reference to the Mover in our machine so that we can access it from our WalkingState. 
 
@@ -417,7 +418,7 @@ public partial class StateMachine : Node
     // rest of file is omitted
 ```
 
-> 🙋🏼 In a future post, we will improve the way we get the systems/components that are used in our states. At this point, it doesn't have to be perfect!
+> 🙋🏼 In a future post, we will improve the way we get the systems that are used in our states. At this point, it doesn't have to be perfect!
 
 Finally, update the `WalkingState` to perform some movement in `PhysicsTick`:
 
@@ -437,17 +438,17 @@ Just like that, we're ready for the big reveal.
 
 With no fear in your heart, press F5 in Godot and take her for a spin!
 
-![Alt text](fsm-moving.gif)
+![Alt text](img/fsm-moving.gif)
 
 There we have it -- a fully functional FSM framework! This can be used to control all possible aspects of a character, if we put some more love into it.
 
 Give yourself a compliment or two, you've earned it! 👏🏼
 
-Experiment and play around with the FSM -- add some states, a new component, or try to break the circular dependency yourself. 
+Experiment and play around with the FSM -- add some states, a new system, or try to break the circular dependency yourself. 
 
 Have fun with it! ☀️
 
-In the next part, I will show you how I solve nasty circular dependency, and also how we can improve the way we fetch components in our states.
+In the next part, I will show you how I solve nasty circular dependency, and also how we can improve the way we fetch systems in our states.
 
 All the best,<br/>
 Nilsiker
