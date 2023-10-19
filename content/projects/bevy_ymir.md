@@ -5,7 +5,6 @@ weight = 2
 
 [extra]
 local_image = "/img/ymir-early-world-cropped.png"
-canonical_url = "https://osc.garden/ca/projects/chu/"
 social_media_card = "/img/ymir-early-world-cropped.png"
 +++
 

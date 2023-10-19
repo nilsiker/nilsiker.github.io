@@ -5,7 +5,6 @@ weight = 1
 
 [extra]
 local_image = "/img/contour.png"
-canonical_url = "https://osc.garden/ca/projects/chu/"
 social_media_card = "/img/contour.png"
 +++
 
