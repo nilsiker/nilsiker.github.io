@@ -1,6 +1,6 @@
 +++
 title = "Godot Recipe: Finite State Machine #1"
-date = 2023-10-13
+date = 2023-10-19
 description = "A walkthrough for implementing a basic FSM module in Godot C#"
 
 [taxonomies]
