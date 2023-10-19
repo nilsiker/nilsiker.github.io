@@ -6,11 +6,10 @@ render = false
 insert_anchor_links = "left"
 +++
 
-<img src="./pb.png" style="width:80px !important; max-width:200px;">
+![Andreas Nilsson](/img/pb.png)
 
-# 🙋🏼
 
-## Andreas Nilsson
+20# Andreas Nilsson
 ### Web and Software Developer
 
 I'm Andreas, a Malmö-based millenial living with my SO and cats.
