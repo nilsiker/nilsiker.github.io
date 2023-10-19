@@ -89,8 +89,8 @@ With this in mind, we sketch up a class that looks like this:
     classDiagram
     class State {
         Enter() void
-        Tick(float) void
-        PhysicsTick(float) void
+        Tick(double) void
+        PhysicsTick(double) void
         Exit() void
     }
 {% end %}
