@@ -448,7 +448,7 @@ Experiment and play around with the FSM -- add some states, a new system, or try
 
 Have fun with it! ☀️
 
-In the next part, I will show you how I solve nasty circular dependency, and also how we can improve the way we fetch systems in our states.
+In the next part, I will show you how I solve the circular dependency. We will also improve the way we fetch systems in our states.
 
 All the best,<br/>
 Nilsiker
