@@ -440,7 +440,7 @@ With no fear in your heart, press F5 in Godot and take her for a spin!
 
 ![Alt text](img/fsm-moving.gif)
 
-There we have it -- a fully functional FSM framework! This can be used to control all possible aspects of a character, if we put some more love into it.
+There we have it -- a functional FSM framework! This can be used to control all possible aspects of a character, if we put some more love into it.
 
 Give yourself a compliment or two, you've earned it! 👏🏼
 
