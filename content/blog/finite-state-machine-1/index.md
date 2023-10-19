@@ -140,7 +140,7 @@ public abstract class State
 
 In addition to this abstract State, let's create two *concrete* states - the `IdleState` and the `WalkingState`. Both inherit from `State` and, for now, does nothing except call the virtual methods on the base class, for now.
 
-Create both scripts and but them in the `scripts` folder.
+Create both scripts and put them in the `scripts` folder.
 
 ```cs
 public class IdleState : State
