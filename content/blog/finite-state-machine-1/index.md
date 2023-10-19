@@ -13,7 +13,7 @@ quick_navigation_buttons = true
 
 > 🙋🏼 A huge thanks goes out to Robert Nystrom for writing the book [Game Programming Patterns](https://gameprogrammingpatterns.com/) and thus inspiring me to write this post!
 
-> ⚠️ This post assumes you have basic understanding of Nodes and Scenes in Godot and some familiarity with C# syntax.
+> ⚠️ This post assumes you have a basic understanding of Nodes and Scenes in Godot and some familiarity with C# syntax if you plan to code along!
 
 *Have you ever had your Character Controller code turn into proper spaghetti?*
 
