@@ -13,7 +13,7 @@ social_media_card = "/img/ymir-early-world-cropped.png"
 [bevy_ymir](https://github.com/nilsiker/bevy_ymir) is a plugin for generating and streaming procedural worlds in Bevy.
 
 
-![](./ymir-early-world.png)
+![](/img/ymir-early-world-cropped.png)
 
 The ambition is to provide a customizable world generator, with support for different biomes and various methods for procedural object placement.
 
