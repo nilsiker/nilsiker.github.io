@@ -114,23 +114,28 @@ public abstract class State
 {
     private string _name;
 
-    public State() {
+    public State() 
+    {
         _name = GetType().Name;
     }
 
-    public virtual void Enter() {
+    public virtual void Enter()
+    {
         GD.Print($"Entered {_name}");
     }
 
-    public virtual void Tick(double delta) {
+    public virtual void Tick(double delta) 
+    {
         GD.Print($"Ticking {_name}");
     }
 
-    public virtual void PhysicsTick(double delta) {
+    public virtual void PhysicsTick(double delta) 
+    {
         GD.Print($"Physics ticking {_name}");
     }
 
-    public virtual void Exit() {
+    public virtual void Exit() 
+    {
         GD.Print($"Exiting {_name}");
     }
 }
@@ -214,10 +219,9 @@ Let's sketch one up!
 {% mermaid() %}
     classDiagram
     direction LR
+    StateMachine o-- State 
     Node<|--StateMachine
     class StateMachine {
-        - _currentState: State
-        - DefaultState: State
         - ChangeState(State) void
     }
 {% end %}
@@ -304,7 +308,8 @@ Remember that circular dependency I warned about earlier? Don't blink, because i
 We will introduce a `StateMachine` reference in our states. It will sit snugly in the abstract State class like so and be assigned in the constructor:
 
 ```cs
-public abstract class State {
+public abstract class State 
+{
     private string _name;
     protected StateMachine _machine;  // NEW!
 
