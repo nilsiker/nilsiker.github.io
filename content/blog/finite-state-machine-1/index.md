@@ -457,3 +457,7 @@ In the next part, I will show you how I solve the circular dependency. We will a
 
 All the best,<br/>
 Nilsiker
+
+[source code here](https://github.com/Nilsiker/godot-fsm/releases/tag/part1)
+
+[part 2 >](/blog/finite-state-machine-2)
