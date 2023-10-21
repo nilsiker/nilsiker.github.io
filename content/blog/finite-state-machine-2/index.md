@@ -48,7 +48,7 @@ direction TB
     }
 {% end %}
 
-It might not look *too bad* at this point. If I recall, our demo showcase proved that our basic movement system worked! So why bother with all this?
+It might not look *too bad* at this point. If I recall, our demo showcase proved that our basic movement system worked! So why should we bother reworking it?
 
 Once we start adding more systems, more states and (cue foreshadowing) a way for our states to handle external events, this setup will swiftly become a breeding ground for logical errors and hard-to-maintain code.
 
