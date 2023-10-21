@@ -13,8 +13,6 @@ quick_navigation_buttons = true
 
 > ⚠️ This post assumes you have a basic understanding of Nodes and Scenes in Godot and some familiarity with C# syntax if you plan to code along!
 
-The source code for this post is available here [fsm2 - godot-fsm (GitHub)]()
-
 Last time, we left things in quite a mess. If you haven't read the first part of this FSM series, you can do so [here](/blog/finite-state-machine-1). 
 
 A class overview of our current FSM looks like this:
