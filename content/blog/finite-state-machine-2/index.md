@@ -496,13 +496,13 @@ I've rambled a lot about software design, which can quickly become dull. If you'
 
 How did we fare? Did all this nonsense actually solve anything? Let's address my introductory pain points:
 
-|Problem|Plan|Solution|Solved|
-|-|-|-|-|
-|*Poor code organization*|Introduce namespaces| i.e. `Project.FSM.Control`|✅|
-|*Circular dependency*|Inverting dependency using interface| i.e. `IState`|✅|
-|*Tight coupling for states fetching states*|Use Locator pattern for states | `ILocator<IState>` |✅|
-|*Tight coupling for states fetching systems*|Use Locator pattern for systems | `ILocator` |✅|
-|*Tightly coupled classes*| Depend on interfaces, Liskov substitution in mind |`IMover` `IAppearanceChanger`|✅|
+|Problem|Plan|Solved|
+|-|-|-|
+|*Poor code organization*|Introduce namespaces|✅|
+|*Circular dependency*|Inverting dependency using interface|✅|
+|*Tight coupling for states fetching states*|Use Locator pattern for states |✅|
+|*Tight coupling for states fetching systems*|Use Locator pattern for systems |✅|
+|*Tightly coupled classes*| Depend on interfaces, Liskov substitution in mind |✅|
 
 Our states no longer expect concrete implementation to solve our needs.
 
