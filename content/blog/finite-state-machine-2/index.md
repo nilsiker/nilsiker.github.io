@@ -223,7 +223,7 @@ public interface IState
 }
 ```
 
-The StateMachine class are updated implement the Locator interfaces. I decide to keep the states inside the StateMachine using a list.
+The `StateMachine` class is updated to implement the  Locator interface as shown below. I decide to keep the states inside the StateMachine using a list.
 
 For now, I decide to have all systems under a Node called *Systems*. We export this and assign it in the Inspector.
 
