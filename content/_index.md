@@ -13,4 +13,4 @@ max_posts = 4
 
 When I don’t do that I work as a systems developer in Malmö, Sweden.
 
-Here you'll fine ramblings about the programming language Rust and my projects and ideas on game systems development using Godot (and occasionally Bevy).
+Here you'll find ramblings about the programming language Rust and my projects and ideas on game systems development using Godot (and occasionally Bevy).
