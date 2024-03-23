@@ -19,7 +19,7 @@ In my professional work, I've developed a minimal Rust runner job to perform mis
 
 Thanks to the performance Rust provides and the virtually weightless `scratch` image, cloud compute and storage costs are so low they're negligible.
 
-Below I'll outline a quick and concise walkthrough of just that. Let's get started!
+Using a small web application as an example, I'll go through a quick and concise of example of how to get started!
 
 > 🙋🏼 This is a bit of an outlier - I won't be shoehorning any gamedev into this one. This is a quick post about a minimal Rust containerization example!
 
