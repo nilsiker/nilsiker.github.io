@@ -2,7 +2,6 @@
 title = "Vardag Dev Log #1: Lo-Fi Everyday Horror"
 date = 2024-04-01
 description = "A fuzzy introduction to the Vardag series."
-draft = true
 
 [taxonomies]
 tags = ["godot", "horror", "gamedev"]
@@ -14,7 +13,7 @@ quick_navigation_buttons = true
 
 _You wake up to your 12 AM alarm kindly reminding you that you've booked the midnight laundry slot._
 
-_The buzz of fluorescent light is heard overhead as you flip the switch to light your way to the basement laundry room._
+_The buzz of fluorescent lights is heard overhead as you flip the switch to light your way to the basement laundry room._
 
 _You get the feeling something is not right. A feeling of being watched._
 
