@@ -12,7 +12,7 @@ insert_anchor_links = "left"
 
 ### Software Engineer | B.Sc in Computer Science and Engineering
 
-A Malmö-based millenial living with my SO and cats.
+A Malmö-based millennial living with my SO and cats.
 
 Talk to me about
 
