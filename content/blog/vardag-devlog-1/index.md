@@ -41,7 +41,7 @@ After getting up to speed with the Remedyverse and taking Sam's words above to h
 
 Horror that, despite its vague presence, manages to instill dread and suffocate with its esotericity.
 
-Horror that describes the events leading up to the awakening of Deep Sleeper, or the stories of the people stumbling upon the omens appearing before the reign of the Yellow King.
+Horror that describes the events leading up to the awakening of the Deep Sleeper, or the stories of the people stumbling upon the omens appearing before the reign of the Yellow King.
 
 > 🙋🏼 Maybe that's just Lovecraftian? But less fantastical? It's probably best not to think too hard about it.
 
