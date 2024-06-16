@@ -6,10 +6,12 @@ template = "index.html"
 [extra]
 header = {title = "🦀 Hi, I am Andreas", img = "img/logo512.png", img_alt = "Andreas Nilsson" }
 section_path = "blog/_index.md"
-max_posts = 4
+max_posts = 2
+projects_path = "projects/_index.md"
+show_projects_first = false
 +++
 
-**I code game systems in .NET and Rust.**
+**I code game systems in C# and Rust.**
 
 When I don’t do that I work as a systems developer in Malmö, Sweden.
 
