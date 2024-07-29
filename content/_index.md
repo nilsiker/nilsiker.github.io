@@ -1,5 +1,4 @@
 +++
-path = "/"
 title = "Latest posts"
 template = "index.html"
 
