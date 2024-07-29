@@ -1,6 +1,6 @@
 +++
 title = "Making Snake using Rust and Bevy"
-date = 2024-03-29
+date = 2024-06-16
 description = "A semi-guided tutorial on how to create the classic game Snake, ASCII-style using Bevy."
 draft = true
 

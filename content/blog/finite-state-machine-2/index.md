@@ -510,7 +510,7 @@ They simply ask for a reference to ***any*** object that fulfills a specific con
 
 > 🙋🏼 A real neat thing is that we can track dependencies by gauging the `using` statements in our classes. If we see any Control class use another module's Control namespace, that's a red flag now and we're probably missing an interface.
 
-Next post, we will take a look at event-handling support in states. This way, polling conditions in ticks won't be the only way to trigger logic or state transitions in our FSM!
+In the future, I want to take a look at event-handling support in states. This way, polling conditions in ticks won't be the only way to trigger logic or state transitions in our FSM!
 
 If you're feeling curious, try your hand at setting it up yourself! ☀️
 
