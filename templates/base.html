@@ -13,13 +13,16 @@ This variable will hold all the text strings for the language #}
 {%- if not language_strings -%}
 {%- set language_strings = load_data(path="themes/tabi/i18n/" ~ lang ~ ".toml", required=false) -%}
 {%- endif -%}
+{% set rtl_languages = ["ar", "arc", "az", "dv", "ff", "he", "ku", "nqo", "fa", "rhg", "syc", "ur"] %}
 
 
 <!DOCTYPE html>
 <html lang="{{ lang }}" {% if config.extra.default_theme -%} data-theme="{{config.extra.default_theme}}" {%- endif -%}>
+
 {% include "partials/header.html" %}
 
-<body>
+<body{% if lang in rtl_languages %} dir="rtl" {% endif %}{% if config.extra.override_serif_with_sans %}
+    class="use-sans-serif" {% endif %}>
     {% include "partials/nav.html" %}
     <div class="content">
         {# Post page is the default #}
@@ -32,7 +35,6 @@ This variable will hold all the text strings for the language #}
         import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
         mermaid.initialize({ theme: 'dark' })
     </script>
-
-</body>
+    </body>
 
 </html>

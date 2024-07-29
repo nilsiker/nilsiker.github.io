@@ -1,6 +1,5 @@
 +++
 title = "About"
-path = "about"
 template = "info-page.html"
 render = false
 insert_anchor_links = "left"

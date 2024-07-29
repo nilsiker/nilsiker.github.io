@@ -21,9 +21,8 @@ highlight_theme = "css"
 smart_punctuation = true
 
 [extra]
-skin = "lowcontrast_orange"
-theme_switcher = false
 default_theme = "dark"
+skin = "rusty"
 favicon_emoji = "🦀"
 header = { title = "Hello! I'm tabi~", img = "img/main.webp", img_alt = "Your Name" }
 socials = [
@@ -41,9 +40,28 @@ menu = [
 ]
 
 allowed_domains = [
-    { directive = "font-src", domains = ["'self'", "data:"] },
-    { directive = "img-src", domains = ["'self'", "https://*", "data:"] },
-    { directive = "script-src", domains = ["'self'", "https://cdn.jsdelivr.net", "'unsafe-inline'", "'unsafe-eval'"] },
-    { directive = "style-src", domains = ["'self'","https://cdn.jsdelivr.net", "'unsafe-inline'", "'unsafe-eval'"] },
-    { directive = "frame-src", domains = ["https://www.youtube-nocookie.com"] },
+    { directive = "font-src", domains = [
+        "'self'",
+        "data:",
+    ] },
+    { directive = "img-src", domains = [
+        "'self'",
+        "https://*",
+        "data:",
+    ] },
+    { directive = "script-src", domains = [
+        "'self'",
+        "https://cdn.jsdelivr.net",
+        "'unsafe-inline'",
+        "'unsafe-eval'",
+    ] },
+    { directive = "style-src", domains = [
+        "'self'",
+        "https://cdn.jsdelivr.net",
+        "'unsafe-inline'",
+        "'unsafe-eval'",
+    ] },
+    { directive = "frame-src", domains = [
+        "https://www.youtube-nocookie.com",
+    ] },
 ]
