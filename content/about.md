@@ -1,4 +1,5 @@
 +++
+path = "/about"
 title = "About"
 template = "info-page.html"
 render = false
