@@ -203,6 +203,8 @@ You can find **godam** in its [public repository over at GitHub](https://github.
 
 For general usage, check out the [README](https://github.com/nilsiker/godam/blob/main/README.md).
 
+![an animated gif of installing limboai using godam](/img/godam-basic-example.gif)
+
 If you're looking for pipeline use cases, I'll include an example itch.io deploy workflow below. The docker image used is based on the [barichello/godot-ci](https://hub.docker.com/r/barichello/godot-ci) image.
 
 ```yaml
