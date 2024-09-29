@@ -219,7 +219,7 @@ on:
 env:
   GODOT_VERSION: 4.3
   ITCH_USER: your_user
-  EXPORT_NAME: our_project_name
+  EXPORT_NAME: your_project_name
 
 jobs:
   export-web:
@@ -249,7 +249,7 @@ jobs:
           path: ./build/web/
       - name: Deploy to itch.io
         run: |
-          butler push ./build/web/ ITCH_USER/${EXPORT_NAME}:web
+          butler push ./build/web/ ${ITCH_USER}/${EXPORT_NAME}:web
         env:
           BUTLER_API_KEY: ${{ secrets.ITCHIO_API_KEY }}
 ```
