@@ -18,7 +18,7 @@ A command-line tool that aims to operate in the same way the Godot Editor downlo
 
 The objective is to allow developers to fully omit addons from their VCS, and keep track of them using a declarative configuration file (similar to Cargo.toml or package.json)
 
-#### [Check it out on GitHub](https://github.com/nilsiker/bevy_ymir) {.centered-text}
+#### [Check it out on GitHub](https://github.com/nilsiker/godam) {.centered-text}
 
 
 
