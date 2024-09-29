@@ -120,7 +120,7 @@ pub enum Command {
 }
 ```
 
-By deriving from `Subcommand`, these roughly 30 humble lines specifies the entire interface:
+By deriving from `Subcommand`, these roughly 30 humble lines specify the entire interface:
 
 * Subcommands are created by adding enum variants:
 
