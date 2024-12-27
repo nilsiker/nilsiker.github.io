@@ -1,7 +1,8 @@
 +++
-title = "Exploring Chickensoft - Getting Started"
+title = "Exploring Chickensoft - GodotEnv and GodotGame"
 date = 2024-12-27
-description = "Getting started with Chickensoft architecture in Godot C#."
+description = "Getting started with Chickensoft C# architecture in Godot."
+draft = true
 
 [taxonomies]
 tags = ["Godot", "recipe", "C#", ".NET", "Chickensoft", "saving", "serialization"]
@@ -19,11 +20,11 @@ quick_navigation_buttons = true
 
 If you're a Godot C# developer, you might have stumbled over the Chickensoft tools. The folks over at the organization has done a wonderful job showcasing the architecture and packages in their [GameDemo](https://github.com/chickensoft-games/GameDemo).
 
-**However, taking it all in at once can show quite daunting.**
+**However, taking it all in at once can be quite daunting.**
 
 In this post, I hope to introduce the Chickensoft concepts, progressively adding them to a Chickensoft game template project as we run into good use cases.
 
-> 🙋🏼 I'm not providing any golden paths or silver bullets here. I will be using the Chickensoft packages **as I understand them**.
+> 🙋🏼 I'm not providing any golden paths or silver bullets here. I will be using the Chickensoft packages **as I understand them**, essentially recreating my personal journey learning these tools!
 
 We'll start things off really simple - let's cook some chicken! 🐔
 
@@ -33,17 +34,17 @@ At the end of this post, we will have finished the following steps:
 
 * Install a Godot C# version with the [GodotEnv CLI](https://github.com/chickensoft-games/GodotEnv)
 * Create a project using the [GodotGame template](https://github.com/chickensoft-games/GodotGame)
-* Setup an App node and script, to handle the application lifecycle of our project.
+* Prepare a scene structure for our game - starting with the `App` node
 
 We'll make stops along the way and rationalize not only how we perform these steps, but *why* we do it.
+
+# Installing GodotEnv and Godot
 
 We'll start off with getting GodotEnv on our machine. As of writing this post, GodotEnv requires `net8.0`.
 
 > 🙋🏼 Specifically, I'll be using .NET 8.0.404. Consider this foreshadowing!
 
 An argument for using GodotEnv is that it makes installing, uninstalling and switching between Godot versions a breeze. It also provides a way to manage addons.
-
-# Installing GodotEnv and Godot
 
 Installing the GodotEnv tool is a sweet one-liner:
 
@@ -173,7 +174,7 @@ There's **GitHub actions** for **continuous testing** and **spell checking**, **
 
 We'll put blinders on for now and focus on the Godot architecture side of things!
 
-# Handling application stuff
+# Preparing our scene structure
 
 Let's get back to the Godot side of things and start adding our own stuff!
 
@@ -181,7 +182,7 @@ The main node of my Godot projects is the `App`. The idea is to have  `App` hand
 
 This will be simple stuff, such as "starting the game" or "closing the application". We're preparing for the game that does not yet exist.
 
-> 🙋🏼 Prior to adopting the Chickensoft ways, I used to call the App node `Main` instead. This has now changed!
+> 🙋🏼 Prior to adopting the Chickensoft ways, I used to call the App node `Main`. This has now changed!
 
 I'll create an App scene and script and place them in the `src/app` folder. Let's also organize our `Game` source files into their own folder.
 
@@ -206,20 +207,73 @@ Now we end up at our main menu when running the game!
 
 Of course, the buttons do nothing at this point. We should give our App some behaviour by editing `App.cs`.
 
-Before we do that, let's introduce the first potentially daunting parts of Chickensoft - state machines and dependency injection.
+Before we do that, let's introduce the first potentially daunting part of Chickensoft - state machines.
 
-## Adding state machines (LogicBlocks)
+## State machines using LogicBlocks
 
-I've [previously written posts on state machines](/blog/finite-state-machine-1), so I won't go into specifics here.
+I will start of by shouting from the rooftops ***that [LogicBlocks](https://github.com/chickensoft-games/LogicBlocks) is a really cool package!***
 
-However, what I will do is shout from the rooftops that [LogicBlocks](https://github.com/chickensoft-games/LogicBlocks) are really cool!
+> 🙋🏼 They're all I dreamed of accomplishing with my FSM series. I might consider myself defeated - but frankly it's more so being ✨ blessed ✨.
 
-> 🙋🏼 They're all I dreamed of accomplishing with my FSM series. I might consider myself defeated - but frankly it's more that I've been ✨ blessed ✨.
+With LogicBlocks, we can create complex logic for our game nodes by separating it into different states. Part of the value proposition is that we won't create a tangled mess while doing so.
 
-With LogicBlocks, we can easily create complex logic for our game nodes by separating it into different states. I remember promising simple beginnings, so we **will** be keeping it simple!
+I remember promising simple beginnings, so we **will** be keeping it simple! This means that the LogicBlock usage might seem overkill, but I'll try my best at explaining why we should bother at all!
 
-This means that the LogicBlock usage might seem overkill, but I'll try my best at explaining why we should bother at all!
+### Installing LogicBlocks
+
+The packages need to be added to our project. The LogicBlock docs recommends including the introspection and diagram generator for added convenience and to get automatically generated diagrams for your state machines (we'll take a look at that later).
+
+To include the packages in the right spot in our project file, I'll use good old-fashioned copypasting:
+
+```xml
+ <ItemGroup>
+    <!-- Production dependencies go here! -->
+    <PackageReference Include="Chickensoft.LogicBlocks" Version="5.14.0" />
+    <PackageReference Include="Chickensoft.Introspection.Generator" Version="2.1.0" />
+    <PackageReference Include="Chickensoft.LogicBlocks.DiagramGenerator" Version="5.14.0" />
+  </ItemGroup>
+```
+
+I'll check my project sanity by hitting F5 in the editor - my game still runs.
+
+### Implementing App states
+
+Earlier, I created `App.cs`. Now, let's put that on our App node and get coding!
+
+```cs
+using System;
+using Godot;
+
+public partial class App : Node { }
+```
+
+Our naked App script looks like this. I'll introduce the LogicBlocks boilerplate piece by piece and explain it as I go.
+
+Each node that uses LogicBlocks will keep track of its machine (Logic), and its state binding (Binding). The `Logic` reference is mainly used to send inputs into the machine and the `Binding` reference is primarily used to listen to outputs produced by the machine.
+
+The machine itself will contain our game logic in various states, taking in input and producing output based on rules we decide.
+
+```cs
+public partial class App : Node
+{
+  #region State
+  AppLogic Logic { get; set; } = default!;
+  AppLogic.IBinding Binding { get; set; } = default!;
+  #endregion
 
 
+  public override void _Ready()
+  {
+    Logic = new AppLogic();
+  }
+}
 
-## Adding dependency injection
+[Meta]
+[LogicBlock(typeof(AppLogic), Diagram = true)]
+public partial class AppLogic : LogicBlock<AppLogic.State>
+{
+  public override Transition GetInitialState() => To<State>();
+
+  public partial record State : StateLogic<State> { }
+}
+```
