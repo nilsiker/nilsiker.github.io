@@ -5,7 +5,7 @@ description = "Getting started with Chickensoft C# architecture in Godot."
 draft = true
 
 [taxonomies]
-tags = ["Godot", "recipe", "C#", ".NET", "Chickensoft", "fsm", "state machines"]
+tags = ["Godot", "C#", ".NET", "Chickensoft", "fsm", "state machines"]
 
 [extra]
 footnote_backlinks = true
