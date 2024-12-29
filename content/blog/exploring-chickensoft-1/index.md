@@ -278,7 +278,7 @@ public partial class App : Node {
 }
 
 [Meta]
-[LogicBlock(typeof(AppLogic), Diagram = true)]
+[LogicBlock(typeof(State), Diagram = true)]
 public partial class AppLogic : LogicBlock<AppLogic.State> {
   public override Transition GetInitialState() => To<State.InMainMenu>();
 
