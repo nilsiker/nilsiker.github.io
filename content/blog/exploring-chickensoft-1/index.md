@@ -283,6 +283,7 @@ public partial class AppLogic : LogicBlock<AppLogic.State> {
   public override Transition GetInitialState() => To<State.InMainMenu>();
 
   public partial static class Input { }
+  
   public partial static class Output { }
 
   public abstract partial record State : StateLogic<State> {
@@ -291,7 +292,6 @@ public partial class AppLogic : LogicBlock<AppLogic.State> {
     public partial record ClosingApplication : State { }
   }
 }
-
 ```
 
 A definition lightning round might go:
