@@ -18,19 +18,25 @@ quick_navigation_buttons = true
 
 # Introduction
 
-...
+In the last part, we downloaded Godot and setup a project from the Chickensoft GodotGame template. Not terribly riveting, but a good start nonetheless!
+
+In this part, we'll dive straight into implementing game logic that ends up being decoupled from the game engine.
+
+To achieve this, we will start off by using LogicBlocks - a hierarchical state machine package for C# by Chickensoft.
 
 # Scope
 
 At the end of this post, we will have finished the following steps:
 
-...
+- Implement two major app states, InMainMenu and InGame.
+- Add a blackout-state to introduce fade transitions between scenes!
+- Try out refactoring steps when working with LogicBlocks
 
-The goal is to build a solid game architecture that we can easily expand on using Chickensoft tools.
+The goal is to introduce state machines to our project, aiming to build a solid game architecture that we can easily expand on using Chickensoft tools.
 
-# State machines using LogicBlocks
+# Implementation
 
-I will start of by shouting from the rooftops ***that [LogicBlocks](https://github.com/chickensoft-games/LogicBlocks) is a really cool package!***
+I will start of by shouting from the rooftops **_that [LogicBlocks](https://github.com/chickensoft-games/LogicBlocks) is a really cool package!_**
 
 > 🙋🏼 They're all I dreamed of accomplishing with my FSM series. I could consider myself defeated - but frankly it's more so being ✨ blessed ✨.
 
@@ -96,7 +102,7 @@ public partial class AppLogic : LogicBlock<AppLogic.State> {
   public override Transition GetInitialState() => To<State.InMainMenu>();
 
   public partial static class Input { }
-  
+
   public partial static class Output { }
 
   public abstract partial record State : StateLogic<State> {
@@ -107,28 +113,28 @@ public partial class AppLogic : LogicBlock<AppLogic.State> {
 }
 ```
 
-A definition lightning round might go:
+A definition lightning round might be in order:
 
-* `Logic`:  This is a reference to the LogicBlocks state machine. This is mainly used to send inputs into the machine.
-* `Binding`: This is a reference to the state binding. It is primarily used to listen to outputs produced by the machine.
-* `[Meta]`: Blinders on for this one! To quote the creators of Chickensoft:
-    > You don't need to fully understand this package to make the most of it. In fact, you may never need to use it directly since you are more likely to encounter it as a dependency of one of the other Chickensoft tools.
-* `[LogicBlock(typeof(AppLogic), Diagram = true)]`: This attribute extends the class, enabling LogicBlocks generators to generate serialization utilities for the our machine. Setting `Diagram = true` includes the class in the diagram generation.
-* `AppLogic`: The LogicBlocks machine that will contain our game logic in various states, taking in input and producing output based on rules we decide.
-  * `Input`: A class containing record structs that are used to send pieces of data as input into the machine.
-  * `Output`: A class containing record structs that are used to produce outputs from the machine, later to be consumed and reacted to in the `App` node via the `Binding`.
-  * `State`: An abstract state class for all our App LogicBlock states.
-    * `InMainMenu`: The state for when the app is in the main menu.
-    * `InGame`: The state for when the app is running the game.
+- `Logic`: This is a reference to the LogicBlocks state machine. This is mainly used to send inputs into the machine.
+- `Binding`: This is a reference to the state binding. It is primarily used to listen to outputs produced by the machine.
+- `[Meta]`: This adds some convenience for our LogicBlock, such as automatically preallocating and setting the states that are used in the machine. As for details; it's blinders on for this one! To quote the creators of Chickensoft:
+  > You don't need to fully understand this package to make the most of it. In fact, you may never need to use it directly since you are more likely to encounter it as a dependency of one of the other Chickensoft tools.
+- `[LogicBlock(typeof(AppLogic), Diagram = true)]`: This attribute extends the class, enabling LogicBlocks generators to generate serialization utilities for the our machine. Setting `Diagram = true` includes the class in the diagram generation.
+- `AppLogic`: The LogicBlocks machine that will contain our game logic in various states, taking in input and producing output based on rules we decide.
+  - `Input`: A class containing record structs that are used to send pieces of data as input into the machine.
+  - `Output`: A class containing record structs that are used to produce outputs from the machine, later to be consumed and reacted to in the `App` node via the `Binding`.
+  - `State`: An abstract state class for all our App LogicBlock states.
+    - `InMainMenu`: The state for when the app is in the main menu.
+    - `InGame`: The state for when the app is running the game.
 
-> 🙋🏼 Later on when using AutoInject, we have access to a separate set of lifecycle methods that we should prefer!
+> 🙋🏼 Later on in the blog series when using AutoInject, we have access to a separate set of lifecycle methods that we should prefer!
 >
 > For now, I will be using the standard Node lifecycle - by overriding `Ready`.
 
 Let us add some inputs; `NewGameClick` and `QuitClick`.
 
 ```cs
-public static partial class Input { 
+public static partial class Input {
   public partial record struct NewGameClick;
   public partial record struct QuitClick;
 }
@@ -145,7 +151,7 @@ public static partial class Output {
 
 ## Sending and listening to inputs
 
-Next, let's actually send some input into the machine. We'll connect the `Button.Pressed` signals to handlers through code. At this point, I've  added unique names to my buttons to get a hold of the references!
+Next, let's actually send some input into the machine. We'll connect the `Button.Pressed` signals to handlers through code. At this point, I've added unique names to my buttons to get a hold of the references!
 
 ```cs
 public partial class App : Node {
@@ -187,11 +193,11 @@ Let's fix that by adding the `IGet<T>` interface!
 ```cs
 // Beginning of script omitted!
 public abstract record State : StateLogic<State> {
-  public record InMainMenu 
+  public record InMainMenu
     : State,
-      IGet<Input.NewGameClick>, 
+      IGet<Input.NewGameClick>,
       IGet<Input.QuitClick> {
-    public Transition On(in Input.NewGameClick input) => 
+    public Transition On(in Input.NewGameClick input) =>
       To<InGame>();
 
     public Transition On(in Input.QuitClick input) =>
@@ -199,7 +205,7 @@ public abstract record State : StateLogic<State> {
   }
 
   public record InGame : State { }
-  
+
   public record ClosingApplication : State { }
 }
 ```
@@ -239,18 +245,20 @@ public override void _Ready() {
 
   // NEW BOILERPLATE UNLOCKED
   Binding
-    .Handle((in AppLogic.Output.StartNewGame output) => 
+    .Handle((in AppLogic.Output.StartNewGame output) =>
       GD.Print("TODO start game"))
-    .Handle((in AppLogic.Output.QuitApp output) => 
+    .Handle((in AppLogic.Output.QuitApp output) =>
       GetTree().Quit());
 }
 ```
 
-When running the game through the editor, we can now quit the game. This proves our state machine is working! 
+When running the game through the editor, we can now quit the game. This proves our state machine is working!
 
-We can also get stuck in the `InGame` state, since the New Game button brings transitions us there. We have no way of getting out of there!
+## More transitions and states
+
+However, we can also get stuck in the `InGame` state, since the New Game button transitions us there. We have no way of getting out of there!
 
 To showcase the ease-of-control that LogicBlocks gives us. The plan is:
 
-* Allow for pressing Escape to return to the main menu.
-* 
+- Allow for pressing Escape to return to the main menu.
+-

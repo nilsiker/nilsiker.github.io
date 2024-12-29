@@ -1,11 +1,10 @@
 +++
-title = "Exploring Chickensoft - GodotEnv and GodotGame"
+title = "Exploring Chickensoft #1:  GodotEnv and GodotGame"
 date = 2024-12-27
 description = "Getting started with Chickensoft C# architecture in Godot."
-draft = true
 
 [taxonomies]
-tags = ["Godot", "recipe", "C#", ".NET", "Chickensoft", "saving", "serialization"]
+tags = ["Godot", "C#", ".NET", "Chickensoft", "getting started"]
 
 [extra]
 footnote_backlinks = true
@@ -14,17 +13,25 @@ quick_navigation_buttons = true
 
 > 🙋🏼 A huge thanks goes out to Joanna May and all Chickensoft collaborators. Check out their [site](https://chickensoft.games/) and their truly impressive open-source tools for most things C# in Godot!
 
-> ⚠️ This post assumes you have a basic understanding of Nodes and Scenes in Godot and at least mid-level familiarity with C# syntax if you plan to code along!
+> ⚠️ This post assumes you have a basic understanding of Nodes and Scenes in Godot and are confident with C# syntax, if you plan to code along!
 
 # Introduction
 
-If you're a Godot C# developer, you might have stumbled over the Chickensoft tools. The folks over at the organization has done a wonderful job showcasing the architecture and packages in their [GameDemo](https://github.com/chickensoft-games/GameDemo).
+**Join me as I discover and try out the Chickensoft way of developing games in Godot!**
 
-In short, the tools and guidelines provided by Chickensoft should provide you with a clean, extendible and testable architecture for your games.
+I often feel that my Godot projects slowly falls apart as I add more scripts and systems. We all know it - it's a classic architecture problem!
+
+It usually starts with a bunch of GDScripts, and as things get tangled I start planning a move to C#. There's only so much namespace organization and interface decoupling can do, however...
+
+I had yet to find a consistent way of implementing the features I have in mind. Returning to older projects always means I have to rediscover what the heck Andreas was thinking - and that might have been more than six months ago.
+
+Luckily, Chickensoft comes to the rescue! If you've dabbled in C# Godot, you might have run into their stuff.
+
+In short, the tools and guidelines provided by Chickensoft should provide you with a clean, extendible and testable architecture for your games. And I must say, the folks over at the organization has done a wonderful job showcasing the architecture and packages in their [GameDemo](https://github.com/chickensoft-games/GameDemo).
 
 **However, taking it all in at once is quite daunting.**
 
-In this post, I hope to introduce the Chickensoft concepts, progressively adding them to a Chickensoft game template project as we run into good use cases.
+In this series of posts, I hope to introduce the Chickensoft concepts, progressively adding them to a Chickensoft game template project as we run into good use cases.
 
 > 🙋🏼 I'm not providing any golden paths or silver bullets here. I will be using the Chickensoft packages **as I understand them**, essentially recreating my personal journey learning these tools and patterns!
 
@@ -34,21 +41,29 @@ We'll start things off really simple - let's get cookin'! 🐔
 
 At the end of this post, we will have finished the following steps:
 
-* Install a Godot C# version with the [GodotEnv CLI](https://github.com/chickensoft-games/GodotEnv)
-* Create a project using the [GodotGame template](https://github.com/chickensoft-games/GodotGame)
-* Prepare a scene structure for our game - starting with the `App` node
+- Install a Godot C# version with the [GodotEnv CLI](https://github.com/chickensoft-games/GodotEnv)
+- Create a project using the [GodotGame template](https://github.com/chickensoft-games/GodotGame)
+- Prepare a scene structure for our game - starting with the `App` node
 
-We'll make stops along the way and rationalize not only how we perform these steps, but *why* we do it.
+We'll make stops along the way and rationalize not only how we perform these steps, but _why_ we do it.
 
 We won't be explaining or describing every technical detail of the Chickensoft packages.
 
 The goal is to build a solid game architecture that we can easily expand on using Chickensoft tools.
 
-# Installing GodotEnv and Godot
+# Implementation
+
+Arguably, the things we'll be sorting out in this part should be fairly simple.
+
+We won't exactly get into the meat and bones of the Chickensoft packages in this post, but we will prepare a project for it.
+
+Let's try using the GodotEnv CLI!
+
+## Installing Godot using GodotEnv
 
 We'll start off with getting GodotEnv on our machine. As of writing this post, GodotEnv requires `net8.0`.
 
-> 🙋🏼 Specifically, I'll be using .NET 8.0.404. Consider this foreshadowing!
+> 🙋🏼 Specifically, I'll be using .NET 8.0.404. It will work nicely!
 
 An argument for using GodotEnv is that it makes installing, uninstalling and switching between Godot versions a breeze. It also provides a way to manage addons.
 
@@ -70,7 +85,7 @@ That's it! We now have Godot 4.3.0 installed. You can confirm this by running:
 godot --version
 ```
 
-# Create a GodotGame template project
+## Create a GodotGame template project
 
 Next, we'll install the GodotGame template, allowing us to quickly scaffold Godot projects using some boilerplate Chickensoft configuration.
 
@@ -90,16 +105,16 @@ I'm calling my project **Eggsploration**, so that we can finally get that inevit
 
 We now have a Chickensoft game template project set up! Easy does it...
 
-## Inspecting the default template
+### Inspecting the default scenes
 
-Let's cd into the project and edit it in Godot:
+Before we make any changes, we should check out what the template actually generates for us.
+
+Let's cd into the project and open it with the Godot editor.
 
 ```bash
 cd Eggsploration # substitute with your project name!
 godot -e
 ```
-
-## Run the game
 
 When running the game with F5, we are presented with a scene containing a test button:
 
@@ -113,7 +128,7 @@ Reading the comments in `Main.cs`, we realize that the main scene is used to con
 
 At the end, the `Main` script changes the scene to `Game`, containing the test button. We're on track!
 
-## The project file
+### The project file
 
 Having a gander at the good ol' `.csproj` file, we have some out-of-the-box configuration.
 
@@ -172,7 +187,7 @@ We also have a few debug dependencies set up for us for testing purposes. The co
 
 Before long, we will add some packages to accompany that Production dependencies comment.
 
-## Miscellaneous configuration and tooling
+### Miscellaneous configuration and tooling
 
 The template provides a lot of out-of-the-box config and tooling - too much to go over here and now!
 
@@ -180,11 +195,11 @@ There's **GitHub actions** for **continuous testing** and **spell checking**, **
 
 We'll put blinders on for now and focus on the Godot architecture side of things!
 
-# Preparing our scene structure
+## Preparing our scene structure
 
 Let's get back to the Godot side of things and start adding our own stuff!
 
-The main node of my Godot projects is the `App`. The idea is to have  `App` handle all application concerns.
+The main node of my Godot projects is the `App`. The idea is to have `App` handle all application concerns.
 
 This will be simple stuff, such as "starting the game" or "closing the application". We're preparing for the game that does not yet exist.
 
@@ -205,224 +220,23 @@ Next, I give them descriptive names and center the VBox in the CanvasLayer.
 Let's pop into `Main.cs` real quick and have `Main.RunScene` change the scene to our app:
 
 ```cs
-  private void RunScene() 
+  private void RunScene()
     => GetTree().ChangeSceneToFile("res://src/app/App.tscn");
 ```
 
 Now we end up at our main menu when running the game!
 
-Of course, the buttons do nothing at this point. We should give our App some behaviour by editing `App.cs`.
+Of course, the buttons do nothing at this point.
 
-Before we do that, let's introduce the first potentially daunting part of Chickensoft - state machines.
+We could give our App some behaviour by editing `App.cs` - but let's be mindful about the architecture, no - but let's be mindful about the architecture, now...
 
-## State machines using LogicBlocks
+To keep things digestible, let's save that for the next part where we'll try out a Chickensoft package; **LogicBlocks**!
 
-I will start of by shouting from the rooftops ***that [LogicBlocks](https://github.com/chickensoft-games/LogicBlocks) is a really cool package!***
+I hope to catch you in the next one!
 
-> 🙋🏼 They're all I dreamed of accomplishing with my FSM series. I could consider myself defeated - but frankly it's more so being ✨ blessed ✨.
+Thanks for reading,<br/>
+Nilsiker
 
-With LogicBlocks, we can create complex logic for our game nodes by separating it into different states. Part of the value proposition is that we won't create a tangled mess while doing so.
+[source code available here](https://github.com/nilsiker/eggsploration)
 
-I remember promising simple beginnings, so we **will** be keeping it simple! This means that the LogicBlock usage might seem overkill, but I'll try my best at explaining why we should bother at all!
-
-### Installing LogicBlocks
-
-The packages need to be added to our project. The LogicBlock docs recommends including the introspection and diagram generator for added convenience and to get automatically generated diagrams for your state machines (we'll take a look at that later).
-
-To include the packages in the right spot in our project file, I'll use good old-fashioned copypasting:
-
-```xml
- <ItemGroup>
-    <!-- Production dependencies go here! -->
-    <PackageReference Include="Chickensoft.LogicBlocks" Version="5.14.0" />
-    <PackageReference Include="Chickensoft.Introspection.Generator" Version="2.1.0" />
-    <PackageReference Include="Chickensoft.LogicBlocks.DiagramGenerator" Version="5.14.0" />
-  </ItemGroup>
-```
-
-I'll check my project sanity by hitting F5 in the editor - my game still runs.
-
-### Implementing App states
-
-Earlier, I created `App.cs`. Now, let's put that on our App node and get coding!
-
-```cs
-using System;
-using Godot;
-
-public partial class App : Node { }
-```
-
-Our naked App script looks like this. I'll introduce the LogicBlocks boilerplate piece by piece and explain it as I go.
-
-Let's add the boilerplate and have a look.
-
-```cs
-namespace Eggsploration;
-
-using Chickensoft.Introspection;
-using Chickensoft.LogicBlocks;
-using Godot;
-
-public partial class App : Node {
-  #region State
-  private AppLogic Logic { get; set; } = default!;
-  private AppLogic.IBinding Binding { get; set; } = default!;
-  #endregion
-
-
-  public override void _Ready() {
-    Logic = new AppLogic();
-    Binding = Logic.Bind();
-  }
-}
-
-[Meta]
-[LogicBlock(typeof(State), Diagram = true)]
-public partial class AppLogic : LogicBlock<AppLogic.State> {
-  public override Transition GetInitialState() => To<State.InMainMenu>();
-
-  public partial static class Input { }
-  
-  public partial static class Output { }
-
-  public abstract partial record State : StateLogic<State> {
-    public partial record InMainMenu : State { }
-    public partial record InGame : State { }
-    public partial record ClosingApplication : State { }
-  }
-}
-```
-
-A definition lightning round might go:
-
-* `Logic`:  This is a reference to the LogicBlocks state machine. This is mainly used to send inputs into the machine.
-* `Binding`: This is a reference to the state binding. It is primarily used to listen to outputs produced by the machine.
-* `[Meta]`: Blinders on for this one! To quote the creators of Chickensoft:
-    > You don't need to fully understand this package to make the most of it. In fact, you may never need to use it directly since you are more likely to encounter it as a dependency of one of the other Chickensoft tools.
-* `[LogicBlock(typeof(AppLogic), Diagram = true)]`: This attribute extends the class, enabling LogicBlocks generators to generate serialization utilities for the our machine. Setting `Diagram = true` includes the class in the diagram generation.
-* `AppLogic`: The LogicBlocks machine that will contain our game logic in various states, taking in input and producing output based on rules we decide.
-  * `Input`: A class containing record structs that are used to send pieces of data as input into the machine.
-  * `Output`: A class containing record structs that are used to produce outputs from the machine, later to be consumed and reacted to in the `App` node via the `Binding`.
-  * `State`: An abstract state class for all our App LogicBlock states.
-    * `InMainMenu`: The state for when the app is in the main menu.
-    * `InGame`: The state for when the app is running the game.
-
-> 🙋🏼 Later on when using AutoInject, we have access to a separate set of lifecycle methods that we should prefer!
->
-> For now, I will be using the standard Node lifecycle - by overriding `Ready`.
-
-Let us add some inputs; `NewGameClick` and `QuitClick`.
-
-```cs
-public static partial class Input { 
-  public partial record struct NewGameClick;
-  public partial record struct QuitClick;
-}
-```
-
-The happenings we want to react to are: `StartNewGame` and `QuitApp`. Let's add them to the output!
-
-```cs
-public static partial class Output {
-  public partial record struct StartNewGame;
-  public partial record struct QuitApp;
-}
-```
-
-Next, let's actually send some input into the machine. We'll connect the `Button.Pressed` signals to handlers through code. Let's leverage Godot unique names to get a hold of the references!
-
-```cs
-public partial class App : Node {
-  #region State
-  private AppLogic Logic { get; set; } = default!;
-  private AppLogic.IBinding Binding { get; set; } = default!;
-  #endregion
-
-  #region Nodes
-  private Button _newGameButton = default!;
-  private Button _quitButton = default!;
-  #endregion
-
-  public override void _Ready() {
-    Logic = new AppLogic();
-    Binding = Logic.Bind();
-
-    _newGameButton = GetNode<Button>("%NewGameButton");
-    _quitButton = GetNode<Button>("%QuitButton");
-
-    _newGameButton.Pressed += OnNewGameButtonPressed;
-    _quitButton.Pressed += OnQuitButtonPressed;
-  }
-
-  private void OnNewGameButtonPressed() =>
-    Logic.Input(new AppLogic.Input.NewGameClick());
-
-  private void OnQuitButtonPressed() =>
-    Logic.Input(new AppLogic.Input.QuitClick());
-}
-
-// ... Rest of script omitted!
-```
-
-At this point our App script actually sends input into the AppLogic machine! However, we haven't told our states to listen to any inputs yet.
-
-Let's fix that by adding the `IGet<T>` interface!
-
-```cs
-// Beginning of script omitted!
-public abstract partial record State : StateLogic<State> {
-  public partial record InMainMenu 
-    : State,
-      IGet<Input.NewGameClick>, 
-      IGet<Input.QuitClick> {
-    public Transition On(in Input.NewGameClick input) => 
-      To<InGame>();
-
-    public Transition On(in Input.QuitClick input) =>
-      To<ClosingApplication>();
-  }
-
-  public partial record InGame : State { }
-  
-  public partial record ClosingApplication : State { }
-}
-```
-
-The code should now be hopping over to the other states; `InGame` and `ClosingApplication`. However, we're not producing any outputs in the states. 
-
-Let's fix that also - by adding the state constructor and specifying what happens `OnEnter`. Tiny boilerplate incoming!
-
-```cs
-public partial record InGame : State {
-  public InGame() {
-    this.OnEnter(() => Output(new Output.StartNewGame()));
-  }
-}
-
-public partial record ClosingApplication : State {
-  public ClosingApplication() {
-    this.OnEnter(() => Output(new Output.QuitApp()));
-  }
-}
-```
-
-The final step now, is to actually **react** to the output from the machine via the `Binding`. We'll hop over to our `Ready` function and set up those reactions!
-
-```cs
-public override void _Ready() {
-  Logic = new AppLogic();
-  Binding = Logic.Bind();
-
-  _newGameButton = GetNode<Button>("%NewGameButton");
-  _quitButton = GetNode<Button>("%QuitButton");
-
-  _newGameButton.Pressed += OnNewGameButtonPressed;
-  _quitButton.Pressed += OnQuitButtonPressed;
-
-  // NEW BOILERPLATE UNLOCKED
-  Binding
-    .Handle((in AppLogic.Output.StartNewGame output) => GD.Print("TODO start game"))
-    .Handle((in AppLogic.Output.QuitApp output) => GetTree().Quit());
-}
-```
+[part 2 >](/blog/exploring-chickensoft-2)
