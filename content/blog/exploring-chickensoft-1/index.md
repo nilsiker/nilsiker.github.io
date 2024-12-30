@@ -19,13 +19,13 @@ quick_navigation_buttons = true
 
 **Join me as I discover and try out the Chickensoft way of developing games in Godot!**
 
-I often feel that my Godot projects slowly falls apart as I add more scripts and systems. We all know it - it's a classic architecture problem!
+I often feel that my Godot projects slowly falls apart as I add more scripts and systems. We all know it - it's a classic architectural problem!
 
 It usually starts with a bunch of GDScripts, and as things get tangled I start planning a move to C#. There's only so much namespace organization and interface decoupling can do, however...
 
-I had yet to find a consistent way of implementing the features I have in mind. Returning to older projects always means I have to rediscover what the heck Andreas was thinking - and that might have been more than six months ago.
+I had yet to find a consistent way of implementing the features I have in mind. Returning to older projects always meant I had to rediscover what the heck Andreas was thinking - and that might have been more than six months ago.
 
-Luckily, Chickensoft comes to the rescue! If you've dabbled in C# Godot, you might have run into their stuff.
+Luckily, Chickensoft comes to the rescue! If you've dabbled in C# Godot, you might have run into their stuff already.
 
 In short, the tools and guidelines provided by Chickensoft should provide you with a clean, extendible and testable architecture for your games. And I must say, the folks over at the organization has done a wonderful job showcasing the architecture and packages in their [GameDemo](https://github.com/chickensoft-games/GameDemo).
 
@@ -35,7 +35,7 @@ In this series of posts, I hope to introduce the Chickensoft concepts, progressi
 
 > 🙋🏼 I'm not providing any golden paths or silver bullets here. I will be using the Chickensoft packages **as I understand them**, essentially recreating my personal journey learning these tools and patterns!
 
-We'll start things off really simple - let's get cookin'! 🐔
+We'll start things off really simple! 🐔
 
 # Scope
 
@@ -43,13 +43,13 @@ At the end of this post, we will have finished the following steps:
 
 - Install a Godot C# version with the [GodotEnv CLI](https://github.com/chickensoft-games/GodotEnv)
 - Create a project using the [GodotGame template](https://github.com/chickensoft-games/GodotGame)
-- Prepare a scene structure for our game - starting with the `App` node
+- Prepare a scene structure for our game - starting with the `App` node and setting up a mock-up main menu.
 
 We'll make stops along the way and rationalize not only how we perform these steps, but _why_ we do it.
 
-We won't be explaining or describing every technical detail of the Chickensoft packages.
+We won't be explaining or describing every technical detail of the Chickensoft packages. I'll leave that up to the Chickensoft docs, which go into technical detail that I couldn't do justice with my current C# experience.
 
-The goal is to build a solid game architecture that we can easily expand on using Chickensoft tools.
+The goal is to build a foundational game structure, with an architecture that we can easily expand on using Chickensoft tools.
 
 # Implementation
 
@@ -57,13 +57,13 @@ Arguably, the things we'll be sorting out in this part should be fairly simple.
 
 We won't exactly get into the meat and bones of the Chickensoft packages in this post, but we will prepare a project for it.
 
-Let's try using the GodotEnv CLI!
+Let's start by trying out the GodotEnv CLI!
 
 ## Installing Godot using GodotEnv
 
 We'll start off with getting GodotEnv on our machine. As of writing this post, GodotEnv requires `net8.0`.
 
-> 🙋🏼 Specifically, I'll be using .NET 8.0.404. It will work nicely!
+> 🙋🏼 Specifically, I'll be using .NET 8.0.404. It will work nicely with the package versions that are used in this series!
 
 An argument for using GodotEnv is that it makes installing, uninstalling and switching between Godot versions a breeze. It also provides a way to manage addons.
 
@@ -85,9 +85,11 @@ That's it! We now have Godot 4.3.0 installed. You can confirm this by running:
 godot --version
 ```
 
+Now that Godot is installed, we'll swiftly move on to generating a project.
+
 ## Create a GodotGame template project
 
-Next, we'll install the GodotGame template, allowing us to quickly scaffold Godot projects using some boilerplate Chickensoft configuration.
+First off, we need to install the GodotGame template, allowing us to quickly scaffold Godot projects that comes with some boilerplate Chickensoft configuration.
 
 Install the template like so:
 
@@ -101,7 +103,7 @@ Then generate a new project using the template:
 dotnet new chickengame --name "Eggsploration" --param:author "Andreas Nilsson"
 ```
 
-I'm calling my project **Eggsploration**, so that we can finally get that inevitable pun out of the way. I'll set myself as the author.
+I'm calling my project **Eggsploration**, so that we can finally get that inevitable pun out of the way. I'll set myself as the author/scapegoat.
 
 We now have a Chickensoft game template project set up! Easy does it...
 
@@ -120,7 +122,7 @@ When running the game with F5, we are presented with a scene containing a test b
 
 ![alt text](img/test_button_scene.png)
 
-Taking a closer look, we see this is actually the `Game.tscn` scene, not `Main.tscn` - the latter being completely empty.
+Taking a closer look, we see this is actually the `Game.tscn` scene, not `Main.tscn` - the latter being a singular node with a script attached to it.
 
 Reading the comments in `Main.cs`, we realize that the main scene is used to conditionally run tests. Let's skip the specifics for now, as we won't dive into the testing capabilities of Chickensoft at this point.
 
@@ -197,11 +199,11 @@ We'll put blinders on for now and focus on the Godot architecture side of things
 
 ## Preparing our scene structure
 
-Let's get back to the Godot side of things and start adding our own stuff!
+Let's get back to Godot and start adding our own stuff!
 
 The main node of my Godot projects is the `App`. The idea is to have `App` handle all application concerns.
 
-This will be simple stuff, such as "starting the game" or "closing the application". We're preparing for the game that does not yet exist.
+This will be simple stuff, such as "starting the game" or "closing the application". We're preparing for the game that we have yet to make.
 
 > 🙋🏼 Prior to adopting the Chickensoft ways, I used to call the App node `Main`. This has now changed!
 
@@ -226,17 +228,17 @@ Let's pop into `Main.cs` real quick and have `Main.RunScene` change the scene to
 
 Now we end up at our main menu when running the game!
 
-Of course, the buttons do nothing at this point.
+# Wrapping up
 
-We could give our App some behaviour by editing `App.cs` - but let's be mindful about the architecture, no - but let's be mindful about the architecture, now...
+That's it for this post. Of course, the buttons do nothing at this point.
 
-To keep things digestible, let's save that for the next part where we'll try out a Chickensoft package; **LogicBlocks**!
+We could give our App some behaviour by editing `App.cs` - but let's be mindful about the architecture. We want to set us up for success in the long run, and there's a nice Chickensoft package that will help us along the way; **LogicBlocks**!
 
-I hope to catch you in the next one!
+To keep things digestible, let's save that for the next part. We've got a good C# coding session ahead of us. Hope to catch you there!
 
 Thanks for reading,<br/>
 Nilsiker
 
-[source code available here](https://github.com/nilsiker/eggsploration)
+[full source code available here](https://github.com/nilsiker/eggsploration/tree/part1)
 
-[part 2 >](/blog/exploring-chickensoft-2)
+**part 2 coming soon**

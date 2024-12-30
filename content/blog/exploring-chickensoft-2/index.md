@@ -36,13 +36,15 @@ The goal is to introduce state machines to our project, aiming to build a solid 
 
 # Implementation
 
-I will start of by shouting from the rooftops **_that [LogicBlocks](https://github.com/chickensoft-games/LogicBlocks) is a really cool package!_**
+I will start off by shouting from the rooftops **_that [LogicBlocks](https://github.com/chickensoft-games/LogicBlocks) is a really cool package!_**
 
 > 🙋🏼 They're all I dreamed of accomplishing with my FSM series. I could consider myself defeated - but frankly it's more so being ✨ blessed ✨.
 
-With LogicBlocks, we can create complex logic for our game nodes by separating it into different states. Part of the value proposition is that we won't create a tangled mess while doing so.
+With LogicBlocks, we can create complex logic for our game nodes by separating it into different states. Part of the value proposition is that we won't create a tangled mess while doing so. 
 
-I remember promising simple beginnings, so we **will** be keeping it simple! This means that the LogicBlock usage might seem overkill, but I'll try my best at explaining why we should bother at all!
+> 🙋🏼 Of course, you can still end up with a mess, but it'll be an *idiomatic* mess. That's the most preferable kind of mess, if you ask me!
+
+I remember promising simple beginnings, so we **will** be keeping it simple! This means that the LogicBlock usage might seem overkill, but I'll try my best at explaining why we should bother at all.
 
 ## Installing LogicBlocks
 
@@ -53,9 +55,9 @@ To include the packages in the right spot in our project file, I'll use good old
 ```xml
  <ItemGroup>
     <!-- Production dependencies go here! -->
-    <PackageReference Include="Chickensoft.LogicBlocks" Version="5.14.0" />
+    <PackageReference Include="Chickensoft.LogicBlocks" Version="5.13.0" />
     <PackageReference Include="Chickensoft.Introspection.Generator" Version="2.0.0" />
-    <PackageReference Include="Chickensoft.LogicBlocks.DiagramGenerator" Version="5.14.0" />
+    <PackageReference Include="Chickensoft.LogicBlocks.DiagramGenerator" Version="5.13.0" />
   </ItemGroup>
 ```
 
@@ -127,9 +129,11 @@ A definition lightning round might be in order:
     - `InMainMenu`: The state for when the app is in the main menu.
     - `InGame`: The state for when the app is running the game.
 
-> 🙋🏼 Later on in the blog series when using AutoInject, we have access to a separate set of lifecycle methods that we should prefer!
+> 🙋🏼 Later on in the blog series we will be using the AutoInject package. This grants us access to a separate set of lifecycle methods that we should prefer!
 >
 > For now, I will be using the standard Node lifecycle - by overriding `Ready`.
+
+## Sending and listening to inputs
 
 Let us add some inputs; `NewGameClick` and `QuitClick`.
 
@@ -140,18 +144,9 @@ public static partial class Input {
 }
 ```
 
-The happenings we want to react to are: `StartNewGame` and `QuitApp`. Let's add them to the output!
+We will be creating instances of these structs and send them into the machine, whenever we want to trigger logic (and typically produce outputs) in our machine.
 
-```cs
-public static partial class Output {
-  public partial record struct StartNewGame;
-  public partial record struct QuitApp;
-}
-```
-
-## Sending and listening to inputs
-
-Next, let's actually send some input into the machine. We'll connect the `Button.Pressed` signals to handlers through code. At this point, I've added unique names to my buttons to get a hold of the references!
+Next, let's actually send some input into the machine. We'll connect the `Button.Pressed` signals to handlers in our script. At this point, I've added unique names to my buttons to get a hold of the references!
 
 ```cs
 public partial class App : Node {
@@ -186,12 +181,13 @@ public partial class App : Node {
 // ... Rest of script omitted!
 ```
 
-At this point our App script actually sends input into the AppLogic machine! However, we haven't told our states to listen to any inputs yet.
+At this point our App script actually sends input into the AppLogic machine! However, the input falls on deaf ears as we haven't told our states to listen to any inputs yet.
 
-Let's fix that by adding the `IGet<T>` interface!
+Let's fix that by adding and implementing the `IGet<T>` interface!
 
 ```cs
 // Beginning of script omitted!
+
 public abstract record State : StateLogic<State> {
   public record InMainMenu
     : State,
@@ -210,11 +206,24 @@ public abstract record State : StateLogic<State> {
 }
 ```
 
+The interface includes the `Transition On<T>(in T input)` method. We'll implement them using the `StateLogic.To<T>()` function, returning a `Transition`. This will tell the machine what state to transition to when triggered by the input.
+
 The code should now be hopping over to the other states; `InGame` and `ClosingApplication`. However, we're not producing any outputs in the states.
 
 ## Producing and reacting to outputs
 
-Let's fix that also - by adding the state constructor and specifying what happens `OnEnter`. Tiny boilerplate incoming!
+The happenings we want to react to are: `StartNewGame` and `QuitApp`. Let's add them to the output!
+
+```cs
+public static partial class Output {
+  public partial record struct StartNewGame;
+  public partial record struct QuitApp;
+}
+```
+
+We will be creating instances of these structs and output them from the machine. We will also bind logic to these outputs via our `Binding` in `App.cs`.
+
+Also, we need to **output the output**. For game logic, we add the state constructor and specify what happens `OnEnter`. Tiny boilerplate incoming!
 
 ```cs
 public record InGame : State {
@@ -229,6 +238,8 @@ public record ClosingApplication : State {
   }
 }
 ```
+
+> 🙋🏼 There is also the `OnAttach` and `OnDetach`. According to [the docs](https://chickensoft.games/docs/logic_blocks/basics/states#-attach-and-detach-vs-entrance-and-exit) these should be used for housekeeping stuff, such as subscribing and unsubscribing to events.
 
 The final step now, is to actually **react** to the output from the machine via the `Binding`. We'll hop over to our `Ready` function and set up those reactions!
 
