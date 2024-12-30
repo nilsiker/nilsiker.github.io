@@ -24,7 +24,7 @@ smart_punctuation = true
 default_theme = "dark"
 skin = "rusty"
 favicon_emoji = "🦀"
-header = { title = "Hello! I'm tabi~", img = "img/main.webp", img_alt = "Your Name" }
+social_media_card = "/img/profile.png"
 socials = [
     { name = "github", url = "https://github.com/nilsiker/", icon = "github" },
     { name = "instagram", url = "https://instagram.com/nilsiker", icon = "instagram" },
