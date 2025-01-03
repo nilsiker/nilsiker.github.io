@@ -1,8 +1,7 @@
 +++
 title = "Exploring Chickensoft #2: LogicBlocks"
-date = 2024-12-29
-description = "Getting started with Chickensoft C# architecture in Godot."
-draft = true
+date = 2025-01-03
+description = "Using Chickensoft LogicBlocks state machines in Godot C#."
 
 [taxonomies]
 tags = ["Godot", "C#", ".NET", "Chickensoft", "fsm", "state machines"]
@@ -486,7 +485,7 @@ As this is the `app` feature, I break the nested classes out into their separate
 
 It would be nice if the transition wasn't so sudden. I'd rather have it fade out to black, have the scene change, and then fade in from black.
 
-To demonstrate the ease of LogicBlocks and how we can handle this in a very human-friendly way, let me just go ahead and comment it as I go along.
+To demonstrate the ease of LogicBlocks and how we can handle this in a very human-friendly way, let me go ahead and comment it as I go along.
 
 I'll be adding a `BlackingOut` state, create some fitting inputs and outputs for the machine, make sure to send and listen to the inputs and also produce and handle the outputs. There's a new concept being introduced also - you'll probably catch it!
 
