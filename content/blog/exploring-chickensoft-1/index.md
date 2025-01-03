@@ -241,4 +241,4 @@ Nilsiker
 
 [full source code available here](https://github.com/nilsiker/eggsploration/tree/part1)
 
-**part 2 coming soon**
+[part 2 >](/blog/exploring-chickensoft-2)
