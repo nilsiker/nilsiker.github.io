@@ -1,7 +1,9 @@
 +++
 title = "Exploring Chickensoft #2: LogicBlocks"
 date = 2025-01-03
-description = "Using Chickensoft LogicBlocks state machines in Godot C#."
+description = "Implementing app logic using state machines."
+aliases = ["/blog/exploring-chickensoft-2"]
+
 
 [taxonomies]
 tags = ["Godot", "C#", ".NET", "Chickensoft", "fsm", "state machines"]
@@ -10,8 +12,6 @@ tags = ["Godot", "C#", ".NET", "Chickensoft", "fsm", "state machines"]
 footnote_backlinks = true
 quick_navigation_buttons = true
 +++
-
-[< part 1](/blog/exploring-chickensoft-1)
 
 > ⚠️ This post assumes you have a basic understanding of Nodes and Scenes in Godot and at least mid-level familiarity with C# syntax if you plan to code along!
 
@@ -680,5 +680,3 @@ Thanks for reading,<br/>
 Nilsiker
 
 [full source code available here](https://github.com/nilsiker/eggsploration/tree/part2)
-
-**part 3 in the works**

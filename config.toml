@@ -24,6 +24,7 @@ smart_punctuation = true
 default_theme = "dark"
 skin = "rusty"
 favicon_emoji = "🦀"
+mermaid = true
 social_media_card = "/img/profile.png"
 socials = [
     { name = "github", url = "https://github.com/nilsiker/", icon = "github" },

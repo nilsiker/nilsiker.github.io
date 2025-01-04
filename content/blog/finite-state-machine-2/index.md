@@ -18,19 +18,18 @@ quick_navigation_buttons = true
 Last time, we left things in quite a mess.
 
 A class overview of our current FSM looks like this:
-
 {% mermaid() %}
 classDiagram
 direction TB
     class StateMachine {
         + ChangeState(State) void
     }
-    class State {
+    class State:::italic {
         - _name : string
-        + Enter() void
-        + Tick(double) void
-        + PhysicsTick(double) void
-        + Exit() void
+        + Enter() void*
+        + Tick(double) void*
+        + PhysicsTick(double) void*
+        + Exit() void*
     }
     StateMachine --|> Node
     State --> StateMachine
@@ -38,7 +37,7 @@ direction TB
     StateMachine --> IdleState
     StateMachine --> State
     StateMachine --> Mover
-    <<abstract>> State
+    State
     WalkingState --|> State
     IdleState --|> State
     Mover --> RigidBody3D

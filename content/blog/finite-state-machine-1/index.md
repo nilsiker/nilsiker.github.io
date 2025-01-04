@@ -35,7 +35,7 @@ Along the line we'll make mistakes and questionable design decisions. This is ho
 
 At the end of this post, we will end up with a state machine that controls a simple Mover system that pushes a RigidBody3D around.
 
-{% mermaid() %}
+{% mermaid () %}
 stateDiagram
     direction LR
     Player-->StateMachine: has a
