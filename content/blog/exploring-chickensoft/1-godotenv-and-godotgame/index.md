@@ -1,7 +1,10 @@
 +++
-title = "Exploring Chickensoft #1:  GodotEnv and GodotGame"
+title = "GodotEnv and GodotGame: Project Setup"
 date = 2024-12-27
 description = "Getting started with Chickensoft C# architecture in Godot."
+aliases = ["/blog/exploring-chickensoft-1"]
+transparent = true
+
 
 [taxonomies]
 tags = ["Godot", "C#", ".NET", "Chickensoft", "getting started"]
@@ -240,5 +243,3 @@ Thanks for reading,<br/>
 Nilsiker
 
 [full source code available here](https://github.com/nilsiker/eggsploration/tree/part1)
-
-[part 2 >](/blog/exploring-chickensoft-2)
