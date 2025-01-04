@@ -487,7 +487,7 @@ It would be nice if the transition wasn't so sudden. I'd rather have it fade out
 
 To demonstrate the ease of LogicBlocks and how we can handle this in a very human-friendly way, let me go ahead and comment it as I go along.
 
-I'll be adding a `FadeingOut` state, create some fitting inputs and outputs for the machine, make sure to send and listen to the inputs and also produce and handle the outputs. There's a new concept being introduced also - you'll probably catch it!
+I'll be adding a `FadingOut` state, create some fitting inputs and outputs for the machine, make sure to send and listen to the inputs and also produce and handle the outputs. There's a new concept being introduced also - you'll probably catch it!
 
 On the game logic side of things, we start by adding our new Input and Outputs.
 
