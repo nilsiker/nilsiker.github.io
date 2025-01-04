@@ -1,7 +1,7 @@
 +++
-title = "LogicBlocks #1: App Logic"
+title = "Exploring Chickensoft #2: LogicBlocks"
 date = 2025-01-03
-description = "Using Chickensoft LogicBlocks state machines in Godot C#."
+description = "Implementing app logic using state machines."
 aliases = ["/blog/exploring-chickensoft-2"]
 
 

@@ -1,7 +1,7 @@
 +++
-title = "GodotEnv and GodotGame: Project Setup"
+title = "Exploring Chickensoft #1: GodotEnv and GodotGame"
 date = 2024-12-27
-description = "Getting started with Chickensoft C# architecture in Godot."
+description = "Getting started with the Chickensoft game template."
 aliases = ["/blog/exploring-chickensoft-1"]
 transparent = true
 
