@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="base" content="https://nilsiker.github.io">
+
+    
+    <title>nilsiker • Godot Recipe: Finite State Machine #2</title>
+
+    
+    
+    
+        <link rel=icon href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 105 55"><text y=".7em" font-size="82">🦀</text></svg>'>
+    
+
+    
+    
+
+    
+    
+    
+        <link rel="stylesheet" href="https://nilsiker.github.io/inter_subset_en.css?h=d8cf4ad058d6c3a4015b">
+    
+
+    
+        <link rel="stylesheet" href="https://nilsiker.github.io/main.css?h=4a3dff148c520f191505" />
+        <link rel="stylesheet" href="https://nilsiker.github.io/skins/rusty.css?h=aed5477675e19161c8fa" />
+
+    <meta name="color-scheme" content="light dark" />
+        <meta name="description" content="Solving circular dependencies and promoting loose coupling" />
+        <meta property="og:description" content="Solving circular dependencies and promoting loose coupling" />
+
+    
+        <meta name="robots" content="index, nofollow" />
+    
+
+    <meta property="og:title" content="Godot Recipe: Finite State Machine #2" />
+    <meta property="og:type" content="article" />
+
+    
+    
+    
+    
+        
+    
+
+    
+
+    
+    
+    
+    
+
+    
+        
+        
+    
+
+    <meta property="og:image" content="https://nilsiker.github.io/img/profile.png?h=b447f87cfb7fe21dfe05" />
+    <meta property="og:image:width" content="400" />
+    <meta property="og:image:height" content="400" />
+    <meta name="twitter:image" content="https://nilsiker.github.io/img/profile.png?h=b447f87cfb7fe21dfe05" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+<meta property="og:locale" content="en_GB" />
+
+    <meta property="og:url" content="https:&#x2F;&#x2F;nilsiker.github.io&#x2F;blog&#x2F;finite-state-machine-2&#x2F;" /><meta property="og:site_name" content="nilsiker"><meta http-equiv="Content-Security-Policy"
+content="default-src 'self';font-src &#x27;self&#x27; data: 'self';img-src &#x27;self&#x27; https:&#x2F;&#x2F;* data:;style-src &#x27;self&#x27; https:&#x2F;&#x2F;cdn.jsdelivr.net &#x27;unsafe-inline&#x27; &#x27;unsafe-eval&#x27; 'unsafe-inline';frame-src https:&#x2F;&#x2F;www.youtube-nocookie.com;connect-src 'self';script-src 'self' 'self' https://cdn.jsdelivr.net 'unsafe-inline' 'unsafe-eval'">
+
+        <noscript><link rel="stylesheet" href="https://nilsiker.github.io/no_js.css"/></noscript>
+        <script type="text/javascript" src="https://nilsiker.github.io/js/initializeTheme.min.js"></script>
+        <script defer src="https://nilsiker.github.io/js/themeSwitcher.min.js"></script><script defer src="https://nilsiker.github.io/search_index.en.js?h=75eecc0275f60b2aba78"></script>
+        <script defer src="https://nilsiker.github.io/js/searchElasticlunr.min.js?h=3626c0ef99daa745b31e"></script>
+
+        </head>
+
+
+<body>
+    <header>
+    <nav class="navbar">
+        <div class="nav-title">
+            <a class="home-title" href="https://nilsiker.github.io">nilsiker</a>
+        </div>
+            <div class="nav-navs">
+                <ul>
+                        
+                            <li>
+                                
+                                <a class="nav-links no-hover-padding" href="https://nilsiker.github.io/blog/">
+                                blog
+                                </a>
+                            </li>
+                        
+                            <li>
+                                
+                                <a class="nav-links no-hover-padding" href="https://nilsiker.github.io/archive/">
+                                archive
+                                </a>
+                            </li>
+                        
+                            <li>
+                                
+                                <a class="nav-links no-hover-padding" href="https://nilsiker.github.io/tags/">
+                                tags
+                                </a>
+                            </li>
+                        
+                            <li>
+                                
+                                <a class="nav-links no-hover-padding" href="https://nilsiker.github.io/projects/">
+                                projects
+                                </a>
+                            </li>
+                        <div class="nav-navs" id="menu-icons-group">
+                        <li class="js">
+                            <div role="button" tabindex="0" id="search-button" class="search-icon interactive-icon" title="Click or press $SHORTCUT to open search" aria-label="Click or press $SHORTCUT to open search">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                                    <path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"/>
+                                </svg>
+                            </div>
+                        </li>
+
+                        
+                        
+
+                        <li class="theme-switcher-wrapper js"><div
+        title="Toggle dark&#x2F;light mode"
+        class="theme-switcher"
+        tabindex="0"
+        role="button"
+        aria-label="Toggle dark mode"
+        aria-pressed="false">
+    </div><div
+        title="Reset mode to default"
+        class="theme-resetter arrow"
+        tabindex="0"
+        role="button"
+        aria-hidden="true"
+        aria-label="Reset mode to default">
+    </div>
+
+</li>
+</div>
+                </ul>
+            </div>
+        
+    </nav>
+</header>
+
+    <div class="content">
+
+        
+        
+
+
+
+
+<main>
+    <article>
+        <h1 class="article-title">
+            Godot Recipe: Finite State Machine #2
+        </h1>
+
+        <ul class="meta">
+                <li>21st Oct 2023</li><li title="1858 words"><span class='separator' aria-hidden='true'>•</span>10 min read</li><li class="tag"><span class='separator' aria-hidden='true'>•</span>Tags:&nbsp;</li><li class="tag"><a href="https://nilsiker.github.io/tags/godot/">Godot</a>,&nbsp;</li><li class="tag"><a href="https://nilsiker.github.io/tags/recipe/">recipe</a>,&nbsp;</li><li class="tag"><a href="https://nilsiker.github.io/tags/c/">C#</a>,&nbsp;</li><li class="tag"><a href="https://nilsiker.github.io/tags/finite-state-machine/">finite state machine</a>,&nbsp;</li><li class="tag"><a href="https://nilsiker.github.io/tags/character-controller/">character controller</a>,&nbsp;</li><li class="tag"><a href="https://nilsiker.github.io/tags/namespaces/">namespaces</a>,&nbsp;</li><li class="tag"><a href="https://nilsiker.github.io/tags/abstraction/">abstraction</a>,&nbsp;</li><li class="tag"><a href="https://nilsiker.github.io/tags/solid/">solid</a></li>
+        </ul>
+
+        <section class="body"><p><a href="/blog/finite-state-machine-1">&lt; part 1</a></p>
+<blockquote>
+<p>⚠️ This post assumes you have a basic understanding of Nodes and Scenes in Godot and some familiarity with C# syntax if you plan to code along!</p>
+</blockquote>
+<p>Last time, we left things in quite a mess.</p>
+<p>A class overview of our current FSM looks like this:
+
+
+<noscript>
+    <strong>⚠️ JavaScript is required to render the diagram.</strong>
+</noscript>
+<pre class="mermaid invertible-image">
+    classDiagram
+direction TB
+    class StateMachine {
+        + ChangeState(State) void
+    }
+    class State:::italic {
+        - _name : string
+        + Enter() void*
+        + Tick(double) void*
+        + PhysicsTick(double) void*
+        + Exit() void*
+    }
+    StateMachine --|> Node
+    State --> StateMachine
+    StateMachine --> WalkingState
+    StateMachine --> IdleState
+    StateMachine --> State
+    StateMachine --> Mover
+    State
+    WalkingState --|> State
+    IdleState --|> State
+    Mover --> RigidBody3D
+    namespace Godot {
+        class RigidBody3D
+        class Node
+    }
+</pre>
+</p>
+<p>It might not look <em>too bad</em> at this point. If I recall, our demo showcase proved that our basic movement system worked! So why should we bother reworking it?</p>
+<p>Once we start adding more systems, more states and (cue foreshadowing) a way for our states to handle external events, this setup will swiftly become a breeding ground for logical errors and hard-to-maintain code.</p>
+<p>My pain points at the moment are:</p>
+<ul>
+<li>We’re not using any organizational tools to categorize our classes</li>
+<li><code>State</code> and <code>StateMachine</code> form a circular dependency</li>
+<li>States need to access other states through the StateMachine</li>
+<li><code>WalkingState</code> need to access <code>Mover</code> through the StateMachine</li>
+<li>Overall, classes are too dependent on concrete classes (tight coupling)</li>
+</ul>
+<p>Let’s make a plan to solve this and prevent future headaches!</p>
+<blockquote>
+<p>⚠️ The tips and techniques shown below are workflows and structures I’ve found works well for me. There might be more idiomatic ways to achieve modularity and encapsulation in Godot.</p>
+</blockquote>
+<h1 id="scope"><a class="header-anchor no-hover-padding" href="#scope" aria-label="Anchor link for: scope"><span class="link-icon" aria-hidden="true"></span></a>
+Scope</h1>
+<p>The goal for this post is to utilize the Dependency Inversion Principle (DIP) to kill off our circular dependency and make our code more loosely coupled. We will briefly touch on the Liskov Substitution Principle (LSP) and what it means for our code examples.</p>
+<p>We will also be introducing a Locator pattern to improve how states get a hold of systems and other states.</p>
+<p>In addition to this, we’ll organize or classes into namespaces to give our codebase some well-needed structure.</p>
+<p>We’ll also honour the Interface Segregation Principle, but after that we put a LID on <a href="https://en.wikipedia.org/wiki/SOLID">SOLID</a> for now (sorry not sorry).</p>
+<p>We’ll end up with something that looks like this:</p>
+
+
+<noscript>
+    <strong>⚠️ JavaScript is required to render the diagram.</strong>
+</noscript>
+<pre class="mermaid invertible-image">
+    graph
+    subgraph FSM
+        State--implements-->IState
+        State--has-->ISystemLocator
+        State--has-->IStateLocator
+        subgraph Control2[Control]
+            State
+            IdleState
+            WalkingState
+            StateMachine
+            IdleState--inherits-->State
+            WalkingState--inherits-->State
+        end
+        StateMachine--has-->IState
+        StateMachine--implements-->IStateLocator
+        StateMachine--implements-->ISystemLocator
+    end
+    subgraph Motion
+        subgraph Control
+        Mover
+        end
+        IMover
+        Mover--implements-->IMover
+    end
+    WalkingState--has-->IMover
+    Mover--has-->RigidBody3D
+    StateMachine--inherits-->Node
+    subgraph Godot
+        Node
+        RigidBody3D
+    end
+</pre>
+<blockquote>
+<p>🙋🏼 Not a class diagram, I know – Mermaid doesn’t support nested namespaces in class diagrams yet, but subgraphs in flowcharts kinda does the trick.</p>
+</blockquote>
+<p>We’ve got some refactoring to do, let’s go!</p>
+<h1 id="using-namespaces-for-organization"><a class="header-anchor no-hover-padding" href="#using-namespaces-for-organization" aria-label="Anchor link for: using-namespaces-for-organization"><span class="link-icon" aria-hidden="true"></span></a>
+Using namespaces for organization</h1>
+<p>I like my classes to belong to a well-defined module. To help me enforce this, I use C# namespaces.</p>
+<p>I follow a convention where the root namespace is the name of my project, let’s say <code>Project</code>. Publically available interfaces live in a nested namespace called the same as the module, let’s say <code>Project.FSM</code>. Classes that perform logic that is internal to the module live in yet another nested namespace in that module, let’s say <code>Project.FSM.Control</code> for logic.</p>
+<blockquote>
+<p>🙋🏼 If we want to separate logic and data, I would also introduce the namespace <code>Project.FSM.Models</code> or <code>Project.FSM.Data</code> – a <a href="https://sv.wikipedia.org/wiki/Model-View-Controller">Model-View-Controller approach</a>!</p>
+</blockquote>
+<p>All classes are updated to use this convention. The class-namespace mapping looks like this currently:</p>
+<ul>
+<li>Project.FSM.Control
+<ul>
+<li>State</li>
+<li>IdleState</li>
+<li>WalkingState</li>
+<li>StateMachine</li>
+</ul>
+</li>
+<li>Project.Motion.Control
+<ul>
+<li>Mover</li>
+</ul>
+</li>
+</ul>
+<p>Optionally, you can mimic the namespace structure in the project folder structure. I always do this.</p>
+<p><img src="https://nilsiker.github.io/blog/finite-state-machine-2/img/namespace-folder-structure.png" alt="folder structure following namespace naming convention" /></p>
+<p>Following this namespace convention, it shows that all our classes are Control classes and shouldn’t be exposed publically. We’ll sort this out by introducing interfaces as we go along.</p>
+<h1 id="solving-circular-dependencies-using-dip"><a class="header-anchor no-hover-padding" href="#solving-circular-dependencies-using-dip" aria-label="Anchor link for: solving-circular-dependencies-using-dip"><span class="link-icon" aria-hidden="true"></span></a>
+Solving circular dependencies using DIP</h1>
+<p>DIP stipulates the following:</p>
+<ul>
+<li>A high-level class mustn’t depend on a lower-level class</li>
+<li>Abstract classes and interfaces should not depend on concrete classes</li>
+<li>Concrete classes should depend on abstract classes and interfaces</li>
+</ul>
+<p>Its goal is to create a more robust and maintainable solution. How does this relate to our current code?</p>
+<p>In our current setup, the state is a <code>lower-level class</code> and the machine is a <code>higher-level class</code>. States should not need to know anything about state machines - not even that they exist. In turn, state machines should not care about state details - they should only depend on an abstraction of states.</p>
+<p>How do we achieve this? It might come off as a bit esoteric, but it’s not that weird in practice!</p>
+<h1 id="adding-locator-and-istate-interfaces"><a class="header-anchor no-hover-padding" href="#adding-locator-and-istate-interfaces" aria-label="Anchor link for: adding-locator-and-istate-interfaces"><span class="link-icon" aria-hidden="true"></span></a>
+Adding Locator and IState interfaces</h1>
+<p>The states do not need the state machine itself. What they do need is a way to access systems, so they can control aspects of the character controller. They also need to relay WHEN to transition to another state, and WHAT state to transition to.</p>
+<p>The way I tackle this, is that I introduce two interfaces: <code>ISystemLocator</code> and <code>IStateLocator</code> in <code>Project.FSM</code> and have StateMachine implement them. The goal here is to keep the fetching of systems and states as generic as possible.</p>
+<p>I also introduce an <code>IState</code> interface in <code>Project.FSM</code>, so that our <code>IStateLocator</code> can depend on an interface rather than an abstract class. Similarly, all references to states in <code>StateMachine</code> can instead reference the <code>IState</code> interface</p>
+<pre data-lang="cs" class="language-cs z-code"><code class="language-cs" data-lang="cs"><span class="z-source z-cs"><span class="z-storage z-modifier z-access z-cs">public</span> <span class="z-meta z-interface z-cs"><span class="z-storage z-type z-interface z-cs">interface</span> <span class="z-entity z-name z-interface z-cs">IState</span> 
+</span></span><span class="z-source z-cs"><span class="z-meta z-interface z-cs"></span><span class="z-meta z-interface z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-punctuation z-section z-block z-begin z-cs">{</span>
+</span></span></span><span class="z-source z-cs"><span class="z-meta z-interface z-body z-cs"><span class="z-meta z-block z-cs">    <span class="z-storage z-type z-cs">void</span> <span class="z-meta z-method z-cs"><span class="z-entity z-name z-function z-cs">Enter</span></span><span class="z-meta z-method z-parameters z-cs"><span class="z-punctuation z-section z-parameters z-begin z-cs">(</span></span><span class="z-meta z-method z-parameters z-cs"><span class="z-punctuation z-section z-parameters z-end z-cs">)</span></span><span class="z-meta z-method z-cs"><span class="z-punctuation z-terminator z-cs">;</span></span>
+</span></span></span><span class="z-source z-cs"><span class="z-meta z-interface z-body z-cs"><span class="z-meta z-block z-cs">    <span class="z-storage z-type z-cs">void</span> <span class="z-meta z-method z-cs"><span class="z-entity z-name z-function z-cs">Tick</span></span><span class="z-meta z-method z-parameters z-cs"><span class="z-punctuation z-section z-parameters z-begin z-cs">(</span></span><span class="z-meta z-method z-parameters z-cs"><span class="z-storage z-type z-cs">double</span> <span class="z-variable z-parameter z-cs">delta</span></span><span class="z-meta z-method z-parameters z-cs"><span class="z-punctuation z-section z-parameters z-end z-cs">)</span></span><span class="z-meta z-method z-cs"><span class="z-punctuation z-terminator z-cs">;</span></span>
+</span></span></span><span class="z-source z-cs"><span class="z-meta z-interface z-body z-cs"><span class="z-meta z-block z-cs">    <span class="z-storage z-type z-cs">void</span> <span class="z-meta z-method z-cs"><span class="z-entity z-name z-function z-cs">PhysicsTick</span></span><span class="z-meta z-method z-parameters z-cs"><span class="z-punctuation z-section z-parameters z-begin z-cs">(</span></span><span class="z-meta z-method z-parameters z-cs"><span class="z-storage z-type z-cs">double</span> <span class="z-variable z-parameter z-cs">delta</span></span><span class="z-meta z-method z-parameters z-cs"><span class="z-punctuation z-section z-parameters z-end z-cs">)</span></span><span class="z-meta z-method z-cs"><span class="z-punctuation z-terminator z-cs">;</span></span>
+</span></span></span><span class="z-source z-cs"><span class="z-meta z-interface z-body z-cs"><span class="z-meta z-block z-cs">    <span class="z-storage z-type z-cs">void</span> <span class="z-meta z-method z-cs"><span class="z-entity z-name z-function z-cs">Exit</span></span><span class="z-meta z-method z-parameters z-cs"><span class="z-punctuation z-section z-parameters z-begin z-cs">(</span></span><span class="z-meta z-method z-parameters z-cs"><span class="z-punctuation z-section z-parameters z-end z-cs">)</span></span><span class="z-meta z-method z-cs"><span class="z-punctuation z-terminator z-cs">;</span></span>
+</span></span></span><span class="z-source z-cs"><span class="z-meta z-interface z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-punctuation z-section z-block z-end z-cs">}</span></span></span>
+</span><span class="z-source z-cs">
+</span><span class="z-source z-cs"><span class="z-storage z-modifier z-access z-cs">public</span> <span class="z-meta z-interface z-cs"><span class="z-storage z-type z-interface z-cs">interface</span> <span class="z-entity z-name z-interface z-cs">ISystemLocator</span>
+</span></span><span class="z-source z-cs"><span class="z-meta z-interface z-cs"></span><span class="z-meta z-interface z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-punctuation z-section z-block z-begin z-cs">{</span>
+</span></span></span><span class="z-source z-cs"><span class="z-meta z-interface z-body z-cs"><span class="z-meta z-block z-cs">    <span class="z-comment z-line z-double-slash z-cs"><span class="z-punctuation z-definition z-comment z-cs">//</span> NOTE you could introduce an interface constraint here
+</span></span></span></span><span class="z-source z-cs"><span class="z-meta z-interface z-body z-cs"><span class="z-meta z-block z-cs">    <span class="z-support z-type z-cs">T</span> <span class="z-meta z-method z-cs"><span class="z-entity z-name z-function z-cs">Get</span><span class="z-meta z-generic z-cs"><span class="z-punctuation z-definition z-generic z-begin z-cs">&lt;</span></span></span><span class="z-meta z-method z-cs"><span class="z-meta z-generic z-cs"><span class="z-support z-type z-cs">T</span></span><span class="z-meta z-generic z-cs"><span class="z-punctuation z-definition z-generic z-end z-cs">&gt;</span></span></span><span class="z-meta z-method z-parameters z-cs"><span class="z-punctuation z-section z-parameters z-begin z-cs">(</span></span><span class="z-meta z-method z-parameters z-cs"><span class="z-punctuation z-section z-parameters z-end z-cs">)</span></span><span class="z-meta z-method z-cs"><span class="z-punctuation z-terminator z-cs">;</span></span>
+</span></span></span><span class="z-source z-cs"><span class="z-meta z-interface z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-punctuation z-section z-block z-end z-cs">}</span></span></span>
+</span><span class="z-source z-cs">
+</span><span class="z-source z-cs"><span class="z-storage z-modifier z-access z-cs">public</span> <span class="z-meta z-interface z-cs"><span class="z-storage z-type z-interface z-cs">interface</span> <span class="z-entity z-name z-interface z-cs">IStateLocator</span>
+</span></span><span class="z-source z-cs"><span class="z-meta z-interface z-cs"></span><span class="z-meta z-interface z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-punctuation z-section z-block z-begin z-cs">{</span>
+</span></span></span><span class="z-source z-cs"><span class="z-meta z-interface z-body z-cs"><span class="z-meta z-block z-cs">    <span class="z-support z-type z-cs">T</span> <span class="z-meta z-method z-cs"><span class="z-entity z-name z-function z-cs">Get</span><span class="z-meta z-generic z-cs"><span class="z-punctuation z-definition z-generic z-begin z-cs">&lt;</span></span></span><span class="z-meta z-method z-cs"><span class="z-meta z-generic z-cs"><span class="z-support z-type z-cs">T</span></span><span class="z-meta z-generic z-cs"><span class="z-punctuation z-definition z-generic z-end z-cs">&gt;</span></span></span><span class="z-meta z-method z-parameters z-cs"><span class="z-punctuation z-section z-parameters z-begin z-cs">(</span></span><span class="z-meta z-method z-parameters z-cs"><span class="z-punctuation z-section z-parameters z-end z-cs">)</span></span><span class="z-meta z-method z-cs"> <span class="z-storage z-modifier z-cs">where</span> <span class="z-support z-type z-cs">T</span> <span class="z-punctuation z-separator z-type z-cs">:</span> <span class="z-entity z-other z-inherited-class z-cs">IState</span><span class="z-punctuation z-terminator z-cs">;</span></span>
+</span></span></span><span class="z-source z-cs"><span class="z-meta z-interface z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-punctuation z-section z-block z-end z-cs">}</span></span></span>
+</span></code></pre>
+<p>As a matter of fact, we can fully generalize the Locator pattern. I’ll make one <em>general</em> Locator, and one <em>generic</em> one where you can specify constraints. I’ll put them in a namespace called <code>Project.Core</code>. Both ways are viable. This generic one might be a bit overengineered, but I’ll use it for now!</p>
+<pre data-lang="cs" class="language-cs z-code"><code class="language-cs" data-lang="cs"><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-storage z-type z-namespace z-cs">namespace</span> <span class="z-entity z-name z-namespace z-cs">Project<span class="z-punctuation z-separator z-namespace z-cs">.</span>Core</span> <span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs"><span class="z-punctuation z-section z-block z-begin z-cs">{</span></span></span></span><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs">
+</span></span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs">    <span class="z-storage z-modifier z-access z-cs">public</span> <span class="z-meta z-interface z-cs"><span class="z-storage z-type z-interface z-cs">interface</span> <span class="z-entity z-name z-interface z-cs">ILocator</span>
+</span></span></span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-interface z-cs">    </span><span class="z-meta z-interface z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-punctuation z-section z-block z-begin z-cs">{</span>
+</span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-interface z-body z-cs"><span class="z-meta z-block z-cs">        <span class="z-support z-type z-cs">T</span> <span class="z-meta z-method z-cs"><span class="z-entity z-name z-function z-cs">Get</span><span class="z-meta z-generic z-cs"><span class="z-punctuation z-definition z-generic z-begin z-cs">&lt;</span></span></span><span class="z-meta z-method z-cs"><span class="z-meta z-generic z-cs"><span class="z-support z-type z-cs">T</span></span><span class="z-meta z-generic z-cs"><span class="z-punctuation z-definition z-generic z-end z-cs">&gt;</span></span></span><span class="z-meta z-method z-parameters z-cs"><span class="z-punctuation z-section z-parameters z-begin z-cs">(</span></span><span class="z-meta z-method z-parameters z-cs"><span class="z-punctuation z-section z-parameters z-end z-cs">)</span></span><span class="z-meta z-method z-cs"><span class="z-punctuation z-terminator z-cs">;</span></span>
+</span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-interface z-body z-cs"><span class="z-meta z-block z-cs">    <span class="z-punctuation z-section z-block z-end z-cs">}</span></span></span>
+</span></span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs">
+</span></span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs">    <span class="z-storage z-modifier z-access z-cs">public</span> <span class="z-meta z-interface z-cs"><span class="z-storage z-type z-interface z-cs">interface</span> <span class="z-entity z-name z-interface z-cs">ILocator</span><span class="z-meta z-generic z-cs"><span class="z-punctuation z-definition z-generic z-begin z-cs">&lt;</span></span><span class="z-meta z-generic z-cs"><span class="z-support z-type z-cs">T</span></span><span class="z-meta z-generic z-cs"><span class="z-punctuation z-definition z-generic z-end z-cs">&gt;</span></span>
+</span></span></span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-interface z-cs">    </span><span class="z-meta z-interface z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-punctuation z-section z-block z-begin z-cs">{</span>
+</span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-interface z-body z-cs"><span class="z-meta z-block z-cs">        <span class="z-support z-type z-cs">U</span> <span class="z-meta z-method z-cs"><span class="z-entity z-name z-function z-cs">Get</span><span class="z-meta z-generic z-cs"><span class="z-punctuation z-definition z-generic z-begin z-cs">&lt;</span></span></span><span class="z-meta z-method z-cs"><span class="z-meta z-generic z-cs"><span class="z-support z-type z-cs">U</span></span><span class="z-meta z-generic z-cs"><span class="z-punctuation z-definition z-generic z-end z-cs">&gt;</span></span></span><span class="z-meta z-method z-parameters z-cs"><span class="z-punctuation z-section z-parameters z-begin z-cs">(</span></span><span class="z-meta z-method z-parameters z-cs"><span class="z-punctuation z-section z-parameters z-end z-cs">)</span></span><span class="z-meta z-method z-cs"> <span class="z-storage z-modifier z-cs">where</span> <span class="z-support z-type z-cs">U</span> <span class="z-punctuation z-separator z-type z-cs">:</span> <span class="z-entity z-other z-inherited-class z-cs">T</span><span class="z-punctuation z-terminator z-cs">;</span></span>
+</span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-interface z-body z-cs"><span class="z-meta z-block z-cs">    <span class="z-punctuation z-section z-block z-end z-cs">}</span></span></span>
+</span></span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs"><span class="z-punctuation z-section z-block z-end z-cs">}</span></span></span>
+</span></code></pre>
+<blockquote>
+<p>⚠️ This <code>ILocator</code> definition is left out of the class overview at the top of this post. They made the diagram very hard to follow.</p>
+</blockquote>
+<p>The abstract <code>State</code> is updated to implement <code>IState</code>. Concrete <code>State</code> classes are updated to store references to <code>ILocator</code> and <code>ILocator&lt;IState&gt;</code> instead of <code>StateMachine</code>.</p>
+<h1 id="shifting-state-changing-responsibility-to-statemachine"><a class="header-anchor no-hover-padding" href="#shifting-state-changing-responsibility-to-statemachine" aria-label="Anchor link for: shifting-state-changing-responsibility-to-statemachine"><span class="link-icon" aria-hidden="true"></span></a>
+Shifting state-changing responsibility to StateMachine</h1>
+<p>I lied, the LID is officially off as we leverage the Single Responsibility Principle (S).</p>
+<blockquote>
+<p>🙋🏼 You could say it SLID off.</p>
+</blockquote>
+<p>The responsibility to call ChangeState is shifted from <code>State</code> to <code>StateMachine</code>. Since the new interfaces don’t expose the <code>ChangeState</code> function, we instead return the result of <code>ILocator&lt;IState&gt;.Get&lt;T&gt;()</code> to the <code>StateMachine</code> where it can handle state-changing internally. The <code>IState</code> interface is updated to return <code>IState</code> on our tick functions for usual condition checks.</p>
+<p>In doing so, <code>StateMachine.ChangeState(State)</code> can be made <em>private</em>. 💡</p>
+<p>You could also add an IState return type to <code>Enter</code> if you feel like it, for really early state change guards. I won’t for now!</p>
+<pre data-lang="cs" class="language-cs z-code"><code class="language-cs" data-lang="cs"><span class="z-source z-cs"><span class="z-storage z-modifier z-access z-cs">public</span> <span class="z-meta z-interface z-cs"><span class="z-storage z-type z-interface z-cs">interface</span> <span class="z-entity z-name z-interface z-cs">IState</span> 
+</span></span><span class="z-source z-cs"><span class="z-meta z-interface z-cs"></span><span class="z-meta z-interface z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-punctuation z-section z-block z-begin z-cs">{</span>
+</span></span></span><span class="z-source z-cs"><span class="z-meta z-interface z-body z-cs"><span class="z-meta z-block z-cs">    <span class="z-storage z-type z-cs">void</span> <span class="z-meta z-method z-cs"><span class="z-entity z-name z-function z-cs">Enter</span></span><span class="z-meta z-method z-parameters z-cs"><span class="z-punctuation z-section z-parameters z-begin z-cs">(</span></span><span class="z-meta z-method z-parameters z-cs"><span class="z-punctuation z-section z-parameters z-end z-cs">)</span></span><span class="z-meta z-method z-cs"><span class="z-punctuation z-terminator z-cs">;</span></span>
+</span></span></span><span class="z-source z-cs"><span class="z-meta z-interface z-body z-cs"><span class="z-meta z-block z-cs">    <span class="z-support z-type z-cs">IState</span> <span class="z-meta z-method z-cs"><span class="z-entity z-name z-function z-cs">Tick</span></span><span class="z-meta z-method z-parameters z-cs"><span class="z-punctuation z-section z-parameters z-begin z-cs">(</span></span><span class="z-meta z-method z-parameters z-cs"><span class="z-storage z-type z-cs">double</span> <span class="z-variable z-parameter z-cs">delta</span></span><span class="z-meta z-method z-parameters z-cs"><span class="z-punctuation z-section z-parameters z-end z-cs">)</span></span><span class="z-meta z-method z-cs"><span class="z-punctuation z-terminator z-cs">;</span></span>
+</span></span></span><span class="z-source z-cs"><span class="z-meta z-interface z-body z-cs"><span class="z-meta z-block z-cs">    <span class="z-support z-type z-cs">IState</span> <span class="z-meta z-method z-cs"><span class="z-entity z-name z-function z-cs">PhysicsTick</span></span><span class="z-meta z-method z-parameters z-cs"><span class="z-punctuation z-section z-parameters z-begin z-cs">(</span></span><span class="z-meta z-method z-parameters z-cs"><span class="z-storage z-type z-cs">double</span> <span class="z-variable z-parameter z-cs">delta</span></span><span class="z-meta z-method z-parameters z-cs"><span class="z-punctuation z-section z-parameters z-end z-cs">)</span></span><span class="z-meta z-method z-cs"><span class="z-punctuation z-terminator z-cs">;</span></span>
+</span></span></span><span class="z-source z-cs"><span class="z-meta z-interface z-body z-cs"><span class="z-meta z-block z-cs">    <span class="z-storage z-type z-cs">void</span> <span class="z-meta z-method z-cs"><span class="z-entity z-name z-function z-cs">Exit</span></span><span class="z-meta z-method z-parameters z-cs"><span class="z-punctuation z-section z-parameters z-begin z-cs">(</span></span><span class="z-meta z-method z-parameters z-cs"><span class="z-punctuation z-section z-parameters z-end z-cs">)</span></span><span class="z-meta z-method z-cs"><span class="z-punctuation z-terminator z-cs">;</span></span>
+</span></span></span><span class="z-source z-cs"><span class="z-meta z-interface z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-punctuation z-section z-block z-end z-cs">}</span></span></span>
+</span></code></pre>
+<p>The <code>StateMachine</code> class is updated to implement the  Locator interface as shown below. I decide to keep the states inside the StateMachine using a list.</p>
+<p>For now, I decide to have all systems under a Node called <em>Systems</em>. We export this and assign it in the Inspector.</p>
+<pre data-lang="cs" class="language-cs z-code"><code class="language-cs" data-lang="cs"><span class="z-source z-cs"><span class="z-keyword z-control z-import z-cs">using</span> <span class="z-meta z-path z-cs">System</span><span class="z-punctuation z-separator z-namespace z-cs">.</span><span class="z-meta z-path z-cs">Collections</span><span class="z-punctuation z-separator z-namespace z-cs">.</span><span class="z-meta z-path z-cs">Generic</span><span class="z-punctuation z-terminator z-cs">;</span>
+</span><span class="z-source z-cs"><span class="z-keyword z-control z-import z-cs">using</span> <span class="z-meta z-path z-cs">System</span><span class="z-punctuation z-separator z-namespace z-cs">.</span><span class="z-meta z-path z-cs">Linq</span><span class="z-punctuation z-terminator z-cs">;</span>
+</span><span class="z-source z-cs"><span class="z-keyword z-control z-import z-cs">using</span> <span class="z-meta z-path z-cs">Godot</span><span class="z-punctuation z-terminator z-cs">;</span>
+</span><span class="z-source z-cs">
+</span><span class="z-source z-cs"><span class="z-storage z-modifier z-access z-cs">public</span> <span class="z-storage z-modifier z-cs">partial</span> <span class="z-meta z-class z-cs"><span class="z-storage z-type z-class z-cs">class</span> <span class="z-entity z-name z-class z-cs">StateMachine</span> <span class="z-punctuation z-separator z-type z-cs">:</span> <span class="z-entity z-other z-inherited-class z-cs">Node</span><span class="z-punctuation z-separator z-inherited-class z-cs">,</span> <span class="z-entity z-other z-inherited-class z-cs">ILocator</span><span class="z-punctuation z-separator z-inherited-class z-cs">,</span> <span class="z-entity z-other z-inherited-class z-cs">ILocator</span><span class="z-meta z-generic z-cs"><span class="z-punctuation z-definition z-generic z-begin z-cs">&lt;</span></span><span class="z-meta z-generic z-cs"><span class="z-support z-type z-cs">IState</span></span><span class="z-meta z-generic z-cs"><span class="z-punctuation z-definition z-generic z-end z-cs">&gt;</span></span>
+</span></span><span class="z-source z-cs"><span class="z-meta z-class z-cs"></span><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-punctuation z-section z-block z-begin z-cs">{</span>
+</span></span></span><span class="z-source z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs">    <span class="z-meta z-annotation z-cs"><span class="z-punctuation z-definition z-annotation z-begin z-cs">[</span><span class="z-variable z-annotation z-cs">Export</span><span class="z-punctuation z-definition z-annotation z-end z-cs">]</span></span> <span class="z-storage z-modifier z-access z-cs">private</span> <span class="z-support z-type z-cs">Node</span> <span class="z-variable z-other z-member z-cs">_systems</span><span class="z-punctuation z-terminator z-statement z-cs">;</span>
+</span></span></span><span class="z-source z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs">    <span class="z-storage z-modifier z-access z-cs">private</span> <span class="z-support z-type z-cs">List</span><span class="z-meta z-generic z-cs"><span class="z-punctuation z-definition z-generic z-begin z-cs">&lt;</span></span><span class="z-meta z-generic z-cs"><span class="z-support z-type z-cs">IState</span></span><span class="z-meta z-generic z-cs"><span class="z-punctuation z-definition z-generic z-end z-cs">&gt;</span></span> <span class="z-variable z-other z-member z-cs">_states</span><span class="z-punctuation z-terminator z-statement z-cs">;</span>
+</span></span></span><span class="z-source z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs">    <span class="z-storage z-modifier z-access z-cs">private</span> <span class="z-support z-type z-cs">IState</span> <span class="z-meta z-property z-cs"><span class="z-variable z-other z-member z-cs">DefaultState </span><span class="z-meta z-method z-cs"><span class="z-storage z-type z-function z-accessor z-get z-cs">=&gt;</span> </span></span><span class="z-meta z-property z-cs"><span class="z-meta z-method z-cs"><span class="z-meta z-group z-cs"><span class="z-punctuation z-section z-group z-begin z-cs">(</span><span class="z-variable z-language z-cs">this</span> <span class="z-keyword z-operator z-reflection z-cs">as</span> <span class="z-support z-type z-cs">IStateLocator</span><span class="z-punctuation z-section z-group z-end z-cs">)</span></span><span class="z-punctuation z-accessor z-dot z-cs">.</span><span class="z-meta z-function-call z-cs"><span class="z-variable z-function z-cs">Get</span><span class="z-meta z-generic z-cs"><span class="z-punctuation z-definition z-generic z-begin z-cs">&lt;</span></span></span><span class="z-meta z-function-call z-cs"><span class="z-meta z-generic z-cs"><span class="z-support z-type z-cs">IdleState</span><span class="z-meta z-function-call z-cs"><span class="z-meta z-generic z-cs"><span class="z-punctuation z-definition z-generic z-end z-cs">&gt;</span></span><span class="z-meta z-group z-cs"><span class="z-punctuation z-section z-group z-begin z-cs">(</span></span></span></span></span><span class="z-meta z-function-call z-cs"><span class="z-meta z-group z-cs"><span class="z-punctuation z-section z-group z-end z-cs">)</span></span></span></span><span class="z-punctuation z-terminator z-statement z-cs">;</span></span>
+</span></span></span><span class="z-source z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs">    <span class="z-storage z-modifier z-access z-cs">private</span> <span class="z-support z-type z-cs">IState</span> <span class="z-variable z-other z-member z-cs">_currentState</span><span class="z-punctuation z-terminator z-statement z-cs">;</span>
+</span></span></span><span class="z-source z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs">
+</span></span></span><span class="z-source z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs">    <span class="z-storage z-modifier z-access z-cs">public</span> <span class="z-storage z-modifier z-cs">override</span> <span class="z-storage z-type z-cs">void</span> <span class="z-meta z-method z-cs"><span class="z-entity z-name z-function z-cs">_Ready</span></span><span class="z-meta z-method z-parameters z-cs"><span class="z-punctuation z-section z-parameters z-begin z-cs">(</span></span><span class="z-meta z-method z-parameters z-cs"><span class="z-punctuation z-section z-parameters z-end z-cs">)</span></span><span class="z-meta z-method z-cs">
+</span></span></span></span><span class="z-source z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-method z-cs">    </span><span class="z-meta z-method z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-punctuation z-section z-block z-begin z-cs">{</span>
+</span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-method z-body z-cs"><span class="z-meta z-block z-cs">        <span class="z-variable z-other z-cs">_states</span> <span class="z-keyword z-operator z-assignment z-cs">=</span> <span class="z-meta z-instance z-cs"><span class="z-keyword z-operator z-new z-cs">new</span></span><span class="z-meta z-instance z-cs"> </span><span class="z-meta z-instance z-cs"><span class="z-support z-type z-cs">List</span><span class="z-meta z-generic z-cs"><span class="z-punctuation z-definition z-generic z-begin z-cs">&lt;</span></span><span class="z-meta z-generic z-cs"><span class="z-support z-type z-cs">IState</span></span><span class="z-meta z-generic z-cs"><span class="z-punctuation z-definition z-generic z-end z-cs">&gt;</span></span> <span class="z-comment z-line z-double-slash z-cs"><span class="z-punctuation z-definition z-comment z-cs">//</span> Construct your states in the list
+</span></span></span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-method z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-instance z-cs">        <span class="z-meta z-instance z-cs"><span class="z-meta z-braces z-cs"><span class="z-punctuation z-section z-braces z-begin z-cs">{</span></span></span></span><span class="z-meta z-instance z-cs"><span class="z-meta z-braces z-cs">   
+</span></span></span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-method z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-instance z-cs"><span class="z-meta z-braces z-cs">            <span class="z-meta z-instance z-cs"><span class="z-keyword z-operator z-new z-cs">new</span></span><span class="z-meta z-instance z-cs"> </span><span class="z-meta z-instance z-cs"><span class="z-support z-type z-cs">IdleState</span><span class="z-meta z-group z-cs"><span class="z-punctuation z-section z-group z-begin z-cs">(</span></span></span><span class="z-meta z-instance z-cs"><span class="z-meta z-group z-cs"><span class="z-variable z-language z-cs">this</span><span class="z-punctuation z-separator z-argument z-cs">,</span> <span class="z-variable z-language z-cs">this</span><span class="z-punctuation z-section z-group z-end z-cs">)</span></span></span><span class="z-punctuation z-separator z-array-element z-cs">,</span>
+</span></span></span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-method z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-instance z-cs"><span class="z-meta z-braces z-cs">            <span class="z-meta z-instance z-cs"><span class="z-keyword z-operator z-new z-cs">new</span></span><span class="z-meta z-instance z-cs"> </span><span class="z-meta z-instance z-cs"><span class="z-support z-type z-cs">WalkingState</span><span class="z-meta z-group z-cs"><span class="z-punctuation z-section z-group z-begin z-cs">(</span></span></span><span class="z-meta z-instance z-cs"><span class="z-meta z-group z-cs"><span class="z-variable z-language z-cs">this</span><span class="z-punctuation z-separator z-argument z-cs">,</span> <span class="z-variable z-language z-cs">this</span><span class="z-punctuation z-section z-group z-end z-cs">)</span>
+</span></span></span></span></span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-method z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-instance z-cs"><span class="z-meta z-braces z-cs"><span class="z-meta z-instance z-cs"><span class="z-meta z-group z-cs">        </span></span></span></span><span class="z-meta z-instance z-cs"><span class="z-meta z-braces z-cs"><span class="z-punctuation z-section z-braces z-end z-cs">}</span></span></span><span class="z-punctuation z-terminator z-statement z-cs">;</span>
+</span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-method z-body z-cs"><span class="z-meta z-block z-cs">
+</span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-method z-body z-cs"><span class="z-meta z-block z-cs">        <span class="z-meta z-function-call z-cs"><span class="z-variable z-function z-cs">ChangeState</span><span class="z-meta z-group z-cs"><span class="z-punctuation z-section z-group z-begin z-cs">(</span></span></span><span class="z-meta z-function-call z-cs"><span class="z-meta z-group z-cs"><span class="z-variable z-other z-cs">DefaultState</span><span class="z-punctuation z-section z-group z-end z-cs">)</span></span></span><span class="z-punctuation z-terminator z-statement z-cs">;</span>
+</span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-method z-body z-cs"><span class="z-meta z-block z-cs">    <span class="z-punctuation z-section z-block z-end z-cs">}</span></span></span>
+</span></span></span><span class="z-source z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs">
+</span></span></span><span class="z-source z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs">    <span class="z-comment z-line z-double-slash z-cs"><span class="z-punctuation z-definition z-comment z-cs">//</span> other methods
+</span></span></span></span><span class="z-source z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs">
+</span></span></span><span class="z-source z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs">    <span class="z-support z-type z-cs">T</span> <span class="z-meta z-method z-cs"><span class="z-entity z-other z-inherited-class z-cs">ILocator</span><span class="z-meta z-generic z-cs"><span class="z-punctuation z-section z-generic z-begin z-cs">&lt;</span></span></span><span class="z-meta z-method z-cs"><span class="z-meta z-generic z-cs"><span class="z-support z-type z-cs">IState</span></span></span><span class="z-meta z-method z-cs"><span class="z-meta z-generic z-cs"><span class="z-punctuation z-definition z-generic z-end z-cs">&gt;</span><span class="z-punctuation z-accessor z-dot z-cs">.</span></span></span><span class="z-meta z-method z-cs"><span class="z-entity z-name z-function z-cs">Get</span><span class="z-meta z-generic z-cs"><span class="z-punctuation z-definition z-generic z-begin z-cs">&lt;</span></span></span><span class="z-meta z-method z-cs"><span class="z-meta z-generic z-cs"><span class="z-support z-type z-cs">T</span></span><span class="z-meta z-generic z-cs"><span class="z-punctuation z-definition z-generic z-end z-cs">&gt;</span></span></span><span class="z-meta z-method z-parameters z-cs"><span class="z-punctuation z-section z-parameters z-begin z-cs">(</span></span><span class="z-meta z-method z-parameters z-cs"><span class="z-punctuation z-section z-parameters z-end z-cs">)</span></span><span class="z-meta z-method z-cs">
+</span></span></span></span><span class="z-source z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-method z-cs">    </span><span class="z-meta z-method z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-punctuation z-section z-block z-begin z-cs">{</span>
+</span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-method z-body z-cs"><span class="z-meta z-block z-cs">        <span class="z-keyword z-control z-flow z-return z-cs">return</span> <span class="z-variable z-other z-cs">_states</span><span class="z-punctuation z-accessor z-dot z-cs">.</span><span class="z-meta z-function-call z-cs"><span class="z-variable z-function z-cs">OfType</span><span class="z-meta z-generic z-cs"><span class="z-punctuation z-definition z-generic z-begin z-cs">&lt;</span></span></span><span class="z-meta z-function-call z-cs"><span class="z-meta z-generic z-cs"><span class="z-support z-type z-cs">T</span><span class="z-meta z-function-call z-cs"><span class="z-meta z-generic z-cs"><span class="z-punctuation z-definition z-generic z-end z-cs">&gt;</span></span><span class="z-meta z-group z-cs"><span class="z-punctuation z-section z-group z-begin z-cs">(</span></span></span></span></span><span class="z-meta z-function-call z-cs"><span class="z-meta z-group z-cs"><span class="z-punctuation z-section z-group z-end z-cs">)</span></span></span><span class="z-punctuation z-accessor z-dot z-cs">.</span><span class="z-meta z-function-call z-cs"><span class="z-variable z-function z-cs">FirstOrDefault</span><span class="z-meta z-group z-cs"><span class="z-punctuation z-section z-group z-begin z-cs">(</span></span></span><span class="z-meta z-function-call z-cs"><span class="z-meta z-group z-cs"><span class="z-punctuation z-section z-group z-end z-cs">)</span></span></span><span class="z-punctuation z-terminator z-statement z-cs">;</span>
+</span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-method z-body z-cs"><span class="z-meta z-block z-cs">    <span class="z-punctuation z-section z-block z-end z-cs">}</span></span></span>
+</span></span></span><span class="z-source z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs">
+</span></span></span><span class="z-source z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs">    <span class="z-support z-type z-cs">T</span> <span class="z-meta z-method z-cs"><span class="z-entity z-other z-inherited-class z-cs">ILocator</span><span class="z-punctuation z-accessor z-dot z-cs">.</span></span><span class="z-meta z-method z-cs"><span class="z-entity z-name z-function z-cs">Get</span><span class="z-meta z-generic z-cs"><span class="z-punctuation z-definition z-generic z-begin z-cs">&lt;</span></span></span><span class="z-meta z-method z-cs"><span class="z-meta z-generic z-cs"><span class="z-support z-type z-cs">T</span></span><span class="z-meta z-generic z-cs"><span class="z-punctuation z-definition z-generic z-end z-cs">&gt;</span></span></span><span class="z-meta z-method z-parameters z-cs"><span class="z-punctuation z-section z-parameters z-begin z-cs">(</span></span><span class="z-meta z-method z-parameters z-cs"><span class="z-punctuation z-section z-parameters z-end z-cs">)</span></span><span class="z-meta z-method z-cs">
+</span></span></span></span><span class="z-source z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-method z-cs">    </span><span class="z-meta z-method z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-punctuation z-section z-block z-begin z-cs">{</span>
+</span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-method z-body z-cs"><span class="z-meta z-block z-cs">        <span class="z-keyword z-control z-flow z-return z-cs">return</span> <span class="z-variable z-other z-cs">_systems</span><span class="z-punctuation z-accessor z-dot z-cs">.</span><span class="z-meta z-function-call z-cs"><span class="z-variable z-function z-cs">GetChildren</span><span class="z-meta z-group z-cs"><span class="z-punctuation z-section z-group z-begin z-cs">(</span></span></span><span class="z-meta z-function-call z-cs"><span class="z-meta z-group z-cs"><span class="z-punctuation z-section z-group z-end z-cs">)</span></span></span><span class="z-punctuation z-accessor z-dot z-cs">.</span><span class="z-meta z-function-call z-cs"><span class="z-variable z-function z-cs">OfType</span><span class="z-meta z-generic z-cs"><span class="z-punctuation z-definition z-generic z-begin z-cs">&lt;</span></span></span><span class="z-meta z-function-call z-cs"><span class="z-meta z-generic z-cs"><span class="z-support z-type z-cs">T</span><span class="z-meta z-function-call z-cs"><span class="z-meta z-generic z-cs"><span class="z-punctuation z-definition z-generic z-end z-cs">&gt;</span></span><span class="z-meta z-group z-cs"><span class="z-punctuation z-section z-group z-begin z-cs">(</span></span></span></span></span><span class="z-meta z-function-call z-cs"><span class="z-meta z-group z-cs"><span class="z-punctuation z-section z-group z-end z-cs">)</span></span></span><span class="z-punctuation z-accessor z-dot z-cs">.</span><span class="z-meta z-function-call z-cs"><span class="z-variable z-function z-cs">FirstOrDefault</span><span class="z-meta z-group z-cs"><span class="z-punctuation z-section z-group z-begin z-cs">(</span></span></span><span class="z-meta z-function-call z-cs"><span class="z-meta z-group z-cs"><span class="z-punctuation z-section z-group z-end z-cs">)</span></span></span><span class="z-punctuation z-terminator z-statement z-cs">;</span>
+</span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-method z-body z-cs"><span class="z-meta z-block z-cs">    <span class="z-punctuation z-section z-block z-end z-cs">}</span></span></span>
+</span></span></span><span class="z-source z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-punctuation z-section z-block z-end z-cs">}</span></span></span>
+</span></code></pre>
+<blockquote>
+<p>🙋🏼 Using <code>OfType&lt;T&gt;</code> from LINQ might not be the optimal way to do state and systems fetching. However, I find it very ergonomic as it allows me to work strictly with types in the state logic. If you have another neat way to solve this, I’d love to hear about it!</p>
+</blockquote>
+<p>Given these changes, we have to move around and refactor our states a bit.</p>
+<p>As an example, <code>WalkingState</code> ends up looking like this after the changes:</p>
+<pre data-lang="cs" class="language-cs z-code"><code class="language-cs" data-lang="cs"><span class="z-source z-cs"><span class="z-keyword z-control z-import z-cs">using</span> <span class="z-meta z-path z-cs">Godot</span><span class="z-punctuation z-terminator z-cs">;</span>
+</span><span class="z-source z-cs">
+</span><span class="z-source z-cs"><span class="z-keyword z-control z-import z-cs">using</span> <span class="z-meta z-path z-cs">Project</span><span class="z-punctuation z-separator z-namespace z-cs">.</span><span class="z-meta z-path z-cs">Motion</span><span class="z-punctuation z-separator z-namespace z-cs">.</span><span class="z-meta z-path z-cs">Control</span><span class="z-punctuation z-terminator z-cs">;</span>
+</span><span class="z-source z-cs">
+</span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-storage z-type z-namespace z-cs">namespace</span> <span class="z-entity z-name z-namespace z-cs">Project<span class="z-punctuation z-separator z-namespace z-cs">.</span>FSM<span class="z-punctuation z-separator z-namespace z-cs">.</span>Control</span>
+</span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs"><span class="z-punctuation z-section z-block z-begin z-cs">{</span></span></span></span><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs">
+</span></span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs">    <span class="z-storage z-modifier z-access z-cs">public</span> <span class="z-storage z-modifier z-cs">partial</span> <span class="z-meta z-class z-cs"><span class="z-storage z-type z-class z-cs">class</span> <span class="z-entity z-name z-class z-cs">WalkingState</span> <span class="z-punctuation z-separator z-type z-cs">:</span> <span class="z-entity z-other z-inherited-class z-cs">State</span>
+</span></span></span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-class z-cs">    </span><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-punctuation z-section z-block z-begin z-cs">{</span>
+</span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs">        <span class="z-storage z-modifier z-access z-cs">public</span> <span class="z-meta z-method z-constructor z-cs"><span class="z-entity z-name z-function z-constructor z-cs">WalkingState</span><span class="z-meta z-method z-parameters z-cs"><span class="z-punctuation z-section z-parameters z-begin z-cs">(</span></span></span><span class="z-meta z-method z-constructor z-cs"><span class="z-meta z-method z-parameters z-cs"><span class="z-support z-type z-cs">ILocator</span><span class="z-meta z-generic z-cs"><span class="z-punctuation z-definition z-generic z-begin z-cs">&lt;</span></span><span class="z-meta z-generic z-cs"><span class="z-support z-type z-cs">IState</span></span><span class="z-meta z-generic z-cs"><span class="z-punctuation z-definition z-generic z-end z-cs">&gt;</span></span> <span class="z-variable z-parameter z-cs">states</span><span class="z-punctuation z-separator z-parameter z-function z-cs">,</span> <span class="z-support z-type z-cs">ILocator</span> <span class="z-variable z-parameter z-cs">systems</span></span><span class="z-meta z-method z-parameters z-cs"><span class="z-punctuation z-section z-parameters z-end z-cs">)</span></span>
+</span></span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-method z-constructor z-cs">            <span class="z-meta z-method z-constructor z-prebody z-cs"><span class="z-punctuation z-separator z-function z-cs">:</span></span></span><span class="z-meta z-method z-constructor z-prebody z-cs"> </span><span class="z-meta z-method z-constructor z-prebody z-cs"><span class="z-variable z-language z-cs">base</span><span class="z-meta z-group z-cs"><span class="z-punctuation z-section z-group z-begin z-cs">(</span></span></span><span class="z-meta z-method z-constructor z-prebody z-cs"><span class="z-meta z-group z-cs"><span class="z-variable z-other z-cs">states</span><span class="z-punctuation z-separator z-argument z-cs">,</span> <span class="z-variable z-other z-cs">systems</span><span class="z-punctuation z-section z-group z-end z-cs">)</span></span></span><span class="z-meta z-method z-constructor z-prebody z-cs"> </span><span class="z-meta z-method z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-punctuation z-section z-block z-begin z-cs">{</span> <span class="z-punctuation z-section z-block z-end z-cs">}</span></span></span>
+</span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs">
+</span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs">        <span class="z-storage z-modifier z-access z-cs">public</span> <span class="z-storage z-modifier z-cs">override</span> <span class="z-storage z-type z-cs">void</span> <span class="z-meta z-method z-cs"><span class="z-entity z-name z-function z-cs">Enter</span></span><span class="z-meta z-method z-parameters z-cs"><span class="z-punctuation z-section z-parameters z-begin z-cs">(</span></span><span class="z-meta z-method z-parameters z-cs"><span class="z-punctuation z-section z-parameters z-end z-cs">)</span></span><span class="z-meta z-method z-cs">
+</span></span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-method z-cs">        </span><span class="z-meta z-method z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-punctuation z-section z-block z-begin z-cs">{</span>
+</span></span></span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-method z-body z-cs"><span class="z-meta z-block z-cs">            <span class="z-variable z-language z-cs">base</span><span class="z-punctuation z-accessor z-dot z-cs">.</span><span class="z-meta z-function-call z-cs"><span class="z-variable z-function z-cs">Enter</span><span class="z-meta z-group z-cs"><span class="z-punctuation z-section z-group z-begin z-cs">(</span></span></span><span class="z-meta z-function-call z-cs"><span class="z-meta z-group z-cs"><span class="z-punctuation z-section z-group z-end z-cs">)</span></span></span><span class="z-punctuation z-terminator z-statement z-cs">;</span>
+</span></span></span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-method z-body z-cs"><span class="z-meta z-block z-cs">        <span class="z-punctuation z-section z-block z-end z-cs">}</span></span></span>
+</span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs">
+</span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs">        <span class="z-storage z-modifier z-access z-cs">public</span> <span class="z-storage z-modifier z-cs">override</span> <span class="z-support z-type z-cs">IState</span> <span class="z-meta z-method z-cs"><span class="z-entity z-name z-function z-cs">Tick</span></span><span class="z-meta z-method z-parameters z-cs"><span class="z-punctuation z-section z-parameters z-begin z-cs">(</span></span><span class="z-meta z-method z-parameters z-cs"><span class="z-storage z-type z-cs">double</span> <span class="z-variable z-parameter z-cs">delta</span></span><span class="z-meta z-method z-parameters z-cs"><span class="z-punctuation z-section z-parameters z-end z-cs">)</span></span><span class="z-meta z-method z-cs">
+</span></span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-method z-cs">        </span><span class="z-meta z-method z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-punctuation z-section z-block z-begin z-cs">{</span>
+</span></span></span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-method z-body z-cs"><span class="z-meta z-block z-cs">            <span class="z-support z-type z-cs">IState</span> <span class="z-variable z-other z-cs">stateFromBase</span> <span class="z-keyword z-operator z-assignment z-variable z-cs">=</span> <span class="z-variable z-language z-cs">base</span><span class="z-punctuation z-accessor z-dot z-cs">.</span><span class="z-meta z-function-call z-cs"><span class="z-variable z-function z-cs">Tick</span><span class="z-meta z-group z-cs"><span class="z-punctuation z-section z-group z-begin z-cs">(</span></span></span><span class="z-meta z-function-call z-cs"><span class="z-meta z-group z-cs"><span class="z-variable z-other z-cs">delta</span><span class="z-punctuation z-section z-group z-end z-cs">)</span></span></span><span class="z-punctuation z-terminator z-statement z-cs">;</span>
+</span></span></span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-method z-body z-cs"><span class="z-meta z-block z-cs">
+</span></span></span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-method z-body z-cs"><span class="z-meta z-block z-cs">            <span class="z-keyword z-control z-flow z-return z-cs">return</span> <span class="z-variable z-other z-cs">Input</span><span class="z-punctuation z-accessor z-dot z-cs">.</span><span class="z-meta z-function-call z-cs"><span class="z-variable z-function z-cs">GetVector</span><span class="z-meta z-group z-cs"><span class="z-punctuation z-section z-group z-begin z-cs">(</span></span></span><span class="z-meta z-function-call z-cs"><span class="z-meta z-group z-cs"><span class="z-string z-quoted z-double z-cs"><span class="z-punctuation z-definition z-string z-begin z-cs">&quot;</span>left<span class="z-punctuation z-definition z-string z-end z-cs">&quot;</span></span><span class="z-punctuation z-separator z-argument z-cs">,</span> <span class="z-string z-quoted z-double z-cs"><span class="z-punctuation z-definition z-string z-begin z-cs">&quot;</span>right<span class="z-punctuation z-definition z-string z-end z-cs">&quot;</span></span><span class="z-punctuation z-separator z-argument z-cs">,</span> <span class="z-string z-quoted z-double z-cs"><span class="z-punctuation z-definition z-string z-begin z-cs">&quot;</span>up<span class="z-punctuation z-definition z-string z-end z-cs">&quot;</span></span><span class="z-punctuation z-separator z-argument z-cs">,</span> <span class="z-string z-quoted z-double z-cs"><span class="z-punctuation z-definition z-string z-begin z-cs">&quot;</span>down<span class="z-punctuation z-definition z-string z-end z-cs">&quot;</span></span><span class="z-punctuation z-section z-group z-end z-cs">)</span></span></span> <span class="z-keyword z-operator z-cs">==</span> <span class="z-variable z-other z-cs">Vector2</span><span class="z-punctuation z-accessor z-dot z-cs">.</span><span class="z-variable z-other z-cs">Zero</span>
+</span></span></span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-method z-body z-cs"><span class="z-meta z-block z-cs">                <span class="z-keyword z-operator z-ternary z-cs">?</span> <span class="z-variable z-other z-cs">states</span><span class="z-punctuation z-accessor z-dot z-cs">.</span><span class="z-meta z-function-call z-cs"><span class="z-variable z-function z-cs">Get</span><span class="z-meta z-generic z-cs"><span class="z-punctuation z-definition z-generic z-begin z-cs">&lt;</span></span></span><span class="z-meta z-function-call z-cs"><span class="z-meta z-generic z-cs"><span class="z-support z-type z-cs">IdleState</span><span class="z-meta z-function-call z-cs"><span class="z-meta z-generic z-cs"><span class="z-punctuation z-definition z-generic z-end z-cs">&gt;</span></span><span class="z-meta z-group z-cs"><span class="z-punctuation z-section z-group z-begin z-cs">(</span></span></span></span></span><span class="z-meta z-function-call z-cs"><span class="z-meta z-group z-cs"><span class="z-punctuation z-section z-group z-end z-cs">)</span></span></span>
+</span></span></span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-method z-body z-cs"><span class="z-meta z-block z-cs">                <span class="z-keyword z-operator z-ternary z-cs">:</span> <span class="z-variable z-other z-cs">stateFromBase</span><span class="z-punctuation z-terminator z-statement z-cs">;</span>
+</span></span></span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-method z-body z-cs"><span class="z-meta z-block z-cs">        <span class="z-punctuation z-section z-block z-end z-cs">}</span></span></span>
+</span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs">
+</span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs">        <span class="z-storage z-modifier z-access z-cs">public</span> <span class="z-storage z-modifier z-cs">override</span> <span class="z-support z-type z-cs">IState</span> <span class="z-meta z-method z-cs"><span class="z-entity z-name z-function z-cs">PhysicsTick</span></span><span class="z-meta z-method z-parameters z-cs"><span class="z-punctuation z-section z-parameters z-begin z-cs">(</span></span><span class="z-meta z-method z-parameters z-cs"><span class="z-storage z-type z-cs">double</span> <span class="z-variable z-parameter z-cs">delta</span></span><span class="z-meta z-method z-parameters z-cs"><span class="z-punctuation z-section z-parameters z-end z-cs">)</span></span><span class="z-meta z-method z-cs">
+</span></span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-method z-cs">        </span><span class="z-meta z-method z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-punctuation z-section z-block z-begin z-cs">{</span>
+</span></span></span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-method z-body z-cs"><span class="z-meta z-block z-cs">            <span class="z-support z-type z-cs">Vector2</span> <span class="z-variable z-other z-cs">direction</span> <span class="z-keyword z-operator z-assignment z-variable z-cs">=</span> <span class="z-variable z-other z-cs">Input</span><span class="z-punctuation z-accessor z-dot z-cs">.</span><span class="z-meta z-function-call z-cs"><span class="z-variable z-function z-cs">GetVector</span><span class="z-meta z-group z-cs"><span class="z-punctuation z-section z-group z-begin z-cs">(</span></span></span><span class="z-meta z-function-call z-cs"><span class="z-meta z-group z-cs"><span class="z-string z-quoted z-double z-cs"><span class="z-punctuation z-definition z-string z-begin z-cs">&quot;</span>left<span class="z-punctuation z-definition z-string z-end z-cs">&quot;</span></span><span class="z-punctuation z-separator z-argument z-cs">,</span> <span class="z-string z-quoted z-double z-cs"><span class="z-punctuation z-definition z-string z-begin z-cs">&quot;</span>right<span class="z-punctuation z-definition z-string z-end z-cs">&quot;</span></span><span class="z-punctuation z-separator z-argument z-cs">,</span> <span class="z-string z-quoted z-double z-cs"><span class="z-punctuation z-definition z-string z-begin z-cs">&quot;</span>up<span class="z-punctuation z-definition z-string z-end z-cs">&quot;</span></span><span class="z-punctuation z-separator z-argument z-cs">,</span> <span class="z-string z-quoted z-double z-cs"><span class="z-punctuation z-definition z-string z-begin z-cs">&quot;</span>down<span class="z-punctuation z-definition z-string z-end z-cs">&quot;</span></span><span class="z-punctuation z-section z-group z-end z-cs">)</span></span></span><span class="z-punctuation z-terminator z-statement z-cs">;</span>
+</span></span></span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-method z-body z-cs"><span class="z-meta z-block z-cs">            <span class="z-variable z-other z-cs">systems</span><span class="z-punctuation z-accessor z-dot z-cs">.</span><span class="z-meta z-function-call z-cs"><span class="z-variable z-function z-cs">Get</span><span class="z-meta z-generic z-cs"><span class="z-punctuation z-definition z-generic z-begin z-cs">&lt;</span></span></span><span class="z-meta z-function-call z-cs"><span class="z-meta z-generic z-cs"><span class="z-support z-type z-cs">Mover</span><span class="z-meta z-function-call z-cs"><span class="z-meta z-generic z-cs"><span class="z-punctuation z-definition z-generic z-end z-cs">&gt;</span></span><span class="z-meta z-group z-cs"><span class="z-punctuation z-section z-group z-begin z-cs">(</span></span></span></span></span><span class="z-meta z-function-call z-cs"><span class="z-meta z-group z-cs"><span class="z-punctuation z-section z-group z-end z-cs">)</span></span></span><span class="z-punctuation z-accessor z-dot z-cs">.</span><span class="z-meta z-function-call z-cs"><span class="z-variable z-function z-cs">Move</span><span class="z-meta z-group z-cs"><span class="z-punctuation z-section z-group z-begin z-cs">(</span></span></span><span class="z-meta z-function-call z-cs"><span class="z-meta z-group z-cs"><span class="z-variable z-other z-cs">direction</span><span class="z-punctuation z-section z-group z-end z-cs">)</span></span></span><span class="z-punctuation z-terminator z-statement z-cs">;</span>
+</span></span></span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-method z-body z-cs"><span class="z-meta z-block z-cs">
+</span></span></span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-method z-body z-cs"><span class="z-meta z-block z-cs">            <span class="z-keyword z-control z-flow z-return z-cs">return</span> <span class="z-variable z-language z-cs">base</span><span class="z-punctuation z-accessor z-dot z-cs">.</span><span class="z-meta z-function-call z-cs"><span class="z-variable z-function z-cs">PhysicsTick</span><span class="z-meta z-group z-cs"><span class="z-punctuation z-section z-group z-begin z-cs">(</span></span></span><span class="z-meta z-function-call z-cs"><span class="z-meta z-group z-cs"><span class="z-variable z-other z-cs">delta</span><span class="z-punctuation z-section z-group z-end z-cs">)</span></span></span><span class="z-punctuation z-terminator z-statement z-cs">;</span> <span class="z-punctuation z-terminator z-statement z-cs">;</span>
+</span></span></span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-method z-body z-cs"><span class="z-meta z-block z-cs">        <span class="z-punctuation z-section z-block z-end z-cs">}</span></span></span>
+</span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs">
+</span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs">        <span class="z-storage z-modifier z-access z-cs">public</span> <span class="z-storage z-modifier z-cs">override</span> <span class="z-storage z-type z-cs">void</span> <span class="z-meta z-method z-cs"><span class="z-entity z-name z-function z-cs">Exit</span></span><span class="z-meta z-method z-parameters z-cs"><span class="z-punctuation z-section z-parameters z-begin z-cs">(</span></span><span class="z-meta z-method z-parameters z-cs"><span class="z-punctuation z-section z-parameters z-end z-cs">)</span></span><span class="z-meta z-method z-cs">
+</span></span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-method z-cs">        </span><span class="z-meta z-method z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-punctuation z-section z-block z-begin z-cs">{</span>
+</span></span></span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-method z-body z-cs"><span class="z-meta z-block z-cs">            <span class="z-variable z-language z-cs">base</span><span class="z-punctuation z-accessor z-dot z-cs">.</span><span class="z-meta z-function-call z-cs"><span class="z-variable z-function z-cs">Exit</span><span class="z-meta z-group z-cs"><span class="z-punctuation z-section z-group z-begin z-cs">(</span></span></span><span class="z-meta z-function-call z-cs"><span class="z-meta z-group z-cs"><span class="z-punctuation z-section z-group z-end z-cs">)</span></span></span><span class="z-punctuation z-terminator z-statement z-cs">;</span>
+</span></span></span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-method z-body z-cs"><span class="z-meta z-block z-cs">        <span class="z-punctuation z-section z-block z-end z-cs">}</span></span></span>
+</span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs">    <span class="z-punctuation z-section z-block z-end z-cs">}</span></span></span>
+</span></span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs"><span class="z-punctuation z-section z-block z-end z-cs">}</span></span></span>
+</span></code></pre>
+<p>The <code>StateMachine</code> is updated to handle potentially returned states from the tick functions:</p>
+<pre data-lang="cs" class="language-cs z-code"><code class="language-cs" data-lang="cs"><span class="z-source z-cs"><span class="z-storage z-modifier z-access z-cs">public</span> <span class="z-storage z-modifier z-cs">partial</span> <span class="z-meta z-class z-cs"><span class="z-storage z-type z-class z-cs">class</span> <span class="z-entity z-name z-class z-cs">StateMachine</span> <span class="z-punctuation z-separator z-type z-cs">:</span> <span class="z-entity z-other z-inherited-class z-cs">Node</span><span class="z-punctuation z-separator z-inherited-class z-cs">,</span> <span class="z-entity z-other z-inherited-class z-cs">ILocator</span><span class="z-meta z-generic z-cs"><span class="z-punctuation z-definition z-generic z-begin z-cs">&lt;</span></span><span class="z-meta z-generic z-cs"><span class="z-support z-type z-cs">IState</span></span><span class="z-meta z-generic z-cs"><span class="z-punctuation z-definition z-generic z-end z-cs">&gt;</span></span><span class="z-punctuation z-separator z-inherited-class z-cs">,</span> <span class="z-entity z-other z-inherited-class z-cs">ILocator</span>
+</span></span><span class="z-source z-cs"><span class="z-meta z-class z-cs"></span><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-punctuation z-section z-block z-begin z-cs">{</span>
+</span></span></span><span class="z-source z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs">    <span class="z-comment z-line z-double-slash z-cs"><span class="z-punctuation z-definition z-comment z-cs">//</span> more code...
+</span></span></span></span><span class="z-source z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs">
+</span></span></span><span class="z-source z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs">    <span class="z-storage z-modifier z-access z-cs">public</span> <span class="z-storage z-modifier z-cs">override</span> <span class="z-storage z-type z-cs">void</span> <span class="z-meta z-method z-cs"><span class="z-entity z-name z-function z-cs">_Process</span></span><span class="z-meta z-method z-parameters z-cs"><span class="z-punctuation z-section z-parameters z-begin z-cs">(</span></span><span class="z-meta z-method z-parameters z-cs"><span class="z-storage z-type z-cs">double</span> <span class="z-variable z-parameter z-cs">delta</span></span><span class="z-meta z-method z-parameters z-cs"><span class="z-punctuation z-section z-parameters z-end z-cs">)</span></span><span class="z-meta z-method z-cs">
+</span></span></span></span><span class="z-source z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-method z-cs">    </span><span class="z-meta z-method z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-punctuation z-section z-block z-begin z-cs">{</span>
+</span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-method z-body z-cs"><span class="z-meta z-block z-cs">        <span class="z-storage z-type z-variable z-cs">var</span> <span class="z-variable z-other z-cs">newState</span> <span class="z-keyword z-operator z-assignment z-variable z-cs">=</span> <span class="z-variable z-other z-cs">_currentState</span><span class="z-punctuation z-accessor z-dot z-cs">.</span><span class="z-meta z-function-call z-cs"><span class="z-variable z-function z-cs">Tick</span><span class="z-meta z-group z-cs"><span class="z-punctuation z-section z-group z-begin z-cs">(</span></span></span><span class="z-meta z-function-call z-cs"><span class="z-meta z-group z-cs"><span class="z-variable z-other z-cs">delta</span><span class="z-punctuation z-section z-group z-end z-cs">)</span></span></span><span class="z-punctuation z-terminator z-statement z-cs">;</span>
+</span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-method z-body z-cs"><span class="z-meta z-block z-cs">        <span class="z-keyword z-control z-conditional z-if z-cs">if</span><span class="z-meta z-group z-cs"><span class="z-punctuation z-section z-group z-begin z-cs">(</span></span><span class="z-meta z-group z-cs"><span class="z-variable z-other z-cs">newState</span> <span class="z-keyword z-operator z-cs">!=</span> <span class="z-constant z-language z-cs">null</span></span><span class="z-meta z-group z-cs"><span class="z-punctuation z-section z-group z-end z-cs">)</span></span> <span class="z-meta z-block z-cs"><span class="z-punctuation z-section z-block z-begin z-cs">{</span></span><span class="z-meta z-block z-cs">
+</span></span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-method z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-block z-cs">            <span class="z-meta z-function-call z-cs"><span class="z-variable z-function z-cs">ChangeState</span><span class="z-meta z-group z-cs"><span class="z-punctuation z-section z-group z-begin z-cs">(</span></span></span><span class="z-meta z-function-call z-cs"><span class="z-meta z-group z-cs"><span class="z-variable z-other z-cs">newState</span><span class="z-punctuation z-section z-group z-end z-cs">)</span></span></span><span class="z-punctuation z-terminator z-statement z-cs">;</span>
+</span></span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-method z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-block z-cs">        </span><span class="z-meta z-block z-cs"><span class="z-punctuation z-section z-block z-end z-cs">}</span></span>
+</span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-method z-body z-cs"><span class="z-meta z-block z-cs">    <span class="z-punctuation z-section z-block z-end z-cs">}</span></span></span>
+</span></span></span><span class="z-source z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs">
+</span></span></span><span class="z-source z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs">    <span class="z-storage z-modifier z-access z-cs">public</span> <span class="z-storage z-modifier z-cs">override</span> <span class="z-storage z-type z-cs">void</span> <span class="z-meta z-method z-cs"><span class="z-entity z-name z-function z-cs">_PhysicsProcess</span></span><span class="z-meta z-method z-parameters z-cs"><span class="z-punctuation z-section z-parameters z-begin z-cs">(</span></span><span class="z-meta z-method z-parameters z-cs"><span class="z-storage z-type z-cs">double</span> <span class="z-variable z-parameter z-cs">delta</span></span><span class="z-meta z-method z-parameters z-cs"><span class="z-punctuation z-section z-parameters z-end z-cs">)</span></span><span class="z-meta z-method z-cs">
+</span></span></span></span><span class="z-source z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-method z-cs">    </span><span class="z-meta z-method z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-punctuation z-section z-block z-begin z-cs">{</span>
+</span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-method z-body z-cs"><span class="z-meta z-block z-cs">        <span class="z-storage z-type z-variable z-cs">var</span> <span class="z-variable z-other z-cs">newState</span> <span class="z-keyword z-operator z-assignment z-variable z-cs">=</span> <span class="z-variable z-other z-cs">_currentState</span><span class="z-punctuation z-accessor z-dot z-cs">.</span><span class="z-meta z-function-call z-cs"><span class="z-variable z-function z-cs">PhysicsTick</span><span class="z-meta z-group z-cs"><span class="z-punctuation z-section z-group z-begin z-cs">(</span></span></span><span class="z-meta z-function-call z-cs"><span class="z-meta z-group z-cs"><span class="z-variable z-other z-cs">delta</span><span class="z-punctuation z-section z-group z-end z-cs">)</span></span></span><span class="z-punctuation z-terminator z-statement z-cs">;</span>
+</span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-method z-body z-cs"><span class="z-meta z-block z-cs">        <span class="z-keyword z-control z-conditional z-if z-cs">if</span> <span class="z-meta z-group z-cs"><span class="z-punctuation z-section z-group z-begin z-cs">(</span></span><span class="z-meta z-group z-cs"><span class="z-variable z-other z-cs">newState</span> <span class="z-keyword z-operator z-cs">!=</span> <span class="z-constant z-language z-cs">null</span></span><span class="z-meta z-group z-cs"><span class="z-punctuation z-section z-group z-end z-cs">)</span></span>
+</span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-method z-body z-cs"><span class="z-meta z-block z-cs">        <span class="z-meta z-block z-cs"><span class="z-punctuation z-section z-block z-begin z-cs">{</span></span><span class="z-meta z-block z-cs">
+</span></span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-method z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-block z-cs">            <span class="z-meta z-function-call z-cs"><span class="z-variable z-function z-cs">ChangeState</span><span class="z-meta z-group z-cs"><span class="z-punctuation z-section z-group z-begin z-cs">(</span></span></span><span class="z-meta z-function-call z-cs"><span class="z-meta z-group z-cs"><span class="z-variable z-other z-cs">newState</span><span class="z-punctuation z-section z-group z-end z-cs">)</span></span></span><span class="z-punctuation z-terminator z-statement z-cs">;</span>
+</span></span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-method z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-block z-cs">        </span><span class="z-meta z-block z-cs"><span class="z-punctuation z-section z-block z-end z-cs">}</span></span>
+</span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-method z-body z-cs"><span class="z-meta z-block z-cs">    <span class="z-punctuation z-section z-block z-end z-cs">}</span></span></span>
+</span></span></span><span class="z-source z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs">
+</span></span></span><span class="z-source z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs">    <span class="z-comment z-line z-double-slash z-cs"><span class="z-punctuation z-definition z-comment z-cs">//</span> more code...
+</span></span></span></span><span class="z-source z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-punctuation z-section z-block z-end z-cs">}</span></span></span>
+</span></code></pre>
+<p>Finally, make sure the scene structure is updated to respect that systems are expected to be children of the Systems node:</p>
+<p><img src="https://nilsiker.github.io/blog/finite-state-machine-2/img/new-scene-structure.png" alt="The new Player scene structure" /></p>
+<p>Hitting play should show that the StateMachine works just as before.</p>
+<blockquote>
+<p>🙋🏼 I admit it’s a lot of work for no new functionality, but it should help us do better design choices moving forward and provide us a framework on how to organize our systems.</p>
+</blockquote>
+<h1 id="a-brief-comment-on-liskov-substitution"><a class="header-anchor no-hover-padding" href="#a-brief-comment-on-liskov-substitution" aria-label="Anchor link for: a-brief-comment-on-liskov-substitution"><span class="link-icon" aria-hidden="true"></span></a>
+A brief comment on Liskov substitution</h1>
+<p>This principle states that you should be able to substitue an object with a sub-object without anything breaking.</p>
+<p>By introducing <code>IState</code> and continue using our <code>StateMachine</code> as if nothing changed, we assume (🚩) that our code passes the Liskov substitution test. The machine should accept any object implementing <code>IState</code> and still work as expected. It seems to hold true for <code>IdleState</code> and <code>WalkingState</code>, but we should be wary as our module grows with increasingly complex interactions.</p>
+<p>The same goes for systems – next let’s do some abstractions for our Mover!</p>
+<h1 id="loose-coupling-for-systems"><a class="header-anchor no-hover-padding" href="#loose-coupling-for-systems" aria-label="Anchor link for: loose-coupling-for-systems"><span class="link-icon" aria-hidden="true"></span></a>
+Loose coupling for systems</h1>
+<p>We loosened up our coupling by introducing the <code>IState</code> interface. We can do one better and let Mover implement the IMover interface:</p>
+<pre data-lang="cs" class="language-cs z-code"><code class="language-cs" data-lang="cs"><span class="z-source z-cs"><span class="z-storage z-modifier z-access z-cs">public</span> <span class="z-meta z-interface z-cs"><span class="z-storage z-type z-interface z-cs">interface</span> <span class="z-entity z-name z-interface z-cs">IMover</span>
+</span></span><span class="z-source z-cs"><span class="z-meta z-interface z-cs"></span><span class="z-meta z-interface z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-punctuation z-section z-block z-begin z-cs">{</span>
+</span></span></span><span class="z-source z-cs"><span class="z-meta z-interface z-body z-cs"><span class="z-meta z-block z-cs">    <span class="z-storage z-type z-cs">void</span> <span class="z-meta z-method z-cs"><span class="z-entity z-name z-function z-cs">Move</span></span><span class="z-meta z-method z-parameters z-cs"><span class="z-punctuation z-section z-parameters z-begin z-cs">(</span></span><span class="z-meta z-method z-parameters z-cs"><span class="z-support z-type z-cs">Vector2</span> <span class="z-variable z-parameter z-cs">direction</span></span><span class="z-meta z-method z-parameters z-cs"><span class="z-punctuation z-section z-parameters z-end z-cs">)</span></span><span class="z-meta z-method z-cs"><span class="z-punctuation z-terminator z-cs">;</span></span>
+</span></span></span><span class="z-source z-cs"><span class="z-meta z-interface z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-punctuation z-section z-block z-end z-cs">}</span></span></span>
+</span></code></pre>
+<p>The states can now also be updated to save references for the systems they need. On construction, <code>WalkingState</code> locates and stores the reference to the IMover.</p>
+<pre data-lang="cs" class="language-cs z-code"><code class="language-cs" data-lang="cs"><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-storage z-type z-namespace z-cs">namespace</span> <span class="z-entity z-name z-namespace z-cs">Project<span class="z-punctuation z-separator z-namespace z-cs">.</span>FSM<span class="z-punctuation z-separator z-namespace z-cs">.</span>Control</span>
+</span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs"><span class="z-punctuation z-section z-block z-begin z-cs">{</span></span></span></span><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs">
+</span></span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs">    <span class="z-storage z-modifier z-access z-cs">public</span> <span class="z-storage z-modifier z-cs">partial</span> <span class="z-meta z-class z-cs"><span class="z-storage z-type z-class z-cs">class</span> <span class="z-entity z-name z-class z-cs">WalkingState</span> <span class="z-punctuation z-separator z-type z-cs">:</span> <span class="z-entity z-other z-inherited-class z-cs">State</span>
+</span></span></span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-class z-cs">    </span><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-punctuation z-section z-block z-begin z-cs">{</span>
+</span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs">        <span class="z-storage z-modifier z-access z-cs">private</span> <span class="z-support z-type z-cs">IMover</span> <span class="z-variable z-other z-member z-cs">_mover</span><span class="z-punctuation z-terminator z-statement z-cs">;</span>
+</span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs">
+</span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs">        <span class="z-storage z-modifier z-access z-cs">public</span> <span class="z-meta z-method z-constructor z-cs"><span class="z-entity z-name z-function z-constructor z-cs">WalkingState</span><span class="z-meta z-method z-parameters z-cs"><span class="z-punctuation z-section z-parameters z-begin z-cs">(</span></span></span><span class="z-meta z-method z-constructor z-cs"><span class="z-meta z-method z-parameters z-cs"><span class="z-support z-type z-cs">ILocator</span><span class="z-meta z-generic z-cs"><span class="z-punctuation z-definition z-generic z-begin z-cs">&lt;</span></span><span class="z-meta z-generic z-cs"><span class="z-support z-type z-cs">IState</span></span><span class="z-meta z-generic z-cs"><span class="z-punctuation z-definition z-generic z-end z-cs">&gt;</span></span> <span class="z-variable z-parameter z-cs">states</span><span class="z-punctuation z-separator z-parameter z-function z-cs">,</span> <span class="z-support z-type z-cs">ILocator</span> <span class="z-variable z-parameter z-cs">systems</span></span><span class="z-meta z-method z-parameters z-cs"><span class="z-punctuation z-section z-parameters z-end z-cs">)</span></span> 
+</span></span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-method z-constructor z-cs">        <span class="z-meta z-method z-constructor z-prebody z-cs"><span class="z-punctuation z-separator z-function z-cs">:</span></span></span><span class="z-meta z-method z-constructor z-prebody z-cs"> </span><span class="z-meta z-method z-constructor z-prebody z-cs"><span class="z-variable z-language z-cs">base</span><span class="z-meta z-group z-cs"><span class="z-punctuation z-section z-group z-begin z-cs">(</span></span></span><span class="z-meta z-method z-constructor z-prebody z-cs"><span class="z-meta z-group z-cs"><span class="z-variable z-other z-cs">states</span><span class="z-punctuation z-section z-group z-end z-cs">)</span></span></span><span class="z-meta z-method z-constructor z-prebody z-cs"> 
+</span></span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-method z-constructor z-prebody z-cs">        </span><span class="z-meta z-method z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-punctuation z-section z-block z-begin z-cs">{</span>
+</span></span></span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-method z-body z-cs"><span class="z-meta z-block z-cs">            <span class="z-variable z-other z-cs">_mover</span> <span class="z-keyword z-operator z-assignment z-cs">=</span> <span class="z-variable z-other z-cs">systems</span><span class="z-punctuation z-accessor z-dot z-cs">.</span><span class="z-meta z-function-call z-cs"><span class="z-variable z-function z-cs">Get</span><span class="z-meta z-generic z-cs"><span class="z-punctuation z-definition z-generic z-begin z-cs">&lt;</span></span></span><span class="z-meta z-function-call z-cs"><span class="z-meta z-generic z-cs"><span class="z-support z-type z-cs">IMover</span><span class="z-meta z-function-call z-cs"><span class="z-meta z-generic z-cs"><span class="z-punctuation z-definition z-generic z-end z-cs">&gt;</span></span><span class="z-meta z-group z-cs"><span class="z-punctuation z-section z-group z-begin z-cs">(</span></span></span></span></span><span class="z-meta z-function-call z-cs"><span class="z-meta z-group z-cs"><span class="z-punctuation z-section z-group z-end z-cs">)</span></span></span><span class="z-punctuation z-terminator z-statement z-cs">;</span>
+</span></span></span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-method z-body z-cs"><span class="z-meta z-block z-cs">        <span class="z-punctuation z-section z-block z-end z-cs">}</span></span></span>
+</span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs">        
+</span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs">        <span class="z-comment z-line z-double-slash z-cs"><span class="z-punctuation z-definition z-comment z-cs">//</span> more code
+</span></span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs">    <span class="z-punctuation z-section z-block z-end z-cs">}</span></span></span>
+</span></span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs"><span class="z-punctuation z-section z-block z-end z-cs">}</span></span></span>
+</span></code></pre>
+<p>As shown above, states only need to locate and store the systems as they are constructed.</p>
+<p>Therefore, we can do away with the persistent <code>ILocator</code> reference in the abstract <code>State</code> class.</p>
+<pre data-lang="cs" class="language-cs z-code"><code class="language-cs" data-lang="cs"><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-storage z-type z-namespace z-cs">namespace</span> <span class="z-entity z-name z-namespace z-cs">Project<span class="z-punctuation z-separator z-namespace z-cs">.</span>FSM<span class="z-punctuation z-separator z-namespace z-cs">.</span>Control</span>
+</span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs"><span class="z-punctuation z-section z-block z-begin z-cs">{</span></span></span></span><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs">
+</span></span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs">    <span class="z-storage z-modifier z-access z-cs">public</span> <span class="z-storage z-modifier z-cs">abstract</span> <span class="z-meta z-class z-cs"><span class="z-storage z-type z-class z-cs">class</span> <span class="z-entity z-name z-class z-cs">State</span> <span class="z-punctuation z-separator z-type z-cs">:</span> <span class="z-entity z-other z-inherited-class z-cs">IState</span>
+</span></span></span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-class z-cs">    </span><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-punctuation z-section z-block z-begin z-cs">{</span>
+</span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs">        <span class="z-storage z-modifier z-access z-cs">private</span> <span class="z-storage z-type z-cs">string</span> <span class="z-variable z-other z-member z-cs">_name</span><span class="z-punctuation z-terminator z-statement z-cs">;</span>
+</span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs">        <span class="z-storage z-modifier z-access z-cs">protected</span> <span class="z-support z-type z-cs">ILocator</span><span class="z-meta z-generic z-cs"><span class="z-punctuation z-definition z-generic z-begin z-cs">&lt;</span></span><span class="z-meta z-generic z-cs"><span class="z-support z-type z-cs">IState</span></span><span class="z-meta z-generic z-cs"><span class="z-punctuation z-definition z-generic z-end z-cs">&gt;</span></span> <span class="z-variable z-other z-member z-cs">states</span><span class="z-punctuation z-terminator z-statement z-cs">;</span>
+</span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs">
+</span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs">        <span class="z-storage z-modifier z-access z-cs">public</span> <span class="z-meta z-method z-constructor z-cs"><span class="z-entity z-name z-function z-constructor z-cs">State</span><span class="z-meta z-method z-parameters z-cs"><span class="z-punctuation z-section z-parameters z-begin z-cs">(</span></span></span><span class="z-meta z-method z-constructor z-cs"><span class="z-meta z-method z-parameters z-cs"><span class="z-support z-type z-cs">ILocator</span><span class="z-meta z-generic z-cs"><span class="z-punctuation z-definition z-generic z-begin z-cs">&lt;</span></span><span class="z-meta z-generic z-cs"><span class="z-support z-type z-cs">IState</span></span><span class="z-meta z-generic z-cs"><span class="z-punctuation z-definition z-generic z-end z-cs">&gt;</span></span> <span class="z-variable z-parameter z-cs">states</span></span><span class="z-meta z-method z-parameters z-cs"><span class="z-punctuation z-section z-parameters z-end z-cs">)</span></span>
+</span></span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-method z-constructor z-cs">        </span><span class="z-meta z-method z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-punctuation z-section z-block z-begin z-cs">{</span>
+</span></span></span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-method z-body z-cs"><span class="z-meta z-block z-cs">            <span class="z-variable z-other z-cs">_name</span> <span class="z-keyword z-operator z-assignment z-cs">=</span> <span class="z-meta z-function-call z-cs"><span class="z-variable z-function z-cs">GetType</span><span class="z-meta z-group z-cs"><span class="z-punctuation z-section z-group z-begin z-cs">(</span></span></span><span class="z-meta z-function-call z-cs"><span class="z-meta z-group z-cs"><span class="z-punctuation z-section z-group z-end z-cs">)</span></span></span><span class="z-punctuation z-accessor z-dot z-cs">.</span><span class="z-variable z-other z-cs">Name</span><span class="z-punctuation z-terminator z-statement z-cs">;</span>
+</span></span></span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-method z-body z-cs"><span class="z-meta z-block z-cs">            <span class="z-variable z-language z-cs">this</span><span class="z-punctuation z-accessor z-dot z-cs">.</span><span class="z-variable z-other z-cs">states</span> <span class="z-keyword z-operator z-assignment z-cs">=</span> <span class="z-variable z-other z-cs">states</span><span class="z-punctuation z-terminator z-statement z-cs">;</span>
+</span></span></span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-method z-body z-cs"><span class="z-meta z-block z-cs">        <span class="z-punctuation z-section z-block z-end z-cs">}</span></span></span>
+</span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs">
+</span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs">        <span class="z-comment z-line z-double-slash z-cs"><span class="z-punctuation z-definition z-comment z-cs">//</span> more
+</span></span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs">    <span class="z-punctuation z-section z-block z-end z-cs">}</span></span></span>
+</span></span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs"><span class="z-punctuation z-section z-block z-end z-cs">}</span></span></span>
+</span></code></pre>
+<p>Now this is neat!</p>
+<h1 id="trying-out-our-new-architecture"><a class="header-anchor no-hover-padding" href="#trying-out-our-new-architecture" aria-label="Anchor link for: trying-out-our-new-architecture"><span class="link-icon" aria-hidden="true"></span></a>
+Trying out our new architecture</h1>
+<p>If your folder structure is a reflection of the namespaces, our scripts folder should look rather tidy now.</p>
+<p><img src="https://nilsiker.github.io/blog/finite-state-machine-2/img/final-scripts-structure.png" alt="scripts folder with new namespace structure" /></p>
+<p>With this new setup, what does it look like to add a new system? I’ll add a contrived system that changes the Player color and decide that the Player turns blue while idling and red while walking.</p>
+<p>The folder structure would hade this added to it:</p>
+<p><img src="https://nilsiker.github.io/blog/finite-state-machine-2/img/appearance-system-folder.png" alt="new appearance system folder structure" /></p>
+<p>And this code would be added:</p>
+<pre data-lang="cs" class="language-cs z-code"><code class="language-cs" data-lang="cs"><span class="z-source z-cs"><span class="z-comment z-line z-double-slash z-cs"><span class="z-punctuation z-definition z-comment z-cs">//</span> IAppearanceChanger.cs
+</span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-storage z-type z-namespace z-cs">namespace</span> <span class="z-entity z-name z-namespace z-cs">Project<span class="z-punctuation z-separator z-namespace z-cs">.</span>Appearance</span> 
+</span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs"><span class="z-punctuation z-section z-block z-begin z-cs">{</span></span></span></span><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs">
+</span></span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs">    <span class="z-storage z-modifier z-access z-cs">public</span> <span class="z-meta z-interface z-cs"><span class="z-storage z-type z-interface z-cs">interface</span> <span class="z-entity z-name z-interface z-cs">IAppearanceChanger</span>
+</span></span></span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-interface z-cs">    </span><span class="z-meta z-interface z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-punctuation z-section z-block z-begin z-cs">{</span>
+</span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-interface z-body z-cs"><span class="z-meta z-block z-cs">        <span class="z-storage z-type z-cs">void</span> <span class="z-meta z-method z-cs"><span class="z-entity z-name z-function z-cs">ChangeColor</span></span><span class="z-meta z-method z-parameters z-cs"><span class="z-punctuation z-section z-parameters z-begin z-cs">(</span></span><span class="z-meta z-method z-parameters z-cs"><span class="z-support z-type z-cs">Color</span> <span class="z-variable z-parameter z-cs">color</span></span><span class="z-meta z-method z-parameters z-cs"><span class="z-punctuation z-section z-parameters z-end z-cs">)</span></span><span class="z-meta z-method z-cs"><span class="z-punctuation z-terminator z-cs">;</span></span>
+</span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-interface z-body z-cs"><span class="z-meta z-block z-cs">    <span class="z-punctuation z-section z-block z-end z-cs">}</span></span></span>
+</span></span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs"><span class="z-punctuation z-section z-block z-end z-cs">}</span></span></span>
+</span></code></pre>
+<pre data-lang="cs" class="language-cs z-code"><code class="language-cs" data-lang="cs"><span class="z-source z-cs"><span class="z-comment z-line z-double-slash z-cs"><span class="z-punctuation z-definition z-comment z-cs">//</span> AppearanceChanger.cs
+</span></span><span class="z-source z-cs"><span class="z-keyword z-control z-import z-cs">using</span> <span class="z-meta z-path z-cs">Godot</span><span class="z-punctuation z-terminator z-cs">;</span>
+</span><span class="z-source z-cs">
+</span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-storage z-type z-namespace z-cs">namespace</span> <span class="z-entity z-name z-namespace z-cs">Project<span class="z-punctuation z-separator z-namespace z-cs">.</span>Appearance<span class="z-punctuation z-separator z-namespace z-cs">.</span>Control</span>
+</span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs"><span class="z-punctuation z-section z-block z-begin z-cs">{</span></span></span></span><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs">
+</span></span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs">    <span class="z-storage z-modifier z-access z-cs">public</span> <span class="z-storage z-modifier z-cs">partial</span> <span class="z-meta z-class z-cs"><span class="z-storage z-type z-class z-cs">class</span> <span class="z-entity z-name z-class z-cs">AppearanceChanger</span> <span class="z-punctuation z-separator z-type z-cs">:</span> <span class="z-entity z-other z-inherited-class z-cs">Node</span><span class="z-punctuation z-separator z-inherited-class z-cs">,</span> <span class="z-entity z-other z-inherited-class z-cs">IAppearanceChanger</span>
+</span></span></span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-class z-cs">    </span><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-punctuation z-section z-block z-begin z-cs">{</span>
+</span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs">        <span class="z-meta z-annotation z-cs"><span class="z-punctuation z-definition z-annotation z-begin z-cs">[</span><span class="z-variable z-annotation z-cs">Export</span><span class="z-punctuation z-definition z-annotation z-end z-cs">]</span></span> <span class="z-storage z-modifier z-access z-cs">private</span> <span class="z-support z-type z-cs">CsgMesh3D</span> <span class="z-variable z-other z-member z-cs">_visuals</span><span class="z-punctuation z-terminator z-statement z-cs">;</span>
+</span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs">
+</span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs">        <span class="z-storage z-modifier z-access z-cs">private</span> <span class="z-support z-type z-cs">StandardMaterial3D</span> <span class="z-variable z-other z-member z-cs">mat</span> <span class="z-keyword z-operator z-assignment z-variable z-cs">=</span> <span class="z-meta z-instance z-cs"><span class="z-keyword z-operator z-new z-cs">new</span></span><span class="z-meta z-instance z-cs"> </span><span class="z-meta z-instance z-cs"><span class="z-support z-type z-cs">StandardMaterial3D</span>
+</span></span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-instance z-cs">        <span class="z-meta z-instance z-cs"><span class="z-meta z-braces z-cs"><span class="z-punctuation z-section z-braces z-begin z-cs">{</span></span></span></span><span class="z-meta z-instance z-cs"><span class="z-meta z-braces z-cs">
+</span></span></span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-instance z-cs"><span class="z-meta z-braces z-cs">            <span class="z-variable z-other z-cs">AlbedoColor</span> <span class="z-keyword z-operator z-assignment z-cs">=</span> <span class="z-meta z-instance z-cs"><span class="z-keyword z-operator z-new z-cs">new</span></span><span class="z-meta z-instance z-cs"> </span><span class="z-meta z-instance z-cs"><span class="z-support z-type z-cs">Color</span><span class="z-meta z-group z-cs"><span class="z-punctuation z-section z-group z-begin z-cs">(</span></span></span><span class="z-meta z-instance z-cs"><span class="z-meta z-group z-cs"><span class="z-constant z-numeric z-integer z-decimal z-cs">1</span><span class="z-punctuation z-separator z-argument z-cs">,</span> <span class="z-constant z-numeric z-integer z-decimal z-cs">1</span><span class="z-punctuation z-separator z-argument z-cs">,</span> <span class="z-constant z-numeric z-integer z-decimal z-cs">1</span><span class="z-punctuation z-section z-group z-end z-cs">)</span>
+</span></span></span></span></span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-instance z-cs"><span class="z-meta z-braces z-cs"><span class="z-meta z-instance z-cs"><span class="z-meta z-group z-cs">        </span></span></span></span><span class="z-meta z-instance z-cs"><span class="z-meta z-braces z-cs"><span class="z-punctuation z-section z-braces z-end z-cs">}</span></span></span><span class="z-punctuation z-terminator z-statement z-cs">;</span>
+</span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs">
+</span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs">        <span class="z-storage z-modifier z-access z-cs">public</span> <span class="z-storage z-modifier z-cs">override</span> <span class="z-storage z-type z-cs">void</span> <span class="z-meta z-method z-cs"><span class="z-entity z-name z-function z-cs">_Ready</span></span><span class="z-meta z-method z-parameters z-cs"><span class="z-punctuation z-section z-parameters z-begin z-cs">(</span></span><span class="z-meta z-method z-parameters z-cs"><span class="z-punctuation z-section z-parameters z-end z-cs">)</span></span><span class="z-meta z-method z-cs">
+</span></span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-method z-cs">        </span><span class="z-meta z-method z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-punctuation z-section z-block z-begin z-cs">{</span>
+</span></span></span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-method z-body z-cs"><span class="z-meta z-block z-cs">            <span class="z-variable z-other z-cs">_visuals</span><span class="z-punctuation z-accessor z-dot z-cs">.</span><span class="z-variable z-other z-cs">Material</span> <span class="z-keyword z-operator z-assignment z-cs">=</span> <span class="z-variable z-other z-cs">mat</span><span class="z-punctuation z-terminator z-statement z-cs">;</span>
+</span></span></span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-method z-body z-cs"><span class="z-meta z-block z-cs">        <span class="z-punctuation z-section z-block z-end z-cs">}</span></span></span>
+</span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs">
+</span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs">        <span class="z-storage z-modifier z-access z-cs">public</span> <span class="z-storage z-type z-cs">void</span> <span class="z-meta z-method z-cs"><span class="z-entity z-name z-function z-cs">ChangeColor</span></span><span class="z-meta z-method z-parameters z-cs"><span class="z-punctuation z-section z-parameters z-begin z-cs">(</span></span><span class="z-meta z-method z-parameters z-cs"><span class="z-support z-type z-cs">Color</span> <span class="z-variable z-parameter z-cs">color</span></span><span class="z-meta z-method z-parameters z-cs"><span class="z-punctuation z-section z-parameters z-end z-cs">)</span></span><span class="z-meta z-method z-cs">
+</span></span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-method z-cs">        </span><span class="z-meta z-method z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-punctuation z-section z-block z-begin z-cs">{</span>
+</span></span></span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-method z-body z-cs"><span class="z-meta z-block z-cs">            <span class="z-variable z-other z-cs">mat</span><span class="z-punctuation z-accessor z-dot z-cs">.</span><span class="z-variable z-other z-cs">AlbedoColor</span> <span class="z-keyword z-operator z-assignment z-cs">=</span> <span class="z-variable z-other z-cs">color</span><span class="z-punctuation z-terminator z-statement z-cs">;</span>
+</span></span></span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-method z-body z-cs"><span class="z-meta z-block z-cs">        <span class="z-punctuation z-section z-block z-end z-cs">}</span></span></span>
+</span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs">    <span class="z-punctuation z-section z-block z-end z-cs">}</span></span></span>
+</span></span></span><span class="z-source z-cs"><span class="z-meta z-namespace z-cs"><span class="z-meta z-block z-cs"><span class="z-punctuation z-section z-block z-end z-cs">}</span></span></span>
+</span></code></pre>
+<pre data-lang="cs" class="language-cs z-code"><code class="language-cs" data-lang="cs"><span class="z-source z-cs"><span class="z-comment z-line z-double-slash z-cs"><span class="z-punctuation z-definition z-comment z-cs">//</span> IdleState.cs
+</span></span><span class="z-source z-cs"><span class="z-storage z-modifier z-access z-cs">public</span> <span class="z-storage z-modifier z-cs">partial</span> <span class="z-meta z-class z-cs"><span class="z-storage z-type z-class z-cs">class</span> <span class="z-entity z-name z-class z-cs">IdleState</span> <span class="z-punctuation z-separator z-type z-cs">:</span> <span class="z-entity z-other z-inherited-class z-cs">State</span>
+</span></span><span class="z-source z-cs"><span class="z-meta z-class z-cs"></span><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-punctuation z-section z-block z-begin z-cs">{</span>
+</span></span></span><span class="z-source z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs">    <span class="z-storage z-modifier z-access z-cs">private</span> <span class="z-support z-type z-cs">IAppearanceChanger</span> <span class="z-variable z-other z-member z-cs">_appearance</span><span class="z-punctuation z-terminator z-statement z-cs">;</span>
+</span></span></span><span class="z-source z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs">
+</span></span></span><span class="z-source z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs">    <span class="z-storage z-modifier z-access z-cs">public</span> <span class="z-meta z-method z-constructor z-cs"><span class="z-entity z-name z-function z-constructor z-cs">IdleState</span><span class="z-meta z-method z-parameters z-cs"><span class="z-punctuation z-section z-parameters z-begin z-cs">(</span></span></span><span class="z-meta z-method z-constructor z-cs"><span class="z-meta z-method z-parameters z-cs"><span class="z-support z-type z-cs">ILocator</span><span class="z-meta z-generic z-cs"><span class="z-punctuation z-definition z-generic z-begin z-cs">&lt;</span></span><span class="z-meta z-generic z-cs"><span class="z-support z-type z-cs">IState</span></span><span class="z-meta z-generic z-cs"><span class="z-punctuation z-definition z-generic z-end z-cs">&gt;</span></span> <span class="z-variable z-parameter z-cs">states</span><span class="z-punctuation z-separator z-parameter z-function z-cs">,</span> <span class="z-support z-type z-cs">ILocator</span> <span class="z-variable z-parameter z-cs">systems</span></span><span class="z-meta z-method z-parameters z-cs"><span class="z-punctuation z-section z-parameters z-end z-cs">)</span></span>
+</span></span></span></span><span class="z-source z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-method z-constructor z-cs">        <span class="z-meta z-method z-constructor z-prebody z-cs"><span class="z-punctuation z-separator z-function z-cs">:</span></span></span><span class="z-meta z-method z-constructor z-prebody z-cs"> </span><span class="z-meta z-method z-constructor z-prebody z-cs"><span class="z-variable z-language z-cs">base</span><span class="z-meta z-group z-cs"><span class="z-punctuation z-section z-group z-begin z-cs">(</span></span></span><span class="z-meta z-method z-constructor z-prebody z-cs"><span class="z-meta z-group z-cs"><span class="z-variable z-other z-cs">states</span><span class="z-punctuation z-section z-group z-end z-cs">)</span></span></span><span class="z-meta z-method z-constructor z-prebody z-cs"> 
+</span></span></span></span><span class="z-source z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-method z-constructor z-prebody z-cs">    </span><span class="z-meta z-method z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-punctuation z-section z-block z-begin z-cs">{</span>
+</span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-method z-body z-cs"><span class="z-meta z-block z-cs">        <span class="z-variable z-other z-cs">_appearance</span> <span class="z-keyword z-operator z-assignment z-cs">=</span> <span class="z-variable z-other z-cs">systems</span><span class="z-punctuation z-accessor z-dot z-cs">.</span><span class="z-meta z-function-call z-cs"><span class="z-variable z-function z-cs">Get</span><span class="z-meta z-generic z-cs"><span class="z-punctuation z-definition z-generic z-begin z-cs">&lt;</span></span></span><span class="z-meta z-function-call z-cs"><span class="z-meta z-generic z-cs"><span class="z-support z-type z-cs">IAppearanceChanger</span><span class="z-meta z-function-call z-cs"><span class="z-meta z-generic z-cs"><span class="z-punctuation z-definition z-generic z-end z-cs">&gt;</span></span><span class="z-meta z-group z-cs"><span class="z-punctuation z-section z-group z-begin z-cs">(</span></span></span></span></span><span class="z-meta z-function-call z-cs"><span class="z-meta z-group z-cs"><span class="z-punctuation z-section z-group z-end z-cs">)</span></span></span><span class="z-punctuation z-terminator z-statement z-cs">;</span>
+</span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-method z-body z-cs"><span class="z-meta z-block z-cs">    <span class="z-punctuation z-section z-block z-end z-cs">}</span></span></span>
+</span></span></span><span class="z-source z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs">
+</span></span></span><span class="z-source z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs">    <span class="z-storage z-modifier z-access z-cs">public</span> <span class="z-storage z-modifier z-cs">override</span> <span class="z-storage z-type z-cs">void</span> <span class="z-meta z-method z-cs"><span class="z-entity z-name z-function z-cs">Enter</span></span><span class="z-meta z-method z-parameters z-cs"><span class="z-punctuation z-section z-parameters z-begin z-cs">(</span></span><span class="z-meta z-method z-parameters z-cs"><span class="z-punctuation z-section z-parameters z-end z-cs">)</span></span><span class="z-meta z-method z-cs">
+</span></span></span></span><span class="z-source z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-method z-cs">    </span><span class="z-meta z-method z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-punctuation z-section z-block z-begin z-cs">{</span>
+</span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-method z-body z-cs"><span class="z-meta z-block z-cs">        <span class="z-variable z-language z-cs">base</span><span class="z-punctuation z-accessor z-dot z-cs">.</span><span class="z-meta z-function-call z-cs"><span class="z-variable z-function z-cs">Enter</span><span class="z-meta z-group z-cs"><span class="z-punctuation z-section z-group z-begin z-cs">(</span></span></span><span class="z-meta z-function-call z-cs"><span class="z-meta z-group z-cs"><span class="z-punctuation z-section z-group z-end z-cs">)</span></span></span><span class="z-punctuation z-terminator z-statement z-cs">;</span>
+</span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-method z-body z-cs"><span class="z-meta z-block z-cs">        <span class="z-variable z-other z-cs">_appearance</span><span class="z-punctuation z-accessor z-dot z-cs">.</span><span class="z-meta z-function-call z-cs"><span class="z-variable z-function z-cs">ChangeColor</span><span class="z-meta z-group z-cs"><span class="z-punctuation z-section z-group z-begin z-cs">(</span></span></span><span class="z-meta z-function-call z-cs"><span class="z-meta z-group z-cs"><span class="z-meta z-instance z-cs"><span class="z-keyword z-operator z-new z-cs">new</span></span><span class="z-meta z-instance z-cs"> </span><span class="z-meta z-instance z-cs"><span class="z-support z-type z-cs">Color</span><span class="z-meta z-group z-cs"><span class="z-punctuation z-section z-group z-begin z-cs">(</span></span></span><span class="z-meta z-instance z-cs"><span class="z-meta z-group z-cs"><span class="z-constant z-numeric z-integer z-decimal z-cs">0</span><span class="z-punctuation z-separator z-argument z-cs">,</span><span class="z-constant z-numeric z-integer z-decimal z-cs">0</span><span class="z-punctuation z-separator z-argument z-cs">,</span><span class="z-constant z-numeric z-integer z-decimal z-cs">1</span><span class="z-punctuation z-section z-group z-end z-cs">)</span></span></span><span class="z-punctuation z-section z-group z-end z-cs">)</span></span></span><span class="z-punctuation z-terminator z-statement z-cs">;</span>
+</span></span></span></span></span><span class="z-source z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-meta z-method z-body z-cs"><span class="z-meta z-block z-cs">    <span class="z-punctuation z-section z-block z-end z-cs">}</span></span></span>
+</span></span></span><span class="z-source z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs">
+</span></span></span><span class="z-source z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs">    <span class="z-comment z-line z-double-slash z-cs"><span class="z-punctuation z-definition z-comment z-cs">//</span> more code
+</span></span></span></span><span class="z-source z-cs"><span class="z-meta z-class z-body z-cs"><span class="z-meta z-block z-cs"><span class="z-punctuation z-section z-block z-end z-cs">}</span></span></span>
+</span></code></pre>
+<p>Similarly, I locate the Appearance system in <code>WalkingState</code>, and change the color to red – et voilà!</p>
+<p><img src="https://nilsiker.github.io/blog/finite-state-machine-2/img/colorful-states.gif" alt="player changes color to red when moving, blue when idling" /></p>
+<h1 id="end-result"><a class="header-anchor no-hover-padding" href="#end-result" aria-label="Anchor link for: end-result"><span class="link-icon" aria-hidden="true"></span></a>
+End result</h1>
+<p>I’ve rambled a lot about software design, which can quickly become dull. If you’ve made it this far – great job!</p>
+<p>How did we fare? Did all this nonsense actually solve anything? Let’s address my introductory pain points:</p>
+<table><thead><tr><th>Problem</th><th>Plan</th><th>Solved</th></tr></thead><tbody>
+<tr><td><em>Poor code organization</em></td><td>Introduce namespaces</td><td>✅</td></tr>
+<tr><td><em>Circular dependency</em></td><td>Inverting dependency using interface</td><td>✅</td></tr>
+<tr><td><em>Tight coupling for states fetching states</em></td><td>Use Locator pattern for states</td><td>✅</td></tr>
+<tr><td><em>Tight coupling for states fetching systems</em></td><td>Use Locator pattern for systems</td><td>✅</td></tr>
+<tr><td><em>Tightly coupled classes</em></td><td>Depend on interfaces, Liskov substitution in mind</td><td>✅</td></tr>
+</tbody></table>
+<p>Our states no longer expect concrete implementation to solve our needs.</p>
+<p>They simply ask for a reference to <em><strong>any</strong></em> object that fulfills a specific contract – the interface.</p>
+<blockquote>
+<p>🙋🏼 A real neat thing is that we can track dependencies by gauging the <code>using</code> statements in our classes. If we see any Control class use another module’s Control namespace, that’s a red flag now and we’re probably missing an interface.</p>
+</blockquote>
+<p>In the future, I want to take a look at event-handling support in states. This way, polling conditions in ticks won’t be the only way to trigger logic or state transitions in our FSM!</p>
+<p>If you’re feeling curious, try your hand at setting it up yourself! ☀️</p>
+<p>All the best,<br/>
+Nilsiker</p>
+<p><a href="https://github.com/Nilsiker/godot-fsm/releases/tag/part2">source code here</a></p>
+
+        </section>
+
+        
+        
+        
+
+        
+            
+            
+            
+
+            
+        
+            
+            
+            
+
+            
+        
+            
+            
+            
+
+            
+        
+            
+            
+            
+
+            
+        
+        
+
+    </article>
+</main>
+
+    <div id="button-container">
+        
+        
+            <div id="toc-floating-container">
+                <input type="checkbox" id="toc-toggle" class="toggle"/>
+                <label for="toc-toggle" class="overlay"></label>
+                <label for="toc-toggle" id="toc-button" class="button" title="Toggle Table of Contents">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"><path d="M414.82-193.094q-18.044 0-30.497-12.32-12.453-12.319-12.453-30.036t12.453-30.086q12.453-12.37 30.497-12.37h392.767q17.237 0 29.927 12.487 12.69 12.486 12.69 30.203 0 17.716-12.69 29.919t-29.927 12.203H414.82Zm0-244.833q-18.044 0-30.497-12.487Q371.87-462.9 371.87-480.45t12.453-29.92q12.453-12.369 30.497-12.369h392.767q17.237 0 29.927 12.511 12.69 12.512 12.69 29.845 0 17.716-12.69 30.086-12.69 12.37-29.927 12.37H414.82Zm0-245.167q-18.044 0-30.497-12.32t-12.453-30.037q0-17.716 12.453-30.086 12.453-12.369 30.497-12.369h392.767q17.237 0 29.927 12.486 12.69 12.487 12.69 30.203 0 17.717-12.69 29.92-12.69 12.203-29.927 12.203H414.82ZM189.379-156.681q-32.652 0-55.878-22.829t-23.226-55.731q0-32.549 23.15-55.647 23.151-23.097 55.95-23.097 32.799 0 55.313 23.484 22.515 23.484 22.515 56.246 0 32.212-22.861 54.893-22.861 22.681-54.963 22.681Zm0-245.167q-32.652 0-55.878-23.134-23.226-23.135-23.226-55.623 0-32.487 23.467-55.517t56.12-23.03q32.102 0 54.721 23.288 22.62 23.288 22.62 55.775 0 32.488-22.861 55.364-22.861 22.877-54.963 22.877Zm-.82-244.833q-32.224 0-55.254-23.288-23.03-23.289-23.03-55.623 0-32.333 23.271-55.364 23.272-23.03 55.495-23.03 32.224 0 55.193 23.288 22.969 23.289 22.969 55.622 0 32.334-23.21 55.364-23.21 23.031-55.434 23.031Z"/></svg>
+                </label>
+                <div class="toc-content">
+                    
+
+<div class="toc-container">
+    
+
+    <ul>
+        
+            
+            
+                <li><a href="https://nilsiker.github.io/blog/finite-state-machine-2/#scope">Scope</a>
+                    
+                </li>
+            
+        
+            
+            
+                <li><a href="https://nilsiker.github.io/blog/finite-state-machine-2/#using-namespaces-for-organization">Using namespaces for organization</a>
+                    
+                </li>
+            
+        
+            
+            
+                <li><a href="https://nilsiker.github.io/blog/finite-state-machine-2/#solving-circular-dependencies-using-dip">Solving circular dependencies using DIP</a>
+                    
+                </li>
+            
+        
+            
+            
+                <li><a href="https://nilsiker.github.io/blog/finite-state-machine-2/#adding-locator-and-istate-interfaces">Adding Locator and IState interfaces</a>
+                    
+                </li>
+            
+        
+            
+            
+                <li><a href="https://nilsiker.github.io/blog/finite-state-machine-2/#shifting-state-changing-responsibility-to-statemachine">Shifting state-changing responsibility to StateMachine</a>
+                    
+                </li>
+            
+        
+            
+            
+                <li><a href="https://nilsiker.github.io/blog/finite-state-machine-2/#a-brief-comment-on-liskov-substitution">A brief comment on Liskov substitution</a>
+                    
+                </li>
+            
+        
+            
+            
+                <li><a href="https://nilsiker.github.io/blog/finite-state-machine-2/#loose-coupling-for-systems">Loose coupling for systems</a>
+                    
+                </li>
+            
+        
+            
+            
+                <li><a href="https://nilsiker.github.io/blog/finite-state-machine-2/#trying-out-our-new-architecture">Trying out our new architecture</a>
+                    
+                </li>
+            
+        
+            
+            
+                <li><a href="https://nilsiker.github.io/blog/finite-state-machine-2/#end-result">End result</a>
+                    
+                </li>
+            
+        
+    </ul>
+</div>
+
+
+                </div>
+            </div>
+        
+
+        
+        
+
+        
+        <a href="#" id="top-button" class="no-hover-padding" title="Go to the top of the page">
+            <svg viewBox="0 0 20 20" fill="currentColor"><path d="M3.293 9.707a1 1 0 010-1.414l6-6a1 1 0 011.414 0l6 6a1 1 0 01-1.414 1.414L11 5.414V17a1 1 0 11-2 0V5.414L4.707 9.707a1 1 0 01-1.414 0z"/></svg>
+        </a>
+    </div>
+
+
+<script defer src="https://nilsiker.github.io/js/mermaid.min.js"></script><span id="copy-success" class="hidden">
+        Copied!
+    </span>
+    <span id="copy-init" class="hidden">
+        Copy code to clipboard
+    </span>
+    <script defer src="https://nilsiker.github.io/js/copyCodeToClipboard.min.js"></script><script defer src="https://nilsiker.github.io/js/footnoteBacklinks.min.js"></script>
+    </div>
+    <footer>
+    <section>
+        <nav class="socials nav-navs">
+                <ul>
+                    
+                    
+                    
+                    
+                        
+                            <li>
+                                <a class="nav-links no-hover-padding social" rel=" me"  href="https://github.com/nilsiker/">
+                                    <img loading="lazy" alt="github" title="github" src="https://nilsiker.github.io/social_icons/github.svg">
+                                </a>
+                            </li>
+                        
+                            <li>
+                                <a class="nav-links no-hover-padding social" rel=" me"  href="https://instagram.com/nilsiker">
+                                    <img loading="lazy" alt="instagram" title="instagram" src="https://nilsiker.github.io/social_icons/instagram.svg">
+                                </a>
+                            </li>
+                        
+                            <li>
+                                <a class="nav-links no-hover-padding social" rel=" me"  href="https://twitter.com/nilsiker">
+                                    <img loading="lazy" alt="twitter" title="twitter" src="https://nilsiker.github.io/social_icons/twitter.svg">
+                                </a>
+                            </li>
+                        
+                    
+                </ul>
+            
+        </nav>
+
+        
+        <nav class="nav-navs">
+        </nav>
+
+        <div class="credits">
+            <small>
+                
+
+                
+                Powered by
+                <a rel=""  href="https://www.getzola.org">Zola</a>
+                &amp;
+                <a rel=""  href="https://github.com/welpo/tabi">tabi</a>
+
+                </small>
+        </div>
+    </section>
+
+    <div id="searchModal" class="search-modal js" role="dialog" aria-labelledby="modalTitle">
+    <h1 id="modalTitle" class="visually-hidden">Search</h1>
+    <div id="modal-content">
+        <div id="searchBar">
+            <div class="search-icon" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                    <path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"/>
+                </svg>
+            </div>
+            <input id="searchInput" role="combobox" autocomplete="off" spellcheck="false" aria-expanded="false" aria-controls="results-container" placeholder="Search…"/>
+            <div id="clear-search" class="close-icon interactive-icon" tabindex="0" role="button" title="Clear search">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/>
+                </svg>
+            </div>
+        </div>
+        <div id="results-container">
+            <div id="results-info"><span id="zero_results"> No results</span>
+                <span id="one_results"> $NUMBER result</span>
+                <span id="many_results"> $NUMBER results</span><span id="two_results"> $NUMBER results</span>
+                <span id="few_results"> $NUMBER results</span>
+            </div>
+            <div id="results" role="listbox"></div>
+        </div>
+    </div>
+</div>
+</footer>
+
+</body>
+
+</html>

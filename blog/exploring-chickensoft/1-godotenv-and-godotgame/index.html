@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="base" content="https://nilsiker.github.io">
+
+    
+    <title>nilsiker • Exploring Chickensoft #1: GodotEnv and GodotGame</title>
+
+    
+    
+    
+        <link rel=icon href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 105 55"><text y=".7em" font-size="82">🦀</text></svg>'>
+    
+
+    
+    
+
+    
+    
+    
+        <link rel="stylesheet" href="https://nilsiker.github.io/inter_subset_en.css?h=d8cf4ad058d6c3a4015b">
+    
+
+    
+        <link rel="stylesheet" href="https://nilsiker.github.io/main.css?h=4a3dff148c520f191505" />
+        <link rel="stylesheet" href="https://nilsiker.github.io/skins/rusty.css?h=aed5477675e19161c8fa" />
+
+    <meta name="color-scheme" content="light dark" />
+        <meta name="description" content="Getting started with the Chickensoft game template." />
+        <meta property="og:description" content="Getting started with the Chickensoft game template." />
+
+    
+        <meta name="robots" content="index, nofollow" />
+    
+
+    <meta property="og:title" content="Exploring Chickensoft #1: GodotEnv and GodotGame" />
+    <meta property="og:type" content="article" />
+
+    
+    
+    
+    
+        
+    
+
+    
+
+    
+    
+    
+    
+
+    
+        
+        
+    
+
+    <meta property="og:image" content="https://nilsiker.github.io/img/profile.png?h=b447f87cfb7fe21dfe05" />
+    <meta property="og:image:width" content="400" />
+    <meta property="og:image:height" content="400" />
+    <meta name="twitter:image" content="https://nilsiker.github.io/img/profile.png?h=b447f87cfb7fe21dfe05" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+<meta property="og:locale" content="en_GB" />
+
+    <meta property="og:url" content="https:&#x2F;&#x2F;nilsiker.github.io&#x2F;blog&#x2F;exploring-chickensoft&#x2F;1-godotenv-and-godotgame&#x2F;" /><meta property="og:site_name" content="nilsiker"><meta http-equiv="Content-Security-Policy"
+content="default-src 'self';font-src &#x27;self&#x27; data: 'self';img-src &#x27;self&#x27; https:&#x2F;&#x2F;* data:;style-src &#x27;self&#x27; https:&#x2F;&#x2F;cdn.jsdelivr.net &#x27;unsafe-inline&#x27; &#x27;unsafe-eval&#x27; 'unsafe-inline';frame-src https:&#x2F;&#x2F;www.youtube-nocookie.com;connect-src 'self';script-src 'self' 'self' https://cdn.jsdelivr.net 'unsafe-inline' 'unsafe-eval'">
+
+        <noscript><link rel="stylesheet" href="https://nilsiker.github.io/no_js.css"/></noscript>
+        <script type="text/javascript" src="https://nilsiker.github.io/js/initializeTheme.min.js"></script>
+        <script defer src="https://nilsiker.github.io/js/themeSwitcher.min.js"></script><script defer src="https://nilsiker.github.io/search_index.en.js?h=75eecc0275f60b2aba78"></script>
+        <script defer src="https://nilsiker.github.io/js/searchElasticlunr.min.js?h=3626c0ef99daa745b31e"></script>
+
+        </head>
+
+
+<body>
+    <header>
+    <nav class="navbar">
+        <div class="nav-title">
+            <a class="home-title" href="https://nilsiker.github.io">nilsiker</a>
+        </div>
+            <div class="nav-navs">
+                <ul>
+                        
+                            <li>
+                                
+                                <a class="nav-links no-hover-padding" href="https://nilsiker.github.io/blog/">
+                                blog
+                                </a>
+                            </li>
+                        
+                            <li>
+                                
+                                <a class="nav-links no-hover-padding" href="https://nilsiker.github.io/archive/">
+                                archive
+                                </a>
+                            </li>
+                        
+                            <li>
+                                
+                                <a class="nav-links no-hover-padding" href="https://nilsiker.github.io/tags/">
+                                tags
+                                </a>
+                            </li>
+                        
+                            <li>
+                                
+                                <a class="nav-links no-hover-padding" href="https://nilsiker.github.io/projects/">
+                                projects
+                                </a>
+                            </li>
+                        <div class="nav-navs" id="menu-icons-group">
+                        <li class="js">
+                            <div role="button" tabindex="0" id="search-button" class="search-icon interactive-icon" title="Click or press $SHORTCUT to open search" aria-label="Click or press $SHORTCUT to open search">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                                    <path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"/>
+                                </svg>
+                            </div>
+                        </li>
+
+                        
+                        
+
+                        <li class="theme-switcher-wrapper js"><div
+        title="Toggle dark&#x2F;light mode"
+        class="theme-switcher"
+        tabindex="0"
+        role="button"
+        aria-label="Toggle dark mode"
+        aria-pressed="false">
+    </div><div
+        title="Reset mode to default"
+        class="theme-resetter arrow"
+        tabindex="0"
+        role="button"
+        aria-hidden="true"
+        aria-label="Reset mode to default">
+    </div>
+
+</li>
+</div>
+                </ul>
+            </div>
+        
+    </nav>
+</header>
+
+    <div class="content">
+
+        
+        
+
+
+
+
+<main>
+    <article>
+        <h1 class="article-title">
+            Exploring Chickensoft #1: GodotEnv and GodotGame
+        </h1>
+
+        <ul class="meta">
+                <li>27th Dec 2024</li><li title="1327 words"><span class='separator' aria-hidden='true'>•</span>7 min read</li><li class="tag"><span class='separator' aria-hidden='true'>•</span>Tags:&nbsp;</li><li class="tag"><a href="https://nilsiker.github.io/tags/godot/">Godot</a>,&nbsp;</li><li class="tag"><a href="https://nilsiker.github.io/tags/c/">C#</a>,&nbsp;</li><li class="tag"><a href="https://nilsiker.github.io/tags/net/">.NET</a>,&nbsp;</li><li class="tag"><a href="https://nilsiker.github.io/tags/chickensoft/">Chickensoft</a>,&nbsp;</li><li class="tag"><a href="https://nilsiker.github.io/tags/getting-started/">getting started</a></li>
+        </ul>
+
+        <section class="body">
+    <section class="series-page-intro">
+                <p><a href="https://nilsiker.github.io/blog/exploring-chickensoft/">📕 Exploring Chickensoft</a> | <a href="https://nilsiker.github.io/blog/exploring-chickensoft/2-logicblocks-app-logic/">next &gt;</a></p>
+
+            </section>
+<blockquote>
+<p>🙋🏼 A huge thanks goes out to Joanna May and all Chickensoft collaborators. Check out their <a href="https://chickensoft.games/">site</a> and their truly impressive open-source tools for most things C# in Godot!</p>
+</blockquote>
+<blockquote>
+<p>⚠️ This post assumes you have a basic understanding of Nodes and Scenes in Godot and are confident with C# syntax, if you plan to code along!</p>
+</blockquote>
+<h1 id="introduction">Introduction</h1>
+<p><strong>Join me as I discover and try out the Chickensoft way of developing games in Godot!</strong></p>
+<p>I often feel that my Godot projects slowly falls apart as I add more scripts and systems. We all know it - it’s a classic architectural problem!</p>
+<p>It usually starts with a bunch of GDScripts, and as things get tangled I start planning a move to C#. There’s only so much namespace organization and interface decoupling can do, however…</p>
+<p>I had yet to find a consistent way of implementing the features I have in mind. Returning to older projects always meant I had to rediscover what the heck Andreas was thinking - and that might have been more than six months ago.</p>
+<p>Luckily, Chickensoft comes to the rescue! If you’ve dabbled in C# Godot, you might have run into their stuff already.</p>
+<p>In short, the tools and guidelines provided by Chickensoft should provide you with a clean, extendible and testable architecture for your games. And I must say, the folks over at the organization has done a wonderful job showcasing the architecture and packages in their <a href="https://github.com/chickensoft-games/GameDemo">GameDemo</a>.</p>
+<p><strong>However, taking it all in at once is quite daunting.</strong></p>
+<p>In this series of posts, I hope to introduce the Chickensoft concepts, progressively adding them to a Chickensoft game template project as we run into good use cases.</p>
+<blockquote>
+<p>🙋🏼 I’m not providing any golden paths or silver bullets here. I will be using the Chickensoft packages <strong>as I understand them</strong>, essentially recreating my personal journey learning these tools and patterns!</p>
+</blockquote>
+<p>We’ll start things off really simple! 🐔</p>
+<h1 id="scope">Scope</h1>
+<p>At the end of this post, we will have finished the following steps:</p>
+<ul>
+<li>Install a Godot C# version with the <a href="https://github.com/chickensoft-games/GodotEnv">GodotEnv CLI</a></li>
+<li>Create a project using the <a href="https://github.com/chickensoft-games/GodotGame">GodotGame template</a></li>
+<li>Prepare a scene structure for our game - starting with the <code>App</code> node and setting up a mock-up main menu.</li>
+</ul>
+<p>We’ll make stops along the way and rationalize not only how we perform these steps, but <em>why</em> we do it.</p>
+<p>We won’t be explaining or describing every technical detail of the Chickensoft packages. I’ll leave that up to the Chickensoft docs, which go into technical detail that I couldn’t do justice with my current C# experience.</p>
+<p>The goal is to build a foundational game structure, with an architecture that we can easily expand on using Chickensoft tools.</p>
+<h1 id="implementation">Implementation</h1>
+<p>Arguably, the things we’ll be sorting out in this part should be fairly simple.</p>
+<p>We won’t exactly get into the meat and bones of the Chickensoft packages in this post, but we will prepare a project for it.</p>
+<p>Let’s start by trying out the GodotEnv CLI!</p>
+<h2 id="installing-godot-using-godotenv">Installing Godot using GodotEnv</h2>
+<p>We’ll start off with getting GodotEnv on our machine. As of writing this post, GodotEnv requires <code>net8.0</code>.</p>
+<blockquote>
+<p>🙋🏼 Specifically, I’ll be using .NET 8.0.404. It will work nicely with the package versions that are used in this series!</p>
+</blockquote>
+<p>An argument for using GodotEnv is that it makes installing, uninstalling and switching between Godot versions a breeze. It also provides a way to manage addons.</p>
+<p>Installing the GodotEnv tool is a sweet one-liner:</p>
+<pre data-lang="bash" class="language-bash z-code"><code class="language-bash" data-lang="bash"><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">dotnet</span></span><span class="z-meta z-function-call z-arguments z-shell"> tool install<span class="z-variable z-parameter z-option z-shell"><span class="z-punctuation z-definition z-parameter z-shell"> --</span>global</span> Chickensoft.GodotEnv</span>
+</span></code></pre>
+<p>With the tool installed, another one-liner helps us install Godot 4.3.0 (C#):</p>
+<pre data-lang="bash" class="language-bash z-code"><code class="language-bash" data-lang="bash"><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">godotenv</span></span><span class="z-meta z-function-call z-arguments z-shell"> godot install 4.3.0 <span class="z-comment z-line z-number-sign z-shell"><span class="z-punctuation z-definition z-comment z-begin z-shell">#</span></span><span class="z-comment z-line z-number-sign z-shell"> adding -n would install the non-C# version.</span><span class="z-comment z-line z-number-sign z-shell">
+</span></span></span></code></pre>
+<p>That’s it! We now have Godot 4.3.0 installed. You can confirm this by running:</p>
+<pre data-lang="bash" class="language-bash z-code"><code class="language-bash" data-lang="bash"><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">godot</span></span><span class="z-meta z-function-call z-arguments z-shell"><span class="z-variable z-parameter z-option z-shell"><span class="z-punctuation z-definition z-parameter z-shell"> --</span>version</span></span>
+</span></code></pre>
+<p>Now that Godot is installed, we’ll swiftly move on to generating a project.</p>
+<h2 id="create-a-godotgame-template-project">Create a GodotGame template project</h2>
+<p>First off, we need to install the GodotGame template, allowing us to quickly scaffold Godot projects that comes with some boilerplate Chickensoft configuration.</p>
+<p>Install the template like so:</p>
+<pre data-lang="bash" class="language-bash z-code"><code class="language-bash" data-lang="bash"><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">dotnet</span></span><span class="z-meta z-function-call z-arguments z-shell"> new install Chickensoft.GodotGame</span>
+</span></code></pre>
+<p>Then generate a new project using the template:</p>
+<pre data-lang="bash" class="language-bash z-code"><code class="language-bash" data-lang="bash"><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">dotnet</span></span><span class="z-meta z-function-call z-arguments z-shell"> new chickengame<span class="z-variable z-parameter z-option z-shell"><span class="z-punctuation z-definition z-parameter z-shell"> --</span>name</span> <span class="z-string z-quoted z-double z-shell"><span class="z-punctuation z-definition z-string z-begin z-shell">&quot;</span>Eggsploration<span class="z-punctuation z-definition z-string z-end z-shell">&quot;</span></span><span class="z-variable z-parameter z-option z-shell"><span class="z-punctuation z-definition z-parameter z-shell"> --</span>param</span>:author <span class="z-string z-quoted z-double z-shell"><span class="z-punctuation z-definition z-string z-begin z-shell">&quot;</span>Andreas Nilsson<span class="z-punctuation z-definition z-string z-end z-shell">&quot;</span></span></span>
+</span></code></pre>
+<p>I’m calling my project <strong>Eggsploration</strong>, so that we can finally get that inevitable pun out of the way. I’ll set myself as the author/scapegoat.</p>
+<p>We now have a Chickensoft game template project set up! Easy does it…</p>
+<h3 id="inspecting-the-default-scenes">Inspecting the default scenes</h3>
+<p>Before we make any changes, we should check out what the template actually generates for us.</p>
+<p>Let’s cd into the project and open it with the Godot editor.</p>
+<pre data-lang="bash" class="language-bash z-code"><code class="language-bash" data-lang="bash"><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-support z-function z-cd z-shell">cd</span></span><span class="z-meta z-function-call z-arguments z-shell"> Eggsploration <span class="z-comment z-line z-number-sign z-shell"><span class="z-punctuation z-definition z-comment z-begin z-shell">#</span></span><span class="z-comment z-line z-number-sign z-shell"> substitute with your project name!</span><span class="z-comment z-line z-number-sign z-shell">
+</span></span></span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">godot</span></span><span class="z-meta z-function-call z-arguments z-shell"><span class="z-variable z-parameter z-option z-shell"><span class="z-punctuation z-definition z-parameter z-shell"> -</span>e</span></span>
+</span></code></pre>
+<p>When running the game with F5, we are presented with a scene containing a test button:</p>
+<p><img src="https://nilsiker.github.io/blog/exploring-chickensoft/1-godotenv-and-godotgame/img/test_button_scene.png" alt="alt text" /></p>
+<p>Taking a closer look, we see this is actually the <code>Game.tscn</code> scene, not <code>Main.tscn</code> - the latter being a singular node with a script attached to it.</p>
+<p>Reading the comments in <code>Main.cs</code>, we realize that the main scene is used to conditionally run tests. Let’s skip the specifics for now, as we won’t dive into the testing capabilities of Chickensoft at this point.</p>
+<blockquote>
+<p>🙋🏼 I’m not fully sold on TDD. I’m sorry, Joanna…</p>
+</blockquote>
+<p>At the end, the <code>Main</code> script changes the scene to <code>Game</code>, containing the test button. We’re on track!</p>
+<h3 id="the-project-file">The project file</h3>
+<p>Having a gander at the good ol’ <code>.csproj</code> file, we have some out-of-the-box configuration.</p>
+<pre data-lang="xml" class="language-xml z-code"><code class="language-xml" data-lang="xml"><span class="z-text z-xml"><span class="z-meta z-tag z-xml"><span class="z-punctuation z-definition z-tag z-begin z-xml">&lt;</span><span class="z-entity z-name z-tag z-localname z-xml">Project</span> <span class="z-entity z-other z-attribute-name z-localname z-xml">Sdk</span><span class="z-punctuation z-separator z-key-value z-xml">=</span><span class="z-string z-quoted z-double z-xml"><span class="z-punctuation z-definition z-string z-begin z-xml">&quot;</span>Godot.NET.Sdk/4.3.0<span class="z-punctuation z-definition z-string z-end z-xml">&quot;</span></span><span class="z-punctuation z-definition z-tag z-end z-xml">&gt;</span></span>
+</span><span class="z-text z-xml">  <span class="z-meta z-tag z-xml"><span class="z-punctuation z-definition z-tag z-begin z-xml">&lt;</span><span class="z-entity z-name z-tag z-localname z-xml">PropertyGroup</span><span class="z-punctuation z-definition z-tag z-end z-xml">&gt;</span></span>
+</span><span class="z-text z-xml">    <span class="z-meta z-tag z-xml"><span class="z-punctuation z-definition z-tag z-begin z-xml">&lt;</span><span class="z-entity z-name z-tag z-localname z-xml">TargetFramework</span><span class="z-punctuation z-definition z-tag z-end z-xml">&gt;</span></span>net8.0<span class="z-meta z-tag z-xml"><span class="z-punctuation z-definition z-tag z-begin z-xml">&lt;/</span><span class="z-entity z-name z-tag z-localname z-xml">TargetFramework</span><span class="z-punctuation z-definition z-tag z-end z-xml">&gt;</span></span>
+</span><span class="z-text z-xml">    <span class="z-meta z-tag z-xml"><span class="z-punctuation z-definition z-tag z-begin z-xml">&lt;</span><span class="z-entity z-name z-tag z-localname z-xml">EnableDynamicLoading</span><span class="z-punctuation z-definition z-tag z-end z-xml">&gt;</span></span>true<span class="z-meta z-tag z-xml"><span class="z-punctuation z-definition z-tag z-begin z-xml">&lt;/</span><span class="z-entity z-name z-tag z-localname z-xml">EnableDynamicLoading</span><span class="z-punctuation z-definition z-tag z-end z-xml">&gt;</span></span>
+</span><span class="z-text z-xml">    <span class="z-meta z-tag z-xml"><span class="z-punctuation z-definition z-tag z-begin z-xml">&lt;</span><span class="z-entity z-name z-tag z-localname z-xml">LangVersion</span><span class="z-punctuation z-definition z-tag z-end z-xml">&gt;</span></span>latest<span class="z-meta z-tag z-xml"><span class="z-punctuation z-definition z-tag z-begin z-xml">&lt;/</span><span class="z-entity z-name z-tag z-localname z-xml">LangVersion</span><span class="z-punctuation z-definition z-tag z-end z-xml">&gt;</span></span>
+</span><span class="z-text z-xml">    <span class="z-meta z-tag z-xml"><span class="z-punctuation z-definition z-tag z-begin z-xml">&lt;</span><span class="z-entity z-name z-tag z-localname z-xml">Nullable</span><span class="z-punctuation z-definition z-tag z-end z-xml">&gt;</span></span>enable<span class="z-meta z-tag z-xml"><span class="z-punctuation z-definition z-tag z-begin z-xml">&lt;/</span><span class="z-entity z-name z-tag z-localname z-xml">Nullable</span><span class="z-punctuation z-definition z-tag z-end z-xml">&gt;</span></span>
+</span><span class="z-text z-xml">    <span class="z-meta z-tag z-xml"><span class="z-punctuation z-definition z-tag z-begin z-xml">&lt;</span><span class="z-entity z-name z-tag z-localname z-xml">RootNamespace</span><span class="z-punctuation z-definition z-tag z-end z-xml">&gt;</span></span>Eggsploration<span class="z-meta z-tag z-xml"><span class="z-punctuation z-definition z-tag z-begin z-xml">&lt;/</span><span class="z-entity z-name z-tag z-localname z-xml">RootNamespace</span><span class="z-punctuation z-definition z-tag z-end z-xml">&gt;</span></span>
+</span><span class="z-text z-xml">    <span class="z-comment z-block z-xml"><span class="z-punctuation z-definition z-comment z-begin z-xml">&lt;!--</span> Required for some nuget packages to work <span class="z-punctuation z-definition z-comment z-end z-xml">--&gt;</span></span>
+</span><span class="z-text z-xml">    <span class="z-comment z-block z-xml"><span class="z-punctuation z-definition z-comment z-begin z-xml">&lt;!--</span> godotengine/godot/issues/42271#issuecomment-751423827 <span class="z-punctuation z-definition z-comment z-end z-xml">--&gt;</span></span>
+</span><span class="z-text z-xml">    <span class="z-meta z-tag z-xml"><span class="z-punctuation z-definition z-tag z-begin z-xml">&lt;</span><span class="z-entity z-name z-tag z-localname z-xml">CopyLocalLockFileAssemblies</span><span class="z-punctuation z-definition z-tag z-end z-xml">&gt;</span></span>true<span class="z-meta z-tag z-xml"><span class="z-punctuation z-definition z-tag z-begin z-xml">&lt;/</span><span class="z-entity z-name z-tag z-localname z-xml">CopyLocalLockFileAssemblies</span><span class="z-punctuation z-definition z-tag z-end z-xml">&gt;</span></span>
+</span><span class="z-text z-xml">    <span class="z-comment z-block z-xml"><span class="z-punctuation z-definition z-comment z-begin z-xml">&lt;!--</span> To show generated files <span class="z-punctuation z-definition z-comment z-end z-xml">--&gt;</span></span>
+</span><span class="z-text z-xml">    <span class="z-comment z-block z-xml"><span class="z-punctuation z-definition z-comment z-begin z-xml">&lt;!--</span> &lt;EmitCompilerGeneratedFiles&gt;true&lt;/EmitCompilerGeneratedFiles&gt; <span class="z-punctuation z-definition z-comment z-end z-xml">--&gt;</span></span>
+</span><span class="z-text z-xml">    <span class="z-comment z-block z-xml"><span class="z-punctuation z-definition z-comment z-begin z-xml">&lt;!--</span>
+</span></span><span class="z-text z-xml"><span class="z-comment z-block z-xml">      &lt;CompilerGeneratedFilesOutputPath&gt;.generated&lt;/CompilerGeneratedFilesOutputPath&gt;
+</span></span><span class="z-text z-xml"><span class="z-comment z-block z-xml">    <span class="z-punctuation z-definition z-comment z-end z-xml">--&gt;</span></span>
+</span><span class="z-text z-xml">    <span class="z-meta z-tag z-xml"><span class="z-punctuation z-definition z-tag z-begin z-xml">&lt;</span><span class="z-entity z-name z-tag z-localname z-xml">DebugType</span><span class="z-punctuation z-definition z-tag z-end z-xml">&gt;</span></span>portable<span class="z-meta z-tag z-xml"><span class="z-punctuation z-definition z-tag z-begin z-xml">&lt;/</span><span class="z-entity z-name z-tag z-localname z-xml">DebugType</span><span class="z-punctuation z-definition z-tag z-end z-xml">&gt;</span></span>
+</span><span class="z-text z-xml">    <span class="z-meta z-tag z-xml"><span class="z-punctuation z-definition z-tag z-begin z-xml">&lt;</span><span class="z-entity z-name z-tag z-localname z-xml">DebugSymbols</span><span class="z-punctuation z-definition z-tag z-end z-xml">&gt;</span></span>true<span class="z-meta z-tag z-xml"><span class="z-punctuation z-definition z-tag z-begin z-xml">&lt;/</span><span class="z-entity z-name z-tag z-localname z-xml">DebugSymbols</span><span class="z-punctuation z-definition z-tag z-end z-xml">&gt;</span></span>
+</span><span class="z-text z-xml">    <span class="z-meta z-tag z-xml"><span class="z-punctuation z-definition z-tag z-begin z-xml">&lt;</span><span class="z-entity z-name z-tag z-localname z-xml">Title</span><span class="z-punctuation z-definition z-tag z-end z-xml">&gt;</span></span>Eggsploration<span class="z-meta z-tag z-xml"><span class="z-punctuation z-definition z-tag z-begin z-xml">&lt;/</span><span class="z-entity z-name z-tag z-localname z-xml">Title</span><span class="z-punctuation z-definition z-tag z-end z-xml">&gt;</span></span>
+</span><span class="z-text z-xml">    <span class="z-meta z-tag z-xml"><span class="z-punctuation z-definition z-tag z-begin z-xml">&lt;</span><span class="z-entity z-name z-tag z-localname z-xml">Version</span><span class="z-punctuation z-definition z-tag z-end z-xml">&gt;</span></span>1.0.0<span class="z-meta z-tag z-xml"><span class="z-punctuation z-definition z-tag z-begin z-xml">&lt;/</span><span class="z-entity z-name z-tag z-localname z-xml">Version</span><span class="z-punctuation z-definition z-tag z-end z-xml">&gt;</span></span>
+</span><span class="z-text z-xml">    <span class="z-meta z-tag z-xml"><span class="z-punctuation z-definition z-tag z-begin z-xml">&lt;</span><span class="z-entity z-name z-tag z-localname z-xml">Description</span><span class="z-punctuation z-definition z-tag z-end z-xml">&gt;</span></span>Eggsploration<span class="z-meta z-tag z-xml"><span class="z-punctuation z-definition z-tag z-begin z-xml">&lt;/</span><span class="z-entity z-name z-tag z-localname z-xml">Description</span><span class="z-punctuation z-definition z-tag z-end z-xml">&gt;</span></span>
+</span><span class="z-text z-xml">    <span class="z-meta z-tag z-xml"><span class="z-punctuation z-definition z-tag z-begin z-xml">&lt;</span><span class="z-entity z-name z-tag z-localname z-xml">Copyright</span><span class="z-punctuation z-definition z-tag z-end z-xml">&gt;</span></span>© 2024 Andreas Nilsson<span class="z-meta z-tag z-xml"><span class="z-punctuation z-definition z-tag z-begin z-xml">&lt;/</span><span class="z-entity z-name z-tag z-localname z-xml">Copyright</span><span class="z-punctuation z-definition z-tag z-end z-xml">&gt;</span></span>
+</span><span class="z-text z-xml">    <span class="z-meta z-tag z-xml"><span class="z-punctuation z-definition z-tag z-begin z-xml">&lt;</span><span class="z-entity z-name z-tag z-localname z-xml">Authors</span><span class="z-punctuation z-definition z-tag z-end z-xml">&gt;</span></span>Andreas Nilsson<span class="z-meta z-tag z-xml"><span class="z-punctuation z-definition z-tag z-begin z-xml">&lt;/</span><span class="z-entity z-name z-tag z-localname z-xml">Authors</span><span class="z-punctuation z-definition z-tag z-end z-xml">&gt;</span></span>
+</span><span class="z-text z-xml">    <span class="z-comment z-block z-xml"><span class="z-punctuation z-definition z-comment z-begin z-xml">&lt;!--</span> Don&#39;t include unit tests in release builds. <span class="z-punctuation z-definition z-comment z-end z-xml">--&gt;</span></span>
+</span><span class="z-text z-xml">    <span class="z-meta z-tag z-xml"><span class="z-punctuation z-definition z-tag z-begin z-xml">&lt;</span><span class="z-entity z-name z-tag z-localname z-xml">DefaultItemExcludes</span> <span class="z-entity z-other z-attribute-name z-localname z-xml">Condition</span><span class="z-punctuation z-separator z-key-value z-xml">=</span><span class="z-string z-quoted z-double z-xml"><span class="z-punctuation z-definition z-string z-begin z-xml">&quot;</span>&#39;$(Configuration)&#39; == &#39;ExportRelease&#39;<span class="z-punctuation z-definition z-string z-end z-xml">&quot;</span></span><span class="z-punctuation z-definition z-tag z-end z-xml">&gt;</span></span>
+</span><span class="z-text z-xml">      $(DefaultItemExcludes);test/**/*
+</span><span class="z-text z-xml">    <span class="z-meta z-tag z-xml"><span class="z-punctuation z-definition z-tag z-begin z-xml">&lt;/</span><span class="z-entity z-name z-tag z-localname z-xml">DefaultItemExcludes</span><span class="z-punctuation z-definition z-tag z-end z-xml">&gt;</span></span>
+</span><span class="z-text z-xml">  <span class="z-meta z-tag z-xml"><span class="z-punctuation z-definition z-tag z-begin z-xml">&lt;/</span><span class="z-entity z-name z-tag z-localname z-xml">PropertyGroup</span><span class="z-punctuation z-definition z-tag z-end z-xml">&gt;</span></span>
+</span><span class="z-text z-xml">  <span class="z-meta z-tag z-xml"><span class="z-punctuation z-definition z-tag z-begin z-xml">&lt;</span><span class="z-entity z-name z-tag z-localname z-xml">ItemGroup</span> <span class="z-entity z-other z-attribute-name z-localname z-xml">Condition</span><span class="z-punctuation z-separator z-key-value z-xml">=</span><span class="z-string z-quoted z-double z-xml"><span class="z-punctuation z-definition z-string z-begin z-xml">&quot;</span> &#39;$(Configuration)&#39; == &#39;Debug&#39; or &#39;$(Configuration)&#39; == &#39;ExportDebug&#39; <span class="z-punctuation z-definition z-string z-end z-xml">&quot;</span></span><span class="z-punctuation z-definition z-tag z-end z-xml">&gt;</span></span>
+</span><span class="z-text z-xml">    <span class="z-comment z-block z-xml"><span class="z-punctuation z-definition z-comment z-begin z-xml">&lt;!--</span> Test dependencies go here! <span class="z-punctuation z-definition z-comment z-end z-xml">--&gt;</span></span>
+</span><span class="z-text z-xml">    <span class="z-comment z-block z-xml"><span class="z-punctuation z-definition z-comment z-begin z-xml">&lt;!--</span> Dependencies added here will not be included in release builds. <span class="z-punctuation z-definition z-comment z-end z-xml">--&gt;</span></span>
+</span><span class="z-text z-xml">    <span class="z-meta z-tag z-xml"><span class="z-punctuation z-definition z-tag z-begin z-xml">&lt;</span><span class="z-entity z-name z-tag z-localname z-xml">PackageReference</span> <span class="z-entity z-other z-attribute-name z-localname z-xml">Include</span><span class="z-punctuation z-separator z-key-value z-xml">=</span><span class="z-string z-quoted z-double z-xml"><span class="z-punctuation z-definition z-string z-begin z-xml">&quot;</span>Chickensoft.GoDotTest<span class="z-punctuation z-definition z-string z-end z-xml">&quot;</span></span> <span class="z-entity z-other z-attribute-name z-localname z-xml">Version</span><span class="z-punctuation z-separator z-key-value z-xml">=</span><span class="z-string z-quoted z-double z-xml"><span class="z-punctuation z-definition z-string z-begin z-xml">&quot;</span>1.5.10<span class="z-punctuation z-definition z-string z-end z-xml">&quot;</span></span> <span class="z-punctuation z-definition z-tag z-end z-xml">/&gt;</span></span>
+</span><span class="z-text z-xml">    <span class="z-comment z-block z-xml"><span class="z-punctuation z-definition z-comment z-begin z-xml">&lt;!--</span> Used to drive test scenes when testing visual code <span class="z-punctuation z-definition z-comment z-end z-xml">--&gt;</span></span>
+</span><span class="z-text z-xml">    <span class="z-meta z-tag z-xml"><span class="z-punctuation z-definition z-tag z-begin z-xml">&lt;</span><span class="z-entity z-name z-tag z-localname z-xml">PackageReference</span> <span class="z-entity z-other z-attribute-name z-localname z-xml">Include</span><span class="z-punctuation z-separator z-key-value z-xml">=</span><span class="z-string z-quoted z-double z-xml"><span class="z-punctuation z-definition z-string z-begin z-xml">&quot;</span>Chickensoft.GodotTestDriver<span class="z-punctuation z-definition z-string z-end z-xml">&quot;</span></span> <span class="z-entity z-other z-attribute-name z-localname z-xml">Version</span><span class="z-punctuation z-separator z-key-value z-xml">=</span><span class="z-string z-quoted z-double z-xml"><span class="z-punctuation z-definition z-string z-begin z-xml">&quot;</span>3.0.2<span class="z-punctuation z-definition z-string z-end z-xml">&quot;</span></span> <span class="z-punctuation z-definition z-tag z-end z-xml">/&gt;</span></span>
+</span><span class="z-text z-xml">    <span class="z-comment z-block z-xml"><span class="z-punctuation z-definition z-comment z-begin z-xml">&lt;!--</span> Bring your own assertion library for tests! <span class="z-punctuation z-definition z-comment z-end z-xml">--&gt;</span></span>
+</span><span class="z-text z-xml">    <span class="z-comment z-block z-xml"><span class="z-punctuation z-definition z-comment z-begin z-xml">&lt;!--</span> We&#39;re using Shouldly for this example, but you can use anything. <span class="z-punctuation z-definition z-comment z-end z-xml">--&gt;</span></span>
+</span><span class="z-text z-xml">    <span class="z-meta z-tag z-xml"><span class="z-punctuation z-definition z-tag z-begin z-xml">&lt;</span><span class="z-entity z-name z-tag z-localname z-xml">PackageReference</span> <span class="z-entity z-other z-attribute-name z-localname z-xml">Include</span><span class="z-punctuation z-separator z-key-value z-xml">=</span><span class="z-string z-quoted z-double z-xml"><span class="z-punctuation z-definition z-string z-begin z-xml">&quot;</span>Shouldly<span class="z-punctuation z-definition z-string z-end z-xml">&quot;</span></span> <span class="z-entity z-other z-attribute-name z-localname z-xml">Version</span><span class="z-punctuation z-separator z-key-value z-xml">=</span><span class="z-string z-quoted z-double z-xml"><span class="z-punctuation z-definition z-string z-begin z-xml">&quot;</span>4.2.1<span class="z-punctuation z-definition z-string z-end z-xml">&quot;</span></span> <span class="z-punctuation z-definition z-tag z-end z-xml">/&gt;</span></span>
+</span><span class="z-text z-xml">    <span class="z-comment z-block z-xml"><span class="z-punctuation z-definition z-comment z-begin z-xml">&lt;!--</span> LightMock is a mocking library that works without reflection. <span class="z-punctuation z-definition z-comment z-end z-xml">--&gt;</span></span>
+</span><span class="z-text z-xml">    <span class="z-meta z-tag z-xml"><span class="z-punctuation z-definition z-tag z-begin z-xml">&lt;</span><span class="z-entity z-name z-tag z-localname z-xml">PackageReference</span> <span class="z-entity z-other z-attribute-name z-localname z-xml">Include</span><span class="z-punctuation z-separator z-key-value z-xml">=</span><span class="z-string z-quoted z-double z-xml"><span class="z-punctuation z-definition z-string z-begin z-xml">&quot;</span>LightMock.Generator<span class="z-punctuation z-definition z-string z-end z-xml">&quot;</span></span> <span class="z-entity z-other z-attribute-name z-localname z-xml">Version</span><span class="z-punctuation z-separator z-key-value z-xml">=</span><span class="z-string z-quoted z-double z-xml"><span class="z-punctuation z-definition z-string z-begin z-xml">&quot;</span>1.2.2<span class="z-punctuation z-definition z-string z-end z-xml">&quot;</span></span> <span class="z-punctuation z-definition z-tag z-end z-xml">/&gt;</span></span>
+</span><span class="z-text z-xml">    <span class="z-comment z-block z-xml"><span class="z-punctuation z-definition z-comment z-begin z-xml">&lt;!--</span> LightMoq is a Chickensoft package which makes it more like Moq. <span class="z-punctuation z-definition z-comment z-end z-xml">--&gt;</span></span>
+</span><span class="z-text z-xml">    <span class="z-meta z-tag z-xml"><span class="z-punctuation z-definition z-tag z-begin z-xml">&lt;</span><span class="z-entity z-name z-tag z-localname z-xml">PackageReference</span> <span class="z-entity z-other z-attribute-name z-localname z-xml">Include</span><span class="z-punctuation z-separator z-key-value z-xml">=</span><span class="z-string z-quoted z-double z-xml"><span class="z-punctuation z-definition z-string z-begin z-xml">&quot;</span>LightMoq<span class="z-punctuation z-definition z-string z-end z-xml">&quot;</span></span> <span class="z-entity z-other z-attribute-name z-localname z-xml">Version</span><span class="z-punctuation z-separator z-key-value z-xml">=</span><span class="z-string z-quoted z-double z-xml"><span class="z-punctuation z-definition z-string z-begin z-xml">&quot;</span>0.1.0<span class="z-punctuation z-definition z-string z-end z-xml">&quot;</span></span> <span class="z-punctuation z-definition z-tag z-end z-xml">/&gt;</span></span>
+</span><span class="z-text z-xml">  <span class="z-meta z-tag z-xml"><span class="z-punctuation z-definition z-tag z-begin z-xml">&lt;/</span><span class="z-entity z-name z-tag z-localname z-xml">ItemGroup</span><span class="z-punctuation z-definition z-tag z-end z-xml">&gt;</span></span>
+</span><span class="z-text z-xml">  <span class="z-meta z-tag z-xml"><span class="z-punctuation z-definition z-tag z-begin z-xml">&lt;</span><span class="z-entity z-name z-tag z-localname z-xml">ItemGroup</span><span class="z-punctuation z-definition z-tag z-end z-xml">&gt;</span></span>
+</span><span class="z-text z-xml">    <span class="z-comment z-block z-xml"><span class="z-punctuation z-definition z-comment z-begin z-xml">&lt;!--</span> Production dependencies go here! <span class="z-punctuation z-definition z-comment z-end z-xml">--&gt;</span></span>
+</span><span class="z-text z-xml">  <span class="z-meta z-tag z-xml"><span class="z-punctuation z-definition z-tag z-begin z-xml">&lt;/</span><span class="z-entity z-name z-tag z-localname z-xml">ItemGroup</span><span class="z-punctuation z-definition z-tag z-end z-xml">&gt;</span></span>
+</span><span class="z-text z-xml"><span class="z-meta z-tag z-xml"><span class="z-punctuation z-definition z-tag z-begin z-xml">&lt;/</span><span class="z-entity z-name z-tag z-localname z-xml">Project</span><span class="z-punctuation z-definition z-tag z-end z-xml">&gt;</span></span>
+</span><span class="z-text z-xml">
+</span></code></pre>
+<p>We’re set up for project-wide nullables (I wouldn’t have it any other way).</p>
+<p>We also have a few debug dependencies set up for us for testing purposes. The comments are more than sufficient to give us an idea on their use.</p>
+<p>Before long, we will add some packages to accompany that Production dependencies comment.</p>
+<h3 id="miscellaneous-configuration-and-tooling">Miscellaneous configuration and tooling</h3>
+<p>The template provides a lot of out-of-the-box config and tooling - too much to go over here and now!</p>
+<p>There’s <strong>GitHub actions</strong> for <strong>continuous testing</strong> and <strong>spell checking</strong>, <strong>test coverage scripts</strong> and <strong>editor configuration</strong> to enforce <strong>coding style</strong>. The list goes on!</p>
+<p>We’ll put blinders on for now and focus on the Godot architecture side of things!</p>
+<h2 id="preparing-our-scene-structure">Preparing our scene structure</h2>
+<p>Let’s get back to Godot and start adding our own stuff!</p>
+<p>The main node of my Godot projects is the <code>App</code>. The idea is to have <code>App</code> handle all application concerns.</p>
+<p>This will be simple stuff, such as “starting the game” or “closing the application”. We’re preparing for the game that we have yet to make.</p>
+<blockquote>
+<p>🙋🏼 Prior to adopting the Chickensoft ways, I used to call the App node <code>Main</code>. This has now changed!</p>
+</blockquote>
+<p>I’ll create an App scene and script and place them in the <code>src/app</code> folder. Let’s also organize our <code>Game</code> source files into their own folder.</p>
+<p><img src="https://nilsiker.github.io/blog/exploring-chickensoft/1-godotenv-and-godotgame/img/project_structure_1.png" alt="The project hierarchy, a source folder containing an app folder and a game folder, with scripts and scenes organized accordingly." /></p>
+<p>In the App, let’s throw in an idea for a node hierarchy. This is a rough sketch of what I like to do:</p>
+<p><img src="https://nilsiker.github.io/blog/exploring-chickensoft/1-godotenv-and-godotgame/./img/node_hierarchy1.png" alt="A scene hierarchy, the scene root being the a Node, containing a CanvasLayer which in turn contains a VBox. The VBox has 4 children; a label and 2 buttons." /></p>
+<p>Next, I give them descriptive names and center the VBox in the CanvasLayer.</p>
+<p><img src="https://nilsiker.github.io/blog/exploring-chickensoft/1-godotenv-and-godotgame/./img/node_hierarchy2.png" alt="Renamed nodes in scene hierarchy, a centered main menu in the editor viewport containing the title “Eggsploration”, and the buttons New Game and Quit." /></p>
+<p>Let’s pop into <code>Main.cs</code> real quick and have <code>Main.RunScene</code> change the scene to our app:</p>
+<pre data-lang="cs" class="language-cs z-code"><code class="language-cs" data-lang="cs"><span class="z-source z-cs">  <span class="z-storage z-modifier z-access z-cs">private</span> <span class="z-storage z-type z-cs">void</span> <span class="z-meta z-method z-cs"><span class="z-entity z-name z-function z-cs">RunScene</span></span><span class="z-meta z-method z-parameters z-cs"><span class="z-punctuation z-section z-parameters z-begin z-cs">(</span></span><span class="z-meta z-method z-parameters z-cs"><span class="z-punctuation z-section z-parameters z-end z-cs">)</span></span><span class="z-meta z-method z-cs">
+</span></span><span class="z-source z-cs"><span class="z-meta z-method z-cs">    <span class="z-storage z-type z-function z-cs">=&gt;</span></span><span class="z-meta z-method z-cs"> <span class="z-meta z-function-call z-cs"><span class="z-variable z-function z-cs">GetTree</span><span class="z-meta z-group z-cs"><span class="z-punctuation z-section z-group z-begin z-cs">(</span></span></span><span class="z-meta z-function-call z-cs"><span class="z-meta z-group z-cs"><span class="z-punctuation z-section z-group z-end z-cs">)</span></span></span><span class="z-punctuation z-accessor z-dot z-cs">.</span><span class="z-meta z-function-call z-cs"><span class="z-variable z-function z-cs">ChangeSceneToFile</span><span class="z-meta z-group z-cs"><span class="z-punctuation z-section z-group z-begin z-cs">(</span></span></span><span class="z-meta z-function-call z-cs"><span class="z-meta z-group z-cs"><span class="z-string z-quoted z-double z-cs"><span class="z-punctuation z-definition z-string z-begin z-cs">&quot;</span>res://src/app/App.tscn<span class="z-punctuation z-definition z-string z-end z-cs">&quot;</span></span><span class="z-punctuation z-section z-group z-end z-cs">)</span></span></span></span><span class="z-punctuation z-terminator z-statement z-cs">;</span>
+</span></code></pre>
+<p>Now we end up at our main menu when running the game!</p>
+<h1 id="wrapping-up">Wrapping up</h1>
+<p>That’s it for this post. Of course, the buttons do nothing at this point.</p>
+<p>We could give our App some behaviour by editing <code>App.cs</code> - but let’s be mindful about the architecture. We want to set us up for success in the long run, and there’s a nice Chickensoft package that will help us along the way; <strong>LogicBlocks</strong>!</p>
+<p>To keep things digestible, let’s save that for the next part. We’ve got a good C# coding session ahead of us. Hope to catch you there!</p>
+<p>Thanks for reading,<br/>
+Nilsiker</p>
+<p><a href="https://github.com/nilsiker/eggsploration/tree/part1">full source code available here</a></p>
+
+    <section class="series-page-outro">
+                <p><a href="https://nilsiker.github.io/blog/exploring-chickensoft/">📕 Exploring Chickensoft</a> | <a href="https://nilsiker.github.io/blog/exploring-chickensoft/2-logicblocks-app-logic/">next &gt;</a></p>
+
+            </section>
+
+        </section>
+
+        
+        
+        
+
+        
+            
+            
+            
+
+            
+        
+            
+            
+            
+
+            
+        
+            
+            
+            
+
+            
+        
+            
+            
+            
+
+            
+        
+        
+
+    </article>
+</main>
+
+    <div id="button-container">
+        
+        
+            <div id="toc-floating-container">
+                <input type="checkbox" id="toc-toggle" class="toggle"/>
+                <label for="toc-toggle" class="overlay"></label>
+                <label for="toc-toggle" id="toc-button" class="button" title="Toggle Table of Contents">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"><path d="M414.82-193.094q-18.044 0-30.497-12.32-12.453-12.319-12.453-30.036t12.453-30.086q12.453-12.37 30.497-12.37h392.767q17.237 0 29.927 12.487 12.69 12.486 12.69 30.203 0 17.716-12.69 29.919t-29.927 12.203H414.82Zm0-244.833q-18.044 0-30.497-12.487Q371.87-462.9 371.87-480.45t12.453-29.92q12.453-12.369 30.497-12.369h392.767q17.237 0 29.927 12.511 12.69 12.512 12.69 29.845 0 17.716-12.69 30.086-12.69 12.37-29.927 12.37H414.82Zm0-245.167q-18.044 0-30.497-12.32t-12.453-30.037q0-17.716 12.453-30.086 12.453-12.369 30.497-12.369h392.767q17.237 0 29.927 12.486 12.69 12.487 12.69 30.203 0 17.717-12.69 29.92-12.69 12.203-29.927 12.203H414.82ZM189.379-156.681q-32.652 0-55.878-22.829t-23.226-55.731q0-32.549 23.15-55.647 23.151-23.097 55.95-23.097 32.799 0 55.313 23.484 22.515 23.484 22.515 56.246 0 32.212-22.861 54.893-22.861 22.681-54.963 22.681Zm0-245.167q-32.652 0-55.878-23.134-23.226-23.135-23.226-55.623 0-32.487 23.467-55.517t56.12-23.03q32.102 0 54.721 23.288 22.62 23.288 22.62 55.775 0 32.488-22.861 55.364-22.861 22.877-54.963 22.877Zm-.82-244.833q-32.224 0-55.254-23.288-23.03-23.289-23.03-55.623 0-32.333 23.271-55.364 23.272-23.03 55.495-23.03 32.224 0 55.193 23.288 22.969 23.289 22.969 55.622 0 32.334-23.21 55.364-23.21 23.031-55.434 23.031Z"/></svg>
+                </label>
+                <div class="toc-content">
+                    
+
+<div class="toc-container">
+    
+
+    <ul>
+        
+            
+            
+                <li><a href="https://nilsiker.github.io/blog/exploring-chickensoft/1-godotenv-and-godotgame/#introduction">Introduction</a>
+                    
+                </li>
+            
+        
+            
+            
+                <li><a href="https://nilsiker.github.io/blog/exploring-chickensoft/1-godotenv-and-godotgame/#scope">Scope</a>
+                    
+                </li>
+            
+        
+            
+            
+                <li><a href="https://nilsiker.github.io/blog/exploring-chickensoft/1-godotenv-and-godotgame/#implementation">Implementation</a>
+                    
+                        <ul>
+                            
+                                
+                                    <li><a href="https://nilsiker.github.io/blog/exploring-chickensoft/1-godotenv-and-godotgame/#installing-godot-using-godotenv">Installing Godot using GodotEnv</a>
+                                        
+                                    </li>
+                                
+                            
+                                
+                                    <li><a href="https://nilsiker.github.io/blog/exploring-chickensoft/1-godotenv-and-godotgame/#create-a-godotgame-template-project">Create a GodotGame template project</a>
+                                        
+                                            <ul>
+                                                
+                                                    
+                                                        <li><a href="https://nilsiker.github.io/blog/exploring-chickensoft/1-godotenv-and-godotgame/#inspecting-the-default-scenes">Inspecting the default scenes</a>
+                                                            
+                                                        </li>
+                                                    
+                                                
+                                                    
+                                                        <li><a href="https://nilsiker.github.io/blog/exploring-chickensoft/1-godotenv-and-godotgame/#the-project-file">The project file</a>
+                                                            
+                                                        </li>
+                                                    
+                                                
+                                                    
+                                                        <li><a href="https://nilsiker.github.io/blog/exploring-chickensoft/1-godotenv-and-godotgame/#miscellaneous-configuration-and-tooling">Miscellaneous configuration and tooling</a>
+                                                            
+                                                        </li>
+                                                    
+                                                
+                                            </ul>
+                                        
+                                    </li>
+                                
+                            
+                                
+                                    <li><a href="https://nilsiker.github.io/blog/exploring-chickensoft/1-godotenv-and-godotgame/#preparing-our-scene-structure">Preparing our scene structure</a>
+                                        
+                                    </li>
+                                
+                            
+                        </ul>
+                    
+                </li>
+            
+        
+            
+            
+                <li><a href="https://nilsiker.github.io/blog/exploring-chickensoft/1-godotenv-and-godotgame/#wrapping-up">Wrapping up</a>
+                    
+                </li>
+            
+        
+    </ul>
+</div>
+
+
+                </div>
+            </div>
+        
+
+        
+        
+
+        
+        <a href="#" id="top-button" class="no-hover-padding" title="Go to the top of the page">
+            <svg viewBox="0 0 20 20" fill="currentColor"><path d="M3.293 9.707a1 1 0 010-1.414l6-6a1 1 0 011.414 0l6 6a1 1 0 01-1.414 1.414L11 5.414V17a1 1 0 11-2 0V5.414L4.707 9.707a1 1 0 01-1.414 0z"/></svg>
+        </a>
+    </div>
+
+
+<script defer src="https://nilsiker.github.io/js/mermaid.min.js"></script><span id="copy-success" class="hidden">
+        Copied!
+    </span>
+    <span id="copy-init" class="hidden">
+        Copy code to clipboard
+    </span>
+    <script defer src="https://nilsiker.github.io/js/copyCodeToClipboard.min.js"></script><script defer src="https://nilsiker.github.io/js/footnoteBacklinks.min.js"></script>
+    </div>
+    <footer>
+    <section>
+        <nav class="socials nav-navs">
+                <ul>
+                    
+                    
+                    
+                    
+                        
+                            <li>
+                                <a class="nav-links no-hover-padding social" rel=" me"  href="https://github.com/nilsiker/">
+                                    <img loading="lazy" alt="github" title="github" src="https://nilsiker.github.io/social_icons/github.svg">
+                                </a>
+                            </li>
+                        
+                            <li>
+                                <a class="nav-links no-hover-padding social" rel=" me"  href="https://instagram.com/nilsiker">
+                                    <img loading="lazy" alt="instagram" title="instagram" src="https://nilsiker.github.io/social_icons/instagram.svg">
+                                </a>
+                            </li>
+                        
+                            <li>
+                                <a class="nav-links no-hover-padding social" rel=" me"  href="https://twitter.com/nilsiker">
+                                    <img loading="lazy" alt="twitter" title="twitter" src="https://nilsiker.github.io/social_icons/twitter.svg">
+                                </a>
+                            </li>
+                        
+                    
+                </ul>
+            
+        </nav>
+
+        
+        <nav class="nav-navs">
+        </nav>
+
+        <div class="credits">
+            <small>
+                
+
+                
+                Powered by
+                <a rel=""  href="https://www.getzola.org">Zola</a>
+                &amp;
+                <a rel=""  href="https://github.com/welpo/tabi">tabi</a>
+
+                </small>
+        </div>
+    </section>
+
+    <div id="searchModal" class="search-modal js" role="dialog" aria-labelledby="modalTitle">
+    <h1 id="modalTitle" class="visually-hidden">Search</h1>
+    <div id="modal-content">
+        <div id="searchBar">
+            <div class="search-icon" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                    <path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"/>
+                </svg>
+            </div>
+            <input id="searchInput" role="combobox" autocomplete="off" spellcheck="false" aria-expanded="false" aria-controls="results-container" placeholder="Search…"/>
+            <div id="clear-search" class="close-icon interactive-icon" tabindex="0" role="button" title="Clear search">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/>
+                </svg>
+            </div>
+        </div>
+        <div id="results-container">
+            <div id="results-info"><span id="zero_results"> No results</span>
+                <span id="one_results"> $NUMBER result</span>
+                <span id="many_results"> $NUMBER results</span><span id="two_results"> $NUMBER results</span>
+                <span id="few_results"> $NUMBER results</span>
+            </div>
+            <div id="results" role="listbox"></div>
+        </div>
+    </div>
+</div>
+</footer>
+
+</body>
+
+</html>

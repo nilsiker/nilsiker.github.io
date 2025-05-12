@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="base" content="https://nilsiker.github.io">
+
+    
+    <title>nilsiker • Using Rust in Minimal Container Images</title>
+
+    
+    
+    
+        <link rel=icon href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 105 55"><text y=".7em" font-size="82">🦀</text></svg>'>
+    
+
+    
+    
+
+    
+    
+    
+        <link rel="stylesheet" href="https://nilsiker.github.io/inter_subset_en.css?h=d8cf4ad058d6c3a4015b">
+    
+
+    
+        <link rel="stylesheet" href="https://nilsiker.github.io/main.css?h=4a3dff148c520f191505" />
+        <link rel="stylesheet" href="https://nilsiker.github.io/skins/rusty.css?h=aed5477675e19161c8fa" />
+
+    <meta name="color-scheme" content="light dark" />
+        <meta name="description" content="Containerizing a Rust application in a minimal container image." />
+        <meta property="og:description" content="Containerizing a Rust application in a minimal container image." />
+
+    
+        <meta name="robots" content="index, nofollow" />
+    
+
+    <meta property="og:title" content="Using Rust in Minimal Container Images" />
+    <meta property="og:type" content="article" />
+
+    
+    
+    
+    
+        
+    
+
+    
+
+    
+    
+    
+    
+
+    
+        
+        
+    
+
+    <meta property="og:image" content="https://nilsiker.github.io/img/profile.png?h=b447f87cfb7fe21dfe05" />
+    <meta property="og:image:width" content="400" />
+    <meta property="og:image:height" content="400" />
+    <meta name="twitter:image" content="https://nilsiker.github.io/img/profile.png?h=b447f87cfb7fe21dfe05" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+<meta property="og:locale" content="en_GB" />
+
+    <meta property="og:url" content="https:&#x2F;&#x2F;nilsiker.github.io&#x2F;blog&#x2F;using-rust-in-minimal-container-images&#x2F;" /><meta property="og:site_name" content="nilsiker"><meta http-equiv="Content-Security-Policy"
+content="default-src 'self';font-src &#x27;self&#x27; data: 'self';img-src &#x27;self&#x27; https:&#x2F;&#x2F;* data:;style-src &#x27;self&#x27; https:&#x2F;&#x2F;cdn.jsdelivr.net &#x27;unsafe-inline&#x27; &#x27;unsafe-eval&#x27; 'unsafe-inline';frame-src https:&#x2F;&#x2F;www.youtube-nocookie.com;connect-src 'self';script-src 'self' 'self' https://cdn.jsdelivr.net 'unsafe-inline' 'unsafe-eval'">
+
+        <noscript><link rel="stylesheet" href="https://nilsiker.github.io/no_js.css"/></noscript>
+        <script type="text/javascript" src="https://nilsiker.github.io/js/initializeTheme.min.js"></script>
+        <script defer src="https://nilsiker.github.io/js/themeSwitcher.min.js"></script><script defer src="https://nilsiker.github.io/search_index.en.js?h=75eecc0275f60b2aba78"></script>
+        <script defer src="https://nilsiker.github.io/js/searchElasticlunr.min.js?h=3626c0ef99daa745b31e"></script>
+
+        </head>
+
+
+<body>
+    <header>
+    <nav class="navbar">
+        <div class="nav-title">
+            <a class="home-title" href="https://nilsiker.github.io">nilsiker</a>
+        </div>
+            <div class="nav-navs">
+                <ul>
+                        
+                            <li>
+                                
+                                <a class="nav-links no-hover-padding" href="https://nilsiker.github.io/blog/">
+                                blog
+                                </a>
+                            </li>
+                        
+                            <li>
+                                
+                                <a class="nav-links no-hover-padding" href="https://nilsiker.github.io/archive/">
+                                archive
+                                </a>
+                            </li>
+                        
+                            <li>
+                                
+                                <a class="nav-links no-hover-padding" href="https://nilsiker.github.io/tags/">
+                                tags
+                                </a>
+                            </li>
+                        
+                            <li>
+                                
+                                <a class="nav-links no-hover-padding" href="https://nilsiker.github.io/projects/">
+                                projects
+                                </a>
+                            </li>
+                        <div class="nav-navs" id="menu-icons-group">
+                        <li class="js">
+                            <div role="button" tabindex="0" id="search-button" class="search-icon interactive-icon" title="Click or press $SHORTCUT to open search" aria-label="Click or press $SHORTCUT to open search">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                                    <path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"/>
+                                </svg>
+                            </div>
+                        </li>
+
+                        
+                        
+
+                        <li class="theme-switcher-wrapper js"><div
+        title="Toggle dark&#x2F;light mode"
+        class="theme-switcher"
+        tabindex="0"
+        role="button"
+        aria-label="Toggle dark mode"
+        aria-pressed="false">
+    </div><div
+        title="Reset mode to default"
+        class="theme-resetter arrow"
+        tabindex="0"
+        role="button"
+        aria-hidden="true"
+        aria-label="Reset mode to default">
+    </div>
+
+</li>
+</div>
+                </ul>
+            </div>
+        
+    </nav>
+</header>
+
+    <div class="content">
+
+        
+        
+
+
+
+
+<main>
+    <article>
+        <h1 class="article-title">
+            Using Rust in Minimal Container Images
+        </h1>
+
+        <ul class="meta">
+                <li>23rd Mar 2024</li><li title="1052 words"><span class='separator' aria-hidden='true'>•</span>6 min read</li><li class="tag"><span class='separator' aria-hidden='true'>•</span>Tags:&nbsp;</li><li class="tag"><a href="https://nilsiker.github.io/tags/rust/">rust</a>,&nbsp;</li><li class="tag"><a href="https://nilsiker.github.io/tags/podman/">podman</a>,&nbsp;</li><li class="tag"><a href="https://nilsiker.github.io/tags/containers/">containers</a>,&nbsp;</li><li class="tag"><a href="https://nilsiker.github.io/tags/containerization/">containerization</a></li>
+        </ul>
+
+        <section class="body"><blockquote>
+<p>⚠️ This post wouldn’t exist without Björn Molins <a href="https://github.com/bjornmolin/rust-minimal-docker">rust-minimal-docker</a> repository.</p>
+</blockquote>
+<h1 id="introduction"><a class="header-anchor no-hover-padding" href="#introduction" aria-label="Anchor link for: introduction"><span class="link-icon" aria-hidden="true"></span></a>
+Introduction</h1>
+<p>In my professional work, I’ve developed a minimal Rust runner job to perform miscellaneous clean-up jobs based on messages from an event bus, all hosted in a cloud environment.</p>
+<p>Thanks to the performance Rust provides and the virtually weightless <code>scratch</code> image, cloud compute and storage costs are so low they’re negligible.</p>
+<p>Using a small web application as an example, I’ll go through a quick and concise project showing how to get started!</p>
+<blockquote>
+<p>🙋🏼 This is a bit of an outlier - I won’t be shoehorning any gamedev into this one. This is a quick post about a minimal Rust containerization example!</p>
+</blockquote>
+<h1 id="scope"><a class="header-anchor no-hover-padding" href="#scope" aria-label="Anchor link for: scope"><span class="link-icon" aria-hidden="true"></span></a>
+Scope</h1>
+<p>For this small project I’ll be using <a href="https://podman.io/">Podman</a> to setup a containerized web application running on a <code>scratch</code> container image. It is a great open-source alternative to Docker.</p>
+<p>For the application I will be using the web framework <a href="https://rocket.rs">Rocket</a>. It will include an index route, and an API route containing a singular endpoint for us to try out.</p>
+<h1 id="the-rocket-application"><a class="header-anchor no-hover-padding" href="#the-rocket-application" aria-label="Anchor link for: the-rocket-application"><span class="link-icon" aria-hidden="true"></span></a>
+The Rocket application</h1>
+<p>Let’s quickly outline how we code and configure the Rocket web application. This project uses Rocket version 0.5.</p>
+<h2 id="code"><a class="header-anchor no-hover-padding" href="#code" aria-label="Anchor link for: code"><span class="link-icon" aria-hidden="true"></span></a>
+Code</h2>
+<p>Rocket provides a concise API to get started with web applications. The entire code is contained in <code>main.rs</code>.</p>
+<pre data-lang="rust" class="language-rust z-code"><code class="language-rust" data-lang="rust"><span class="z-source z-rust"><span class="z-keyword z-other z-rust">use</span> <span class="z-meta z-path z-rust">rocket<span class="z-punctuation z-accessor z-rust">::</span></span><span class="z-keyword z-operator z-arithmetic z-rust">*</span><span class="z-punctuation z-terminator z-rust">;</span>
+</span><span class="z-source z-rust">
+</span><span class="z-source z-rust"><span class="z-comment z-line z-double-slash z-rust"><span class="z-punctuation z-definition z-comment z-rust">//</span> THIS IS OUR APP ENTRYPOINT
+</span></span><span class="z-source z-rust"><span class="z-meta z-annotation z-rust"><span class="z-punctuation z-definition z-annotation z-rust">#</span><span class="z-punctuation z-section z-group z-begin z-rust">[</span><span class="z-variable z-annotation z-rust">launch</span><span class="z-punctuation z-section z-group z-end z-rust">]</span></span> 
+</span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-function z-rust"><span class="z-storage z-type z-function z-rust">fn</span> </span><span class="z-entity z-name z-function z-rust">rocket</span></span><span class="z-meta z-function z-rust"><span class="z-meta z-function z-parameters z-rust"><span class="z-punctuation z-section z-parameters z-begin z-rust">(</span></span><span class="z-meta z-function z-rust"><span class="z-meta z-function z-parameters z-rust"><span class="z-punctuation z-section z-parameters z-end z-rust">)</span></span></span></span><span class="z-meta z-function z-rust"> <span class="z-meta z-function z-return-type z-rust"><span class="z-punctuation z-separator z-rust">-&gt;</span> <span class="z-keyword z-operator z-rust">_</span></span> </span><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"><span class="z-punctuation z-section z-block z-begin z-rust">{</span>  
+</span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust">    <span class="z-meta z-path z-rust">rocket<span class="z-punctuation z-accessor z-rust">::</span></span>build<span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-begin z-rust">(</span></span><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-end z-rust">)</span></span>
+</span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust">        <span class="z-punctuation z-accessor z-dot z-rust">.</span><span class="z-support z-function z-rust">mount</span><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-begin z-rust">(</span><span class="z-string z-quoted z-double z-rust"><span class="z-punctuation z-definition z-string z-begin z-rust">&quot;</span>/<span class="z-punctuation z-definition z-string z-end z-rust">&quot;</span></span><span class="z-punctuation z-separator z-rust">,</span> <span class="z-support z-macro z-rust">routes!</span><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-begin z-rust">[</span>index<span class="z-punctuation z-section z-group z-end z-rust">]</span></span></span><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-end z-rust">)</span></span>
+</span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust">        <span class="z-punctuation z-accessor z-dot z-rust">.</span><span class="z-support z-function z-rust">mount</span><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-begin z-rust">(</span><span class="z-string z-quoted z-double z-rust"><span class="z-punctuation z-definition z-string z-begin z-rust">&quot;</span>/api<span class="z-punctuation z-definition z-string z-end z-rust">&quot;</span></span><span class="z-punctuation z-separator z-rust">,</span> <span class="z-support z-macro z-rust">routes!</span><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-begin z-rust">[</span>hello<span class="z-punctuation z-section z-group z-end z-rust">]</span></span></span><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-end z-rust">)</span></span>
+</span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"></span><span class="z-meta z-block z-rust"><span class="z-punctuation z-section z-block z-end z-rust">}</span></span></span>
+</span><span class="z-source z-rust">
+</span><span class="z-source z-rust"><span class="z-meta z-annotation z-rust"><span class="z-punctuation z-definition z-annotation z-rust">#</span><span class="z-punctuation z-section z-group z-begin z-rust">[</span><span class="z-variable z-annotation z-rust">get</span><span class="z-meta z-annotation z-parameters z-rust"><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-begin z-rust">(</span></span></span><span class="z-meta z-annotation z-parameters z-rust"><span class="z-meta z-group z-rust"><span class="z-string z-quoted z-double z-rust"><span class="z-punctuation z-definition z-string z-begin z-rust">&quot;</span>/<span class="z-punctuation z-definition z-string z-end z-rust">&quot;</span></span></span></span><span class="z-meta z-annotation z-parameters z-rust"><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-end z-rust">)</span></span></span><span class="z-punctuation z-section z-group z-end z-rust">]</span></span>
+</span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-function z-rust"><span class="z-storage z-modifier z-rust">pub</span> <span class="z-storage z-type z-function z-rust">fn</span> </span><span class="z-entity z-name z-function z-rust">index</span></span><span class="z-meta z-function z-rust"><span class="z-meta z-function z-parameters z-rust"><span class="z-punctuation z-section z-parameters z-begin z-rust">(</span></span><span class="z-meta z-function z-rust"><span class="z-meta z-function z-parameters z-rust"><span class="z-punctuation z-section z-parameters z-end z-rust">)</span></span></span></span><span class="z-meta z-function z-rust"> <span class="z-meta z-function z-return-type z-rust"><span class="z-punctuation z-separator z-rust">-&gt;</span> String</span> </span><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"><span class="z-punctuation z-section z-block z-begin z-rust">{</span>
+</span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust">    <span class="z-support z-macro z-rust">format!</span><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-begin z-rust">(</span></span><span class="z-meta z-group z-rust">
+</span></span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-group z-rust">        <span class="z-string z-quoted z-double z-rust"><span class="z-punctuation z-definition z-string z-begin z-rust">&quot;</span>This is a dummy landing page for our Rocket web server.<span class="z-constant z-character z-escape z-rust">\n</span><span class="z-constant z-character z-escape z-rust">\n</span>Try /api/hello?name=YOUR_NAME<span class="z-constant z-character z-escape z-rust">\n</span><span class="z-punctuation z-definition z-string z-end z-rust">&quot;</span></span>
+</span></span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-group z-rust">    </span><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-end z-rust">)</span></span>
+</span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"></span><span class="z-meta z-block z-rust"><span class="z-punctuation z-section z-block z-end z-rust">}</span></span></span>
+</span><span class="z-source z-rust">
+</span><span class="z-source z-rust"><span class="z-meta z-annotation z-rust"><span class="z-punctuation z-definition z-annotation z-rust">#</span><span class="z-punctuation z-section z-group z-begin z-rust">[</span><span class="z-variable z-annotation z-rust">get</span><span class="z-meta z-annotation z-parameters z-rust"><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-begin z-rust">(</span></span></span><span class="z-meta z-annotation z-parameters z-rust"><span class="z-meta z-group z-rust"><span class="z-string z-quoted z-double z-rust"><span class="z-punctuation z-definition z-string z-begin z-rust">&quot;</span>/hello?&lt;name&gt;&amp;&lt;occupation&gt;<span class="z-punctuation z-definition z-string z-end z-rust">&quot;</span></span></span></span><span class="z-meta z-annotation z-parameters z-rust"><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-end z-rust">)</span></span></span><span class="z-punctuation z-section z-group z-end z-rust">]</span></span>
+</span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-function z-rust"><span class="z-storage z-modifier z-rust">pub</span> <span class="z-storage z-type z-function z-rust">fn</span> </span><span class="z-entity z-name z-function z-rust">hello</span></span><span class="z-meta z-function z-rust"><span class="z-meta z-function z-parameters z-rust"><span class="z-punctuation z-section z-parameters z-begin z-rust">(</span><span class="z-variable z-parameter z-rust">name</span><span class="z-punctuation z-separator z-rust">:</span> <span class="z-keyword z-operator z-rust">&amp;</span><span class="z-storage z-type z-rust">str</span>, <span class="z-variable z-parameter z-rust">occupation</span><span class="z-punctuation z-separator z-rust">:</span> <span class="z-meta z-generic z-rust"><span class="z-support z-type z-rust">Option</span><span class="z-punctuation z-definition z-generic z-begin z-rust">&lt;</span><span class="z-keyword z-operator z-rust">&amp;</span><span class="z-storage z-type z-rust">str</span><span class="z-punctuation z-definition z-generic z-end z-rust">&gt;</span></span></span><span class="z-meta z-function z-rust"><span class="z-meta z-function z-parameters z-rust"><span class="z-punctuation z-section z-parameters z-end z-rust">)</span></span></span></span><span class="z-meta z-function z-rust"> <span class="z-meta z-function z-return-type z-rust"><span class="z-punctuation z-separator z-rust">-&gt;</span> String</span> </span><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"><span class="z-punctuation z-section z-block z-begin z-rust">{</span>
+</span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust">    <span class="z-keyword z-control z-rust">match</span> occupation <span class="z-meta z-block z-rust"><span class="z-punctuation z-section z-block z-begin z-rust">{</span>
+</span></span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-block z-rust">        <span class="z-support z-type z-rust">Some</span><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-begin z-rust">(</span>occupation</span><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-end z-rust">)</span></span> <span class="z-keyword z-operator z-rust">=&gt;</span> <span class="z-support z-macro z-rust">format!</span><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-begin z-rust">(</span></span><span class="z-meta z-group z-rust"><span class="z-string z-quoted z-double z-rust"><span class="z-punctuation z-definition z-string z-begin z-rust">&quot;</span>Hello <span class="z-constant z-other z-placeholder z-rust">{name}</span>, you are a <span class="z-constant z-other z-placeholder z-rust">{occupation}</span>.<span class="z-constant z-character z-escape z-rust">\n</span><span class="z-punctuation z-definition z-string z-end z-rust">&quot;</span></span></span><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-end z-rust">)</span></span><span class="z-punctuation z-separator z-rust">,</span>
+</span></span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-block z-rust">        <span class="z-support z-type z-rust">None</span> <span class="z-keyword z-operator z-rust">=&gt;</span> <span class="z-support z-macro z-rust">format!</span><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-begin z-rust">(</span></span><span class="z-meta z-group z-rust"><span class="z-string z-quoted z-double z-rust"><span class="z-punctuation z-definition z-string z-begin z-rust">&quot;</span>Hello <span class="z-constant z-other z-placeholder z-rust">{name}</span>! You can also provide your occupation as a query parameter.<span class="z-constant z-character z-escape z-rust">\n</span><span class="z-punctuation z-definition z-string z-end z-rust">&quot;</span></span></span><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-end z-rust">)</span></span><span class="z-punctuation z-separator z-rust">,</span>
+</span></span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-block z-rust">    </span><span class="z-meta z-block z-rust"><span class="z-punctuation z-section z-block z-end z-rust">}</span></span>
+</span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"></span><span class="z-meta z-block z-rust"><span class="z-punctuation z-section z-block z-end z-rust">}</span></span></span>
+</span></code></pre>
+<p>It’s a small application that returns a string message when accessing the base URL. It also provides a <code>hello</code> endpoint in its API route, that responds based on the name and optional occupation provided as query parameters.</p>
+<blockquote>
+<p>🙋🏼 I have yet to experiment seriously with Rocket, but it’s remarkable how little code you actually need to get started. It reminds me of Express.js – except I get to write Rust, making me a happy developer!</p>
+</blockquote>
+<h2 id="configuration"><a class="header-anchor no-hover-padding" href="#configuration" aria-label="Anchor link for: configuration"><span class="link-icon" aria-hidden="true"></span></a>
+Configuration</h2>
+<p>In Rocket, we can create a file called <code>Rocket.toml</code> to configure our application. In our case we want to bind the application to the <code>0.0.0.0</code>, so that we can curl our way into the container. The TOML looks like this:</p>
+<pre data-lang="toml" class="language-toml z-code"><code class="language-toml" data-lang="toml"><span class="z-source z-toml"><span class="z-punctuation z-definition z-table z-begin z-toml">[</span><span class="z-meta z-tag z-table z-toml"><span class="z-entity z-name z-table z-toml">global</span></span><span class="z-punctuation z-definition z-table z-end z-toml">]</span>
+</span><span class="z-source z-toml"><span class="z-meta z-tag z-key z-toml"><span class="z-entity z-name z-tag z-toml">address</span></span> <span class="z-punctuation z-definition z-key-value z-toml">=</span> <span class="z-string z-quoted z-double z-basic z-toml"><span class="z-punctuation z-definition z-string z-begin z-toml">&quot;</span>0.0.0.0<span class="z-punctuation z-definition z-string z-end z-toml">&quot;</span></span>
+</span></code></pre>
+<p>Of course, there is more configuration available to us. The official guide has a good section about <a href="https://rocket.rs/guide/master/configuration/">Configuration</a>.</p>
+<p>That’s all regarding the application. Let’s look at creating the container image.</p>
+<h1 id="containerizing-the-application"><a class="header-anchor no-hover-padding" href="#containerizing-the-application" aria-label="Anchor link for: containerizing-the-application"><span class="link-icon" aria-hidden="true"></span></a>
+Containerizing the application</h1>
+<p>Running the application locally with <code>cargo run</code> tells me the code is sound, but we want to run this in a container, ready to be deployed to any suitable platform or host.</p>
+<p>Let’s quickly set up a configuration for all this.</p>
+<h2 id="setting-up-our-containerfile"><a class="header-anchor no-hover-padding" href="#setting-up-our-containerfile" aria-label="Anchor link for: setting-up-our-containerfile"><span class="link-icon" aria-hidden="true"></span></a>
+Setting up our Containerfile</h2>
+<p>First off, I create a <code>Containerfile</code> in my project root. The Containerfile specifies the following:</p>
+<pre data-lang="Dockerfile" class="language-Dockerfile z-code"><code class="language-Dockerfile" data-lang="Dockerfile"><span class="z-source z-dockerfile"><span class="z-keyword z-control z-dockerfile">FROM</span> clux/muslrust:<span class="z-entity z-name z-enum z-tag-digest">stable</span> <span class="z-keyword z-control z-dockerfile">as</span> <span class="z-variable z-stage-name">builder</span>
+</span><span class="z-source z-dockerfile"><span class="z-keyword z-control z-dockerfile">ENV </span>TARGET=<span class="z-string z-quoted z-double z-dockerfile"><span class="z-punctuation z-definition z-string z-begin z-dockerfile">&quot;</span>x86_64-unknown-linux-musl<span class="z-punctuation z-definition z-string z-end z-dockerfile">&quot;</span></span>
+</span><span class="z-source z-dockerfile">
+</span><span class="z-source z-dockerfile"><span class="z-keyword z-control z-dockerfile">WORKDIR </span>/staging
+</span><span class="z-source z-dockerfile">
+</span><span class="z-source z-dockerfile"><span class="z-keyword z-control z-dockerfile">COPY</span> src ./src
+</span><span class="z-source z-dockerfile"><span class="z-keyword z-control z-dockerfile">COPY</span> Cargo.lock .
+</span><span class="z-source z-dockerfile"><span class="z-keyword z-control z-dockerfile">COPY</span> Cargo.toml .
+</span><span class="z-source z-dockerfile">
+</span><span class="z-source z-dockerfile"><span class="z-keyword z-control z-dockerfile">RUN </span>cargo build --target $TARGET --release
+</span><span class="z-source z-dockerfile">
+</span><span class="z-source z-dockerfile"><span class="z-keyword z-control z-dockerfile">FROM</span> scratch
+</span><span class="z-source z-dockerfile"><span class="z-keyword z-control z-dockerfile">ENV </span>TARGET=<span class="z-string z-quoted z-double z-dockerfile"><span class="z-punctuation z-definition z-string z-begin z-dockerfile">&quot;</span>x86_64-unknown-linux-musl<span class="z-punctuation z-definition z-string z-end z-dockerfile">&quot;</span></span>
+</span><span class="z-source z-dockerfile"><span class="z-keyword z-control z-dockerfile">ENV </span>BINARY_NAME=<span class="z-string z-quoted z-double z-dockerfile"><span class="z-punctuation z-definition z-string z-begin z-dockerfile">&quot;</span>rust-minimal-podman<span class="z-punctuation z-definition z-string z-end z-dockerfile">&quot;</span></span>
+</span><span class="z-source z-dockerfile">
+</span><span class="z-source z-dockerfile"><span class="z-keyword z-control z-dockerfile">COPY</span> Rocket.toml /Rocket.toml
+</span><span class="z-source z-dockerfile"><span class="z-keyword z-control z-dockerfile">COPY</span> --from=<span class="z-variable z-stage-name">builder</span> /staging/target/$TARGET/release/$BINARY_NAME /app
+</span><span class="z-source z-dockerfile">
+</span><span class="z-source z-dockerfile"><span class="z-keyword z-operator z-dockerfile">ENTRYPOINT </span>[<span class="z-string z-quoted z-double z-dockerfile"><span class="z-punctuation z-definition z-string z-begin z-dockerfile">&quot;</span>/app<span class="z-punctuation z-definition z-string z-end z-dockerfile">&quot;</span></span>]
+</span></code></pre>
+<p>No bells and whistles, in short we:</p>
+<ul>
+<li>Use the <code>clux/muslrust</code> image as our <em>builder</em></li>
+<li>Copy over necessary project files</li>
+<li>Build the project in release mode, targetting <code>x86_64-unknown-linux-musl</code></li>
+<li>Use the <code>scratch</code> image as our final image, our <em>runner</em>!</li>
+<li>Copy the compiled executable and the Rocket configuration file to the <em>runner</em></li>
+<li>Specify our app as the image entrypoint</li>
+</ul>
+<p>That should be enough to get us running Rust in a barebones image. Next, we leverage Podman to build and run our container image!</p>
+<h2 id="building-the-image"><a class="header-anchor no-hover-padding" href="#building-the-image" aria-label="Anchor link for: building-the-image"><span class="link-icon" aria-hidden="true"></span></a>
+Building the image</h2>
+<p>If you are familiar with Docker, you’ll feel right at home. To build the image, we simply run:</p>
+<pre data-lang="bash" class="language-bash z-code"><code class="language-bash" data-lang="bash"><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">podman</span></span><span class="z-meta z-function-call z-arguments z-shell"> build<span class="z-variable z-parameter z-option z-shell"><span class="z-punctuation z-definition z-parameter z-shell"> -</span>t</span> rust-minimal-podman .</span>
+</span></code></pre>
+<p>The <code>clux/muslrust</code> image includes the necessary toolchain and libraries to compile for our target image <code>scratch</code>.</p>
+<h2 id="running-the-image"><a class="header-anchor no-hover-padding" href="#running-the-image" aria-label="Anchor link for: running-the-image"><span class="link-icon" aria-hidden="true"></span></a>
+Running the image</h2>
+<p>Running the image is a breeze also. We run the image in a container using:</p>
+<pre data-lang="bash" class="language-bash z-code"><code class="language-bash" data-lang="bash"><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">podman</span></span><span class="z-meta z-function-call z-arguments z-shell"> run<span class="z-variable z-parameter z-option z-shell"><span class="z-punctuation z-definition z-parameter z-shell"> -</span>d</span><span class="z-variable z-parameter z-option z-shell"><span class="z-punctuation z-definition z-parameter z-shell"> -</span>p</span> 8000:8000<span class="z-variable z-parameter z-option z-shell"><span class="z-punctuation z-definition z-parameter z-shell"> -</span>t</span> rust-minimal-podman</span>
+</span></code></pre>
+<p>We use the detach flag <code>-d</code> to run the container in the background.</p>
+<p>Using the publish flag <code>-p</code> we export the port 8080 inside the container to port 8000 outside the container.</p>
+<p>This will allow us to curl the application running in the container, using the port 8000.</p>
+<h2 id="testing-some-curls"><a class="header-anchor no-hover-padding" href="#testing-some-curls" aria-label="Anchor link for: testing-some-curls"><span class="link-icon" aria-hidden="true"></span></a>
+Testing some curls</h2>
+<p>We’re <em>probably</em> all set now. To be sure, we try out our routes and API and see what we get.</p>
+<pre data-lang="bash" class="language-bash z-code"><code class="language-bash" data-lang="bash"><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">$</span></span><span class="z-meta z-function-call z-arguments z-shell"> curl <span class="z-string z-quoted z-double z-shell"><span class="z-punctuation z-definition z-string z-begin z-shell">&quot;</span>0.0.0.0/8000<span class="z-punctuation z-definition z-string z-end z-shell">&quot;</span></span></span>
+</span><span class="z-source z-shell z-bash"><span class="z-keyword z-operator z-assignment z-redirection z-shell">&gt;</span> This <span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">is</span></span><span class="z-meta z-function-call z-arguments z-shell"> a dummy landing page for our Rocket web server.</span>
+</span><span class="z-source z-shell z-bash"><span class="z-keyword z-operator z-assignment z-redirection z-shell">&gt;</span> 
+</span><span class="z-source z-shell z-bash"><span class="z-keyword z-operator z-assignment z-redirection z-shell">&gt;</span> Try <span class="z-variable z-other z-readwrite z-assignment z-shell">/api/hello?name</span><span class="z-keyword z-operator z-assignment z-shell">=</span><span class="z-string z-unquoted z-shell">YOUR_NAME</span>
+</span><span class="z-source z-shell z-bash">
+</span><span class="z-source z-shell z-bash">
+</span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">$</span></span><span class="z-meta z-function-call z-arguments z-shell"> curl <span class="z-string z-quoted z-double z-shell"><span class="z-punctuation z-definition z-string z-begin z-shell">&quot;</span>0.0.0.0:8000/api/hello?name=Nilsiker<span class="z-punctuation z-definition z-string z-end z-shell">&quot;</span></span></span>
+</span><span class="z-source z-shell z-bash"><span class="z-keyword z-operator z-assignment z-redirection z-shell">&gt;</span> Hello <span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">Nilsiker!</span></span><span class="z-meta z-function-call z-arguments z-shell"> You can also provide your occupation as a query parameter.</span>
+</span><span class="z-source z-shell z-bash">
+</span><span class="z-source z-shell z-bash">
+</span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">$</span></span><span class="z-meta z-function-call z-arguments z-shell"> curl <span class="z-string z-quoted z-double z-shell"><span class="z-punctuation z-definition z-string z-begin z-shell">&quot;</span>0.0.0.0:8000/api/hello?name=Nilsiker&amp;occupation=Rust%20propagandist<span class="z-punctuation z-definition z-string z-end z-shell">&quot;</span></span></span>
+</span><span class="z-source z-shell z-bash"><span class="z-keyword z-operator z-assignment z-redirection z-shell">&gt;</span> Hello <span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">Nilsiker,</span></span><span class="z-meta z-function-call z-arguments z-shell"> you are a Rust propagandist.</span>
+</span></code></pre>
+<p>It works flawlessly!</p>
+<p>Once content with the responses, we can kill the container with <code>podman kill &lt;ID&gt;</code>.</p>
+<h1 id="result"><a class="header-anchor no-hover-padding" href="#result" aria-label="Anchor link for: result"><span class="link-icon" aria-hidden="true"></span></a>
+Result</h1>
+<p>With the sanity check above performed, we can confirm that the <code>scratch</code> image is running our application without problems. Mission accomplished!</p>
+<p>For the grand reveal, we check our image size with <code>podman images</code> (some headings are omitted from the output):</p>
+<pre data-lang="bash" class="language-bash z-code"><code class="language-bash" data-lang="bash"><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">$</span></span><span class="z-meta z-function-call z-arguments z-shell"> podman images localhost</span>
+</span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">REPOSITORY</span></span><span class="z-meta z-function-call z-arguments z-shell">                     TAG         SIZE</span>
+</span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">localhost/rust-minimal-podman</span></span><span class="z-meta z-function-call z-arguments z-shell">  latest      8.98 MB</span>
+</span></code></pre>
+<p>Admittedly, the application is a very minimal example of a Rocket web application, but a basic web server application containing everything it needs to run as a standalone binary clocking in under 10MB? That is impressive!</p>
+<blockquote>
+<p>🙋🏼 If you want to go all crazy about it, you can add the option <code>strip = true</code> to your Cargo.toml release profile. At the time of writing this, this brought my image size down to a miniscule 4.35 MB!</p>
+</blockquote>
+<h1 id="conclusion"><a class="header-anchor no-hover-padding" href="#conclusion" aria-label="Anchor link for: conclusion"><span class="link-icon" aria-hidden="true"></span></a>
+Conclusion</h1>
+<p>Basing your container images on <code>scratch</code> can be useful for hyperoptimizing disk space used - an image size under 10MB is quite the feat in my book!</p>
+<p>In the case of Rust, where we can statically link our application into a standalone binary, we can successfully and also quite effortlessly provide a minimal environment for our application to run using <code>scratch</code>.</p>
+<p>For smaller use cases, we might also enjoy the complete control over dependencies used. Since we are fully aware of the binaries and libraries used on the image, you could also make a case for a more conscious and clear picture of what security concerns our app and environment is susceptible to.</p>
+<p>I see a great use case for <code>scratch</code>-based images for small runner jobs or simple microservices where the use case isn’t very complex - a great argument to use the least bloated image available.</p>
+<p>Of course, the image does not come without its limitations. Imagine the observability issue; what if the container fails to run, and we want insights into what might be causing the problem. Since our standalone binary is possibly the only binary present in the container, how would we go about SSHing into the container?</p>
+<p>Stripping out everything leaves us with not only full control but also full responsibility for what we put in our image.</p>
+<p>At some point, it is more reasonable to use an Alpine Linux image. They’re not much bigger, and comes with a lot of handy tools that make your containerization endeavours easier.</p>
+<p>But if all you want is a tiny data footprint, you can’t beat doing it <code>FROM scratch</code>.</p>
+<p><em>Thanks for reading,<br/>Nilsiker</em></p>
+
+        </section>
+
+        
+        
+        
+
+        
+            
+            
+            
+
+            
+        
+            
+            
+            
+
+            
+        
+            
+            
+            
+
+            
+        
+            
+            
+            
+
+            
+        
+        
+
+    </article>
+</main>
+
+    <div id="button-container">
+        
+        
+            <div id="toc-floating-container">
+                <input type="checkbox" id="toc-toggle" class="toggle"/>
+                <label for="toc-toggle" class="overlay"></label>
+                <label for="toc-toggle" id="toc-button" class="button" title="Toggle Table of Contents">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"><path d="M414.82-193.094q-18.044 0-30.497-12.32-12.453-12.319-12.453-30.036t12.453-30.086q12.453-12.37 30.497-12.37h392.767q17.237 0 29.927 12.487 12.69 12.486 12.69 30.203 0 17.716-12.69 29.919t-29.927 12.203H414.82Zm0-244.833q-18.044 0-30.497-12.487Q371.87-462.9 371.87-480.45t12.453-29.92q12.453-12.369 30.497-12.369h392.767q17.237 0 29.927 12.511 12.69 12.512 12.69 29.845 0 17.716-12.69 30.086-12.69 12.37-29.927 12.37H414.82Zm0-245.167q-18.044 0-30.497-12.32t-12.453-30.037q0-17.716 12.453-30.086 12.453-12.369 30.497-12.369h392.767q17.237 0 29.927 12.486 12.69 12.487 12.69 30.203 0 17.717-12.69 29.92-12.69 12.203-29.927 12.203H414.82ZM189.379-156.681q-32.652 0-55.878-22.829t-23.226-55.731q0-32.549 23.15-55.647 23.151-23.097 55.95-23.097 32.799 0 55.313 23.484 22.515 23.484 22.515 56.246 0 32.212-22.861 54.893-22.861 22.681-54.963 22.681Zm0-245.167q-32.652 0-55.878-23.134-23.226-23.135-23.226-55.623 0-32.487 23.467-55.517t56.12-23.03q32.102 0 54.721 23.288 22.62 23.288 22.62 55.775 0 32.488-22.861 55.364-22.861 22.877-54.963 22.877Zm-.82-244.833q-32.224 0-55.254-23.288-23.03-23.289-23.03-55.623 0-32.333 23.271-55.364 23.272-23.03 55.495-23.03 32.224 0 55.193 23.288 22.969 23.289 22.969 55.622 0 32.334-23.21 55.364-23.21 23.031-55.434 23.031Z"/></svg>
+                </label>
+                <div class="toc-content">
+                    
+
+<div class="toc-container">
+    
+
+    <ul>
+        
+            
+            
+                <li><a href="https://nilsiker.github.io/blog/using-rust-in-minimal-container-images/#introduction">Introduction</a>
+                    
+                </li>
+            
+        
+            
+            
+                <li><a href="https://nilsiker.github.io/blog/using-rust-in-minimal-container-images/#scope">Scope</a>
+                    
+                </li>
+            
+        
+            
+            
+                <li><a href="https://nilsiker.github.io/blog/using-rust-in-minimal-container-images/#the-rocket-application">The Rocket application</a>
+                    
+                        <ul>
+                            
+                                
+                                    <li><a href="https://nilsiker.github.io/blog/using-rust-in-minimal-container-images/#code">Code</a>
+                                        
+                                    </li>
+                                
+                            
+                                
+                                    <li><a href="https://nilsiker.github.io/blog/using-rust-in-minimal-container-images/#configuration">Configuration</a>
+                                        
+                                    </li>
+                                
+                            
+                        </ul>
+                    
+                </li>
+            
+        
+            
+            
+                <li><a href="https://nilsiker.github.io/blog/using-rust-in-minimal-container-images/#containerizing-the-application">Containerizing the application</a>
+                    
+                        <ul>
+                            
+                                
+                                    <li><a href="https://nilsiker.github.io/blog/using-rust-in-minimal-container-images/#setting-up-our-containerfile">Setting up our Containerfile</a>
+                                        
+                                    </li>
+                                
+                            
+                                
+                                    <li><a href="https://nilsiker.github.io/blog/using-rust-in-minimal-container-images/#building-the-image">Building the image</a>
+                                        
+                                    </li>
+                                
+                            
+                                
+                                    <li><a href="https://nilsiker.github.io/blog/using-rust-in-minimal-container-images/#running-the-image">Running the image</a>
+                                        
+                                    </li>
+                                
+                            
+                                
+                                    <li><a href="https://nilsiker.github.io/blog/using-rust-in-minimal-container-images/#testing-some-curls">Testing some curls</a>
+                                        
+                                    </li>
+                                
+                            
+                        </ul>
+                    
+                </li>
+            
+        
+            
+            
+                <li><a href="https://nilsiker.github.io/blog/using-rust-in-minimal-container-images/#result">Result</a>
+                    
+                </li>
+            
+        
+            
+            
+                <li><a href="https://nilsiker.github.io/blog/using-rust-in-minimal-container-images/#conclusion">Conclusion</a>
+                    
+                </li>
+            
+        
+    </ul>
+</div>
+
+
+                </div>
+            </div>
+        
+
+        
+        
+
+        
+        <a href="#" id="top-button" class="no-hover-padding" title="Go to the top of the page">
+            <svg viewBox="0 0 20 20" fill="currentColor"><path d="M3.293 9.707a1 1 0 010-1.414l6-6a1 1 0 011.414 0l6 6a1 1 0 01-1.414 1.414L11 5.414V17a1 1 0 11-2 0V5.414L4.707 9.707a1 1 0 01-1.414 0z"/></svg>
+        </a>
+    </div>
+
+
+<script defer src="https://nilsiker.github.io/js/mermaid.min.js"></script><span id="copy-success" class="hidden">
+        Copied!
+    </span>
+    <span id="copy-init" class="hidden">
+        Copy code to clipboard
+    </span>
+    <script defer src="https://nilsiker.github.io/js/copyCodeToClipboard.min.js"></script><script defer src="https://nilsiker.github.io/js/footnoteBacklinks.min.js"></script>
+    </div>
+    <footer>
+    <section>
+        <nav class="socials nav-navs">
+                <ul>
+                    
+                    
+                    
+                    
+                        
+                            <li>
+                                <a class="nav-links no-hover-padding social" rel=" me"  href="https://github.com/nilsiker/">
+                                    <img loading="lazy" alt="github" title="github" src="https://nilsiker.github.io/social_icons/github.svg">
+                                </a>
+                            </li>
+                        
+                            <li>
+                                <a class="nav-links no-hover-padding social" rel=" me"  href="https://instagram.com/nilsiker">
+                                    <img loading="lazy" alt="instagram" title="instagram" src="https://nilsiker.github.io/social_icons/instagram.svg">
+                                </a>
+                            </li>
+                        
+                            <li>
+                                <a class="nav-links no-hover-padding social" rel=" me"  href="https://twitter.com/nilsiker">
+                                    <img loading="lazy" alt="twitter" title="twitter" src="https://nilsiker.github.io/social_icons/twitter.svg">
+                                </a>
+                            </li>
+                        
+                    
+                </ul>
+            
+        </nav>
+
+        
+        <nav class="nav-navs">
+        </nav>
+
+        <div class="credits">
+            <small>
+                
+
+                
+                Powered by
+                <a rel=""  href="https://www.getzola.org">Zola</a>
+                &amp;
+                <a rel=""  href="https://github.com/welpo/tabi">tabi</a>
+
+                </small>
+        </div>
+    </section>
+
+    <div id="searchModal" class="search-modal js" role="dialog" aria-labelledby="modalTitle">
+    <h1 id="modalTitle" class="visually-hidden">Search</h1>
+    <div id="modal-content">
+        <div id="searchBar">
+            <div class="search-icon" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                    <path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"/>
+                </svg>
+            </div>
+            <input id="searchInput" role="combobox" autocomplete="off" spellcheck="false" aria-expanded="false" aria-controls="results-container" placeholder="Search…"/>
+            <div id="clear-search" class="close-icon interactive-icon" tabindex="0" role="button" title="Clear search">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/>
+                </svg>
+            </div>
+        </div>
+        <div id="results-container">
+            <div id="results-info"><span id="zero_results"> No results</span>
+                <span id="one_results"> $NUMBER result</span>
+                <span id="many_results"> $NUMBER results</span><span id="two_results"> $NUMBER results</span>
+                <span id="few_results"> $NUMBER results</span>
+            </div>
+            <div id="results" role="listbox"></div>
+        </div>
+    </div>
+</div>
+</footer>
+
+</body>
+
+</html>

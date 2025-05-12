@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="base" content="https://nilsiker.github.io">
+
+    
+    <title>nilsiker • Creating Worlds in Bevy</title>
+
+    
+    
+    
+        <link rel=icon href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 105 55"><text y=".7em" font-size="82">🦀</text></svg>'>
+    
+
+    
+    
+
+    
+    
+    
+        <link rel="stylesheet" href="https://nilsiker.github.io/inter_subset_en.css?h=d8cf4ad058d6c3a4015b">
+    
+
+    
+        <link rel="stylesheet" href="https://nilsiker.github.io/main.css?h=4a3dff148c520f191505" />
+        <link rel="stylesheet" href="https://nilsiker.github.io/skins/rusty.css?h=aed5477675e19161c8fa" />
+
+    <meta name="color-scheme" content="light dark" />
+        <meta name="description" content="Tabletop RPGs and a segue into procedural world generation in Bevy." />
+        <meta property="og:description" content="Tabletop RPGs and a segue into procedural world generation in Bevy." />
+
+    
+        <meta name="robots" content="index, nofollow" />
+    
+
+    <meta property="og:title" content="Creating Worlds in Bevy" />
+    <meta property="og:type" content="article" />
+
+    
+    
+    
+    
+        
+    
+
+    
+
+    
+    
+    
+    
+
+    
+        
+        
+    
+
+    <meta property="og:image" content="https://nilsiker.github.io/img/profile.png?h=b447f87cfb7fe21dfe05" />
+    <meta property="og:image:width" content="400" />
+    <meta property="og:image:height" content="400" />
+    <meta name="twitter:image" content="https://nilsiker.github.io/img/profile.png?h=b447f87cfb7fe21dfe05" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+<meta property="og:locale" content="en_GB" />
+
+    <meta property="og:url" content="https:&#x2F;&#x2F;nilsiker.github.io&#x2F;blog&#x2F;creating-worlds-in-bevy&#x2F;" /><meta property="og:site_name" content="nilsiker"><meta http-equiv="Content-Security-Policy"
+content="default-src 'self';font-src &#x27;self&#x27; data: 'self';img-src &#x27;self&#x27; https:&#x2F;&#x2F;* data:;style-src &#x27;self&#x27; https:&#x2F;&#x2F;cdn.jsdelivr.net &#x27;unsafe-inline&#x27; &#x27;unsafe-eval&#x27; 'unsafe-inline';frame-src https:&#x2F;&#x2F;www.youtube-nocookie.com;connect-src 'self';script-src 'self' 'self' https://cdn.jsdelivr.net 'unsafe-inline' 'unsafe-eval'">
+
+        <noscript><link rel="stylesheet" href="https://nilsiker.github.io/no_js.css"/></noscript>
+        <script type="text/javascript" src="https://nilsiker.github.io/js/initializeTheme.min.js"></script>
+        <script defer src="https://nilsiker.github.io/js/themeSwitcher.min.js"></script><script defer src="https://nilsiker.github.io/search_index.en.js?h=75eecc0275f60b2aba78"></script>
+        <script defer src="https://nilsiker.github.io/js/searchElasticlunr.min.js?h=3626c0ef99daa745b31e"></script>
+
+        </head>
+
+
+<body>
+    <header>
+    <nav class="navbar">
+        <div class="nav-title">
+            <a class="home-title" href="https://nilsiker.github.io">nilsiker</a>
+        </div>
+            <div class="nav-navs">
+                <ul>
+                        
+                            <li>
+                                
+                                <a class="nav-links no-hover-padding" href="https://nilsiker.github.io/blog/">
+                                blog
+                                </a>
+                            </li>
+                        
+                            <li>
+                                
+                                <a class="nav-links no-hover-padding" href="https://nilsiker.github.io/archive/">
+                                archive
+                                </a>
+                            </li>
+                        
+                            <li>
+                                
+                                <a class="nav-links no-hover-padding" href="https://nilsiker.github.io/tags/">
+                                tags
+                                </a>
+                            </li>
+                        
+                            <li>
+                                
+                                <a class="nav-links no-hover-padding" href="https://nilsiker.github.io/projects/">
+                                projects
+                                </a>
+                            </li>
+                        <div class="nav-navs" id="menu-icons-group">
+                        <li class="js">
+                            <div role="button" tabindex="0" id="search-button" class="search-icon interactive-icon" title="Click or press $SHORTCUT to open search" aria-label="Click or press $SHORTCUT to open search">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                                    <path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"/>
+                                </svg>
+                            </div>
+                        </li>
+
+                        
+                        
+
+                        <li class="theme-switcher-wrapper js"><div
+        title="Toggle dark&#x2F;light mode"
+        class="theme-switcher"
+        tabindex="0"
+        role="button"
+        aria-label="Toggle dark mode"
+        aria-pressed="false">
+    </div><div
+        title="Reset mode to default"
+        class="theme-resetter arrow"
+        tabindex="0"
+        role="button"
+        aria-hidden="true"
+        aria-label="Reset mode to default">
+    </div>
+
+</li>
+</div>
+                </ul>
+            </div>
+        
+    </nav>
+</header>
+
+    <div class="content">
+
+        
+        
+
+
+
+
+<main>
+    <article>
+        <h1 class="article-title">
+            Creating Worlds in Bevy
+        </h1>
+
+        <ul class="meta">
+                <li>27th Dec 2022</li><li title="489 words"><span class='separator' aria-hidden='true'>•</span>3 min read</li><li class="tag"><span class='separator' aria-hidden='true'>•</span>Tags:&nbsp;</li><li class="tag"><a href="https://nilsiker.github.io/tags/rust/">Rust</a>,&nbsp;</li><li class="tag"><a href="https://nilsiker.github.io/tags/bevy/">Bevy</a>,&nbsp;</li><li class="tag"><a href="https://nilsiker.github.io/tags/procgen/">procgen</a></li>
+        </ul>
+
+        <section class="body"><p><em>You find yourself caught in a rainstorm as dusk falls. From behind the tree trunks, you notice a flickering light. <strong>Torchlight</strong>.</em></p>
+<p><em>As you hear the chattering from the small goblin raid party, you realize this berry-harvest outing will end up being vastly more deadly than you planned…</em></p>
+<h1 id="a-world-imagined"><a class="header-anchor no-hover-padding" href="#a-world-imagined" aria-label="Anchor link for: a-world-imagined"><span class="link-icon" aria-hidden="true"></span></a>
+A world imagined</h1>
+<p>I’m not a storywriter or a game designer by trade. Despite this I’ve always loved telling stories and weaving narratives. Historically, this has been around the table with my friends playing tabletop games.</p>
+<p>As a gaming group, we’ve been through our fair share of systems. Each one providing new takes on how to create and shape narratives. Some systems are lean and depend more heavily on the group’s improvisational skills (<em><strong>Fate</strong></em>), while others provide more rigid frameworks that ushers the characters and stories in directions based on multiple moving parts and subsystems (<em><strong>Burning Wheel</strong></em>).</p>
+<p><img src="https://nilsiker.github.io/blog/creating-worlds-in-bevy/./img/bw_cropped.png" alt="A Burning Wheel campaign table" /></p>
+<p>I’ve always been a fan of the more <strong>procedural</strong> systems. The same goes for my love for video games - despite it being a rough genre to like, I often prefer the unplanned and chaotic nature of survival games over games pushing you along a curated story.</p>
+<p>There’s great beauty to be had in the drama created by independent game systems synergizing in unpredictable ways. You need but cast a quick glance at <a href="https://www.pcgamer.com/the-most-ridiculous-patch-notes-from-10-years-of-dwarf-fortress/">Dwarf Fortress patch notes</a> to assure yourself of it.</p>
+<h1 id="a-world-generated"><a class="header-anchor no-hover-padding" href="#a-world-generated" aria-label="Anchor link for: a-world-generated"><span class="link-icon" aria-hidden="true"></span></a>
+A world generated</h1>
+<p>So, what’s up with this long-ass preamble? The points I’m making form a line that points toward my first major undertaking on my Rust developer journey - Ymir.</p>
+<p><strong>Ymir</strong> is a very early and rigid implementation of a terrain generator plugin with a dummy system providing makeshift object placement. All in all, the performance is shoddy and the API is close to useless. It suffices as a proof of concept - nothing else. But boy, am I optimistic!</p>
+<p><img src="https://nilsiker.github.io/blog/creating-worlds-in-bevy/./img/ymir-early-world.png" alt="" /></p>
+<h1 id="what-s-next"><a class="header-anchor no-hover-padding" href="#what-s-next" aria-label="Anchor link for: what-s-next"><span class="link-icon" aria-hidden="true"></span></a>
+What’s next?</h1>
+<p>I really want to dig into it and talk about the specifics - inspirations, planned features, implementation details and technical unknowns - the whole nine yards!</p>
+<p>Despite its infancy, some draft systems are in place. The landscape mesh generation is passable in its current state, but provides little-to-no information about the landscapes once generated. All it offers currently is a colored terrain with an attached collider. It’s cool, but hardly useful.</p>
+<p>I want to make my next post about exploring the current implementation, discuss how it can be improved, and provide some code-along examples where I actually implement the improvements.</p>
+<p>For now, I will leave you with this short code snippet, illustrating a very high-level and barely customized usage of the plugin to serve as an example.</p>
+<p>To the seasoned Bevy enjoyer, it is a trivial code block.</p>
+<p>To Ymir, it’s a peek of things to come.</p>
+<pre data-lang="rust" class="language-rust z-code"><code class="language-rust" data-lang="rust"><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-function z-rust"><span class="z-storage z-type z-function z-rust">fn</span> </span><span class="z-entity z-name z-function z-rust">main</span></span><span class="z-meta z-function z-rust"><span class="z-meta z-function z-parameters z-rust"><span class="z-punctuation z-section z-parameters z-begin z-rust">(</span></span><span class="z-meta z-function z-rust"><span class="z-meta z-function z-parameters z-rust"><span class="z-punctuation z-section z-parameters z-end z-rust">)</span></span></span></span><span class="z-meta z-function z-rust"> </span><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"><span class="z-punctuation z-section z-block z-begin z-rust">{</span>
+</span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust">    <span class="z-storage z-type z-rust">let</span> mesh_config <span class="z-keyword z-operator z-assignment z-rust">=</span> <span class="z-meta z-path z-rust">MeshConfig<span class="z-punctuation z-accessor z-rust">::</span></span>default<span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-begin z-rust">(</span></span><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-end z-rust">)</span></span><span class="z-punctuation z-terminator z-rust">;</span>
+</span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust">    <span class="z-storage z-type z-rust">let</span> noise_config <span class="z-keyword z-operator z-assignment z-rust">=</span> <span class="z-meta z-path z-rust">NoiseConfig<span class="z-punctuation z-accessor z-rust">::</span></span>default<span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-begin z-rust">(</span></span><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-end z-rust">)</span></span><span class="z-punctuation z-terminator z-rust">;</span>
+</span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust">
+</span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust">    <span class="z-meta z-path z-rust">App<span class="z-punctuation z-accessor z-rust">::</span></span>new<span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-begin z-rust">(</span></span><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-end z-rust">)</span></span>
+</span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust">        <span class="z-punctuation z-accessor z-dot z-rust">.</span><span class="z-support z-function z-rust">add_plugin</span><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-begin z-rust">(</span>DefaultPlugins</span><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-end z-rust">)</span></span>
+</span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust">        <span class="z-punctuation z-accessor z-dot z-rust">.</span><span class="z-support z-function z-rust">add_plugin</span><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-begin z-rust">(</span><span class="z-meta z-path z-rust">bevy_ymir<span class="z-punctuation z-accessor z-rust">::</span></span>YmirPlugin <span class="z-meta z-block z-rust"><span class="z-punctuation z-section z-block z-begin z-rust">{</span>
+</span></span></span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-group z-rust"><span class="z-meta z-block z-rust">            mesh_config<span class="z-punctuation z-separator z-rust">,</span>
+</span></span></span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-group z-rust"><span class="z-meta z-block z-rust">            noise_config<span class="z-punctuation z-separator z-rust">,</span>
+</span></span></span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"><span class="z-meta z-group z-rust"><span class="z-meta z-block z-rust">        </span><span class="z-meta z-block z-rust"><span class="z-punctuation z-section z-block z-end z-rust">}</span></span></span><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-end z-rust">)</span></span>
+</span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust">        <span class="z-punctuation z-accessor z-dot z-rust">.</span><span class="z-support z-function z-rust">add_system</span><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-begin z-rust">(</span><span class="z-meta z-path z-rust">bevy_ymir<span class="z-punctuation z-accessor z-rust">::</span></span><span class="z-meta z-path z-rust">player<span class="z-punctuation z-accessor z-rust">::</span></span>broadcast_player_position</span><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-end z-rust">)</span></span>
+</span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust">        <span class="z-punctuation z-accessor z-dot z-rust">.</span><span class="z-support z-function z-rust">run</span><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-begin z-rust">(</span></span><span class="z-meta z-group z-rust"><span class="z-punctuation z-section z-group z-end z-rust">)</span></span><span class="z-punctuation z-terminator z-rust">;</span>
+</span></span></span><span class="z-source z-rust"><span class="z-meta z-function z-rust"><span class="z-meta z-block z-rust"></span><span class="z-meta z-block z-rust"><span class="z-punctuation z-section z-block z-end z-rust">}</span></span></span>
+</span></code></pre>
+<p><em><strong>Thanks for reading! All the best,</strong></em><br/>
+<em>Nilsiker</em></p>
+
+        </section>
+
+        
+        
+        
+
+        
+            
+            
+            
+
+            
+        
+            
+            
+            
+
+            
+        
+            
+            
+            
+
+            
+        
+            
+            
+            
+
+            
+        
+        
+
+    </article>
+</main>
+
+    <div id="button-container">
+        
+        
+            <div id="toc-floating-container">
+                <input type="checkbox" id="toc-toggle" class="toggle"/>
+                <label for="toc-toggle" class="overlay"></label>
+                <label for="toc-toggle" id="toc-button" class="button" title="Toggle Table of Contents">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"><path d="M414.82-193.094q-18.044 0-30.497-12.32-12.453-12.319-12.453-30.036t12.453-30.086q12.453-12.37 30.497-12.37h392.767q17.237 0 29.927 12.487 12.69 12.486 12.69 30.203 0 17.716-12.69 29.919t-29.927 12.203H414.82Zm0-244.833q-18.044 0-30.497-12.487Q371.87-462.9 371.87-480.45t12.453-29.92q12.453-12.369 30.497-12.369h392.767q17.237 0 29.927 12.511 12.69 12.512 12.69 29.845 0 17.716-12.69 30.086-12.69 12.37-29.927 12.37H414.82Zm0-245.167q-18.044 0-30.497-12.32t-12.453-30.037q0-17.716 12.453-30.086 12.453-12.369 30.497-12.369h392.767q17.237 0 29.927 12.486 12.69 12.487 12.69 30.203 0 17.717-12.69 29.92-12.69 12.203-29.927 12.203H414.82ZM189.379-156.681q-32.652 0-55.878-22.829t-23.226-55.731q0-32.549 23.15-55.647 23.151-23.097 55.95-23.097 32.799 0 55.313 23.484 22.515 23.484 22.515 56.246 0 32.212-22.861 54.893-22.861 22.681-54.963 22.681Zm0-245.167q-32.652 0-55.878-23.134-23.226-23.135-23.226-55.623 0-32.487 23.467-55.517t56.12-23.03q32.102 0 54.721 23.288 22.62 23.288 22.62 55.775 0 32.488-22.861 55.364-22.861 22.877-54.963 22.877Zm-.82-244.833q-32.224 0-55.254-23.288-23.03-23.289-23.03-55.623 0-32.333 23.271-55.364 23.272-23.03 55.495-23.03 32.224 0 55.193 23.288 22.969 23.289 22.969 55.622 0 32.334-23.21 55.364-23.21 23.031-55.434 23.031Z"/></svg>
+                </label>
+                <div class="toc-content">
+                    
+
+<div class="toc-container">
+    
+
+    <ul>
+        
+            
+            
+                <li><a href="https://nilsiker.github.io/blog/creating-worlds-in-bevy/#a-world-imagined">A world imagined</a>
+                    
+                </li>
+            
+        
+            
+            
+                <li><a href="https://nilsiker.github.io/blog/creating-worlds-in-bevy/#a-world-generated">A world generated</a>
+                    
+                </li>
+            
+        
+            
+            
+                <li><a href="https://nilsiker.github.io/blog/creating-worlds-in-bevy/#what-s-next">What’s next?</a>
+                    
+                </li>
+            
+        
+    </ul>
+</div>
+
+
+                </div>
+            </div>
+        
+
+        
+        
+
+        
+        <a href="#" id="top-button" class="no-hover-padding" title="Go to the top of the page">
+            <svg viewBox="0 0 20 20" fill="currentColor"><path d="M3.293 9.707a1 1 0 010-1.414l6-6a1 1 0 011.414 0l6 6a1 1 0 01-1.414 1.414L11 5.414V17a1 1 0 11-2 0V5.414L4.707 9.707a1 1 0 01-1.414 0z"/></svg>
+        </a>
+    </div>
+
+
+<script defer src="https://nilsiker.github.io/js/mermaid.min.js"></script><span id="copy-success" class="hidden">
+        Copied!
+    </span>
+    <span id="copy-init" class="hidden">
+        Copy code to clipboard
+    </span>
+    <script defer src="https://nilsiker.github.io/js/copyCodeToClipboard.min.js"></script><script defer src="https://nilsiker.github.io/js/footnoteBacklinks.min.js"></script>
+    </div>
+    <footer>
+    <section>
+        <nav class="socials nav-navs">
+                <ul>
+                    
+                    
+                    
+                    
+                        
+                            <li>
+                                <a class="nav-links no-hover-padding social" rel=" me"  href="https://github.com/nilsiker/">
+                                    <img loading="lazy" alt="github" title="github" src="https://nilsiker.github.io/social_icons/github.svg">
+                                </a>
+                            </li>
+                        
+                            <li>
+                                <a class="nav-links no-hover-padding social" rel=" me"  href="https://instagram.com/nilsiker">
+                                    <img loading="lazy" alt="instagram" title="instagram" src="https://nilsiker.github.io/social_icons/instagram.svg">
+                                </a>
+                            </li>
+                        
+                            <li>
+                                <a class="nav-links no-hover-padding social" rel=" me"  href="https://twitter.com/nilsiker">
+                                    <img loading="lazy" alt="twitter" title="twitter" src="https://nilsiker.github.io/social_icons/twitter.svg">
+                                </a>
+                            </li>
+                        
+                    
+                </ul>
+            
+        </nav>
+
+        
+        <nav class="nav-navs">
+        </nav>
+
+        <div class="credits">
+            <small>
+                
+
+                
+                Powered by
+                <a rel=""  href="https://www.getzola.org">Zola</a>
+                &amp;
+                <a rel=""  href="https://github.com/welpo/tabi">tabi</a>
+
+                </small>
+        </div>
+    </section>
+
+    <div id="searchModal" class="search-modal js" role="dialog" aria-labelledby="modalTitle">
+    <h1 id="modalTitle" class="visually-hidden">Search</h1>
+    <div id="modal-content">
+        <div id="searchBar">
+            <div class="search-icon" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                    <path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"/>
+                </svg>
+            </div>
+            <input id="searchInput" role="combobox" autocomplete="off" spellcheck="false" aria-expanded="false" aria-controls="results-container" placeholder="Search…"/>
+            <div id="clear-search" class="close-icon interactive-icon" tabindex="0" role="button" title="Clear search">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/>
+                </svg>
+            </div>
+        </div>
+        <div id="results-container">
+            <div id="results-info"><span id="zero_results"> No results</span>
+                <span id="one_results"> $NUMBER result</span>
+                <span id="many_results"> $NUMBER results</span><span id="two_results"> $NUMBER results</span>
+                <span id="few_results"> $NUMBER results</span>
+            </div>
+            <div id="results" role="listbox"></div>
+        </div>
+    </div>
+</div>
+</footer>
+
+</body>
+
+</html>
