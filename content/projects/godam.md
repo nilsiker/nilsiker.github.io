@@ -12,9 +12,9 @@ social_media_card = "/img/godam-big.png"
 
 ![an icon of a orange pixel-art robot head, with a command line icon obscuring its face, titled "godam" just below it](/img/godam-big.png)
 
-A command-line tool that aims to operate in the same way the Godot Editor downloads and installs assets from the Godot Asset Library. 
+A command-line tool that aims to operate in the same way the Godot Editor downloads and installs assets from the Godot Asset Library.
 
-![installing limboai using godam](/img/godam_basic_example.gif)
+![installing limboai using godam](/img/godam-basic-example.gif)
 
 The objective is to allow developers to fully omit addons from their VCS, and keep track of them using a declarative configuration file (similar to Cargo.toml or package.json)
 
