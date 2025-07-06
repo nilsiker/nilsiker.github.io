@@ -1,7 +1,7 @@
 +++
 title = "Contour"
 description = "A pixel-art horror microgame, powered by Rust and Bevy."
-weight = 1
+weight = 100
 
 [extra]
 local_image = "/img/contour.png"

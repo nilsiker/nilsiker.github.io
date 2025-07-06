@@ -1,7 +1,7 @@
 +++
 title = "godam"
 description = "An unofficial minimal Godot Asset Manager."
-weight = 0
+weight = 2
 
 [extra]
 local_image = "/img/godam-big.png"

@@ -1,7 +1,7 @@
 +++
 title = "bevy_ymir"
 description = "A plugin for generating and streaming procedural worlds in Bevy."
-weight = 2
+weight = 100
 
 [extra]
 local_image = "/img/ymir-early-world-cropped.png"

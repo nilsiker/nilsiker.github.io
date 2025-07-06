@@ -5,9 +5,9 @@ template = "index.html"
 [extra]
 header = {title = "🦀 Hi, I am Andreas", img = "img/logo512.png", img_alt = "Andreas Nilsson" }
 section_path = "blog/_index.md"
-max_posts = 2
+max_posts = 3
 projects_path = "projects/_index.md"
-show_projects_first = false
+show_projects_first = true
 +++
 
 **I code game systems in C# and Rust.**
