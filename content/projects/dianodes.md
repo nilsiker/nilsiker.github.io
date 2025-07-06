@@ -1,7 +1,7 @@
 +++
 title = "Dianodes"
 description = "A dialogue editor plugin for Godot."
-weight = 0
+weight = 100
 draft = true
 
 [extra]
